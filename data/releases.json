@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "title": "Tendrils of Descending Divinity",
+    "type": "Single",
+    "date": "2025-11-08",
+    "cover": "/images/covers/tendrils-single.jpg",
+    "description": "Our debut single. As its reach descended from above, the city descended into chaos. A Chicago metal anthem that scores the death of creation—where atmosphere, rage, and awe collapse into something vast and visceral.",
+    "links": {
+      "bandcamp": "https://ofblood.bandcamp.com/track/tendrils-of-descending-divinity",
+      "youtube": "https://www.youtube.com/@OfBloodBand"
+    },
+    "tracks": [
+      { "n": 1, "title": "Tendrils of Descending Divinity" }
+    ]
+  }
+]
+
