@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -273,10 +274,10 @@ export default function ContactPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-foreground/70 mb-4">
-                    High-res photos, logos, and technical info.
+                    High-res photos, logos, and technical info for promoters and media.
                   </p>
                   <Button variant="ghost" className="w-full" asChild>
-                    <a href="/media">Download Press Kit</a>
+                    <Link href="/press">View Press Kit</Link>
                   </Button>
                 </CardContent>
               </Card>

@@ -2,9 +2,9 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Of Blood - Industrial Occult Metal',
+    name: 'Of Blood - Cosmic Death Metal',
     short_name: 'Of Blood',
-    description: 'Industrial occult metal. Tendrils of descending divinity wrapped in black, red, and gold.',
+    description: 'Cosmic death metal exploring cosmic horror, existential dread, and apocalyptic themes. Tendrils of descending divinity wrapped in black, red, and gold.',
     start_url: '/',
     display: 'standalone',
     background_color: '#0A0A0A',

@@ -10,6 +10,14 @@ export type Show = {
   isSoldOut?: boolean;
 };
 
+export type Track = {
+  n: number;
+  title: string;
+  lyricsPath?: string;
+  audioUrl?: string; // Path to audio file in /public/audio/
+  duration?: number; // Duration in seconds
+};
+
 export type Release = {
   id: string;
   title: string;
@@ -22,13 +30,16 @@ export type Release = {
     youtube?: string;
     bandcamp?: string;
   };
-  tracks?: {
-    n: number;
-    title: string;
-    lyricsPath?: string;
-  }[];
+  tracks?: Track[];
   description?: string;
 };
+
+export type NowPlaying = {
+  track: Track;
+  release: Release;
+  releaseId: string;
+  trackIndex: number;
+} | null;
 
 export type Product = {
   id: string;

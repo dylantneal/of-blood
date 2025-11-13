@@ -102,31 +102,6 @@ export default function MediaPage() {
           </div>
         </Container>
       </Section>
-
-      {/* Press Kit */}
-      <Section className="bg-muted/30">
-        <Container size="narrow" className="text-center">
-          <h2 className="font-display text-3xl font-bold mb-4">Press Kit</h2>
-          <p className="text-foreground/70 mb-8">
-            High-res photos, logos, bios, and technical riders for media and promoters.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="#"
-              download
-              className="inline-flex items-center justify-center h-12 px-8 py-3 bg-primary text-fg rounded-sm font-medium hover:bg-primary/90 transition-colors"
-            >
-              Download Press Kit
-            </a>
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center h-12 px-8 py-3 border-2 border-fg text-fg rounded-sm font-medium hover:bg-fg hover:text-background transition-colors"
-            >
-              Contact for Booking
-            </a>
-          </div>
-        </Container>
-      </Section>
     </>
   );
 }

@@ -1,33 +1,37 @@
-import type { Metadata } from "next";
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { Play } from "lucide-react";
+import { Play, Pause } from "lucide-react";
+import { useAudio } from "@/contexts/audio-context";
+import { Release } from "@/lib/types";
+import { formatTime } from "@/lib/utils";
+import Image from "next/image";
 
-export const metadata: Metadata = {
-  title: "Music",
-  description: "Discography of Of Blood. Industrial occult metal releases.",
-};
+// Note: This is a client component, so we'll fetch data differently
+// For now, we'll import the JSON directly. In production, you might want
+// to use a server component wrapper or API route.
 
-const releases = [
-  {
-    id: "1",
-    title: "Tendrils of Descending Divinity",
-    type: "Single",
-    date: "2025-11-08",
-    tracks: [
-      { n: 1, title: "Tendrils of Descending Divinity" },
-    ],
-    links: {
-      bandcamp: "https://ofblood.bandcamp.com/track/tendrils-of-descending-divinity",
-      youtube: "https://www.youtube.com/@OfBloodBand",
-      spotify: undefined,
-    },
-  },
-];
+const releasesData = require("@/data/releases.json") as Release[];
 
 export default function MusicPage() {
+  const { nowPlaying, isPlaying, playTrack } = useAudio();
+
+  const handleTrackClick = (track: any, release: Release, releaseId: string, trackIndex: number) => {
+    if (track.audioUrl) {
+      playTrack(track, release, releaseId, trackIndex);
+    }
+  };
+
+  const isTrackPlaying = (track: any, release: Release) => {
+    return (
+      nowPlaying?.track.title === track.title &&
+      nowPlaying?.release.id === release.id
+    );
+  };
+
   return (
     <>
       {/* Header */}
@@ -41,10 +45,10 @@ export default function MusicPage() {
       </Section>
 
       {/* Releases */}
-      <Section>
+      <Section className="pb-32">
         <Container>
           <div className="space-y-16">
-            {releases.map((release) => (
+            {releasesData.map((release) => (
               <div
                 key={release.id}
                 className="grid gap-12 lg:grid-cols-[1fr_2fr] items-start"
@@ -53,8 +57,17 @@ export default function MusicPage() {
                 <div className="relative aspect-square w-full max-w-md mx-auto lg:mx-0">
                   <div className="absolute inset-0 bg-primary/20 blur-3xl" />
                   <div className="relative border-2 border-gold/50 p-4">
-                    <div className="relative aspect-square bg-muted flex items-center justify-center">
-                      <Play className="w-24 h-24 text-gold/50" />
+                    <div className="relative aspect-square bg-muted flex items-center justify-center overflow-hidden">
+                      {release.cover && release.cover !== "/images/covers/tendrils-single.jpg" ? (
+                        <Image
+                          src={release.cover}
+                          alt={release.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <Play className="w-24 h-24 text-gold/50" />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -68,6 +81,11 @@ export default function MusicPage() {
                     <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
                       {release.title}
                     </h2>
+                    {release.description && (
+                      <p className="text-foreground/70 text-lg mb-6">
+                        {release.description}
+                      </p>
+                    )}
                   </div>
 
                   {/* Streaming Links */}
@@ -102,17 +120,45 @@ export default function MusicPage() {
                     </CardHeader>
                     <CardContent>
                       <ol className="space-y-2">
-                        {release.tracks.map((track) => (
-                          <li
-                            key={track.n}
-                            className="flex items-baseline gap-3 text-foreground/70 hover:text-foreground transition-colors cursor-pointer"
-                          >
-                            <span className="text-gold font-mono text-sm min-w-[24px]">
-                              {String(track.n).padStart(2, "0")}
-                            </span>
-                            <span>{track.title}</span>
-                          </li>
-                        ))}
+                        {release.tracks?.map((track, index) => {
+                          const trackIsPlaying = isTrackPlaying(track, release);
+                          const hasAudio = !!track.audioUrl;
+
+                          return (
+                            <li
+                              key={track.n}
+                              onClick={() => hasAudio && handleTrackClick(track, release, release.id, index)}
+                              className={`flex items-center gap-3 p-3 rounded-sm transition-all ${
+                                hasAudio
+                                  ? "cursor-pointer hover:bg-muted/50 hover:text-foreground"
+                                  : "cursor-default"
+                              } ${
+                                trackIsPlaying
+                                  ? "bg-primary/10 text-primary border-l-2 border-primary pl-2"
+                                  : "text-foreground/70"
+                              }`}
+                            >
+                              <span className="text-gold font-mono text-sm min-w-[24px]">
+                                {String(track.n).padStart(2, "0")}
+                              </span>
+                              <span className="flex-1">{track.title}</span>
+                              {hasAudio && (
+                                <div className="flex items-center gap-2">
+                                  {track.duration && track.duration > 0 && (
+                                    <span className="text-xs text-foreground/50 font-mono">
+                                      {formatTime(track.duration)}
+                                    </span>
+                                  )}
+                                  {trackIsPlaying && isPlaying ? (
+                                    <Pause className="w-4 h-4 text-primary" />
+                                  ) : (
+                                    <Play className="w-4 h-4" />
+                                  )}
+                                </div>
+                              )}
+                            </li>
+                          );
+                        })}
                       </ol>
                     </CardContent>
                   </Card>
@@ -125,4 +171,3 @@ export default function MusicPage() {
     </>
   );
 }
-

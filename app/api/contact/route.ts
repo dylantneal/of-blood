@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     await resend.emails.send({
-      from: "Of Blood Website <onboarding@resend.dev>",
+      from: "Of Blood Website <website@of-blood.com>",
       to: "ofbloodband@gmail.com",
       reply_to: email,
       subject: subject,
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
 
     // Send auto-reply to the user
     await resend.emails.send({
-      from: "Of Blood <onboarding@resend.dev>",
+      from: "Of Blood <newsletter@of-blood.com>",
       to: email,
       subject: "We received your message",
       html: `

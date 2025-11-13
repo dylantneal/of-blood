@@ -10,10 +10,12 @@ import { Check } from "lucide-react";
 export function Newsletter() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setStatus("loading");
+    setErrorMessage("");
 
     try {
       const response = await fetch("/api/newsletter", {
@@ -22,14 +24,27 @@ export function Newsletter() {
         body: JSON.stringify({ email }),
       });
 
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        // If response is not JSON, use status text
+        setStatus("error");
+        setErrorMessage(`Server error: ${response.statusText || "Unknown error"}`);
+        return;
+      }
+
       if (response.ok) {
         setStatus("success");
         setEmail("");
       } else {
         setStatus("error");
+        setErrorMessage(data.error || "Something went wrong. Please try again.");
       }
     } catch (error) {
       setStatus("error");
+      setErrorMessage("Network error. Please check your connection and try again.");
+      console.error("Newsletter subscription error:", error);
     }
   };
 
@@ -75,7 +90,7 @@ export function Newsletter() {
 
           {status === "error" && (
             <p className="text-primary text-sm">
-              Something went wrong. Please try again.
+              {errorMessage || "Something went wrong. Please try again."}
             </p>
           )}
         </div>

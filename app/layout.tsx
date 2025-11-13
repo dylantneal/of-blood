@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Cinzel } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { AudioProvider } from "@/contexts/audio-context";
+import { AudioPlayer } from "@/components/audio/audio-player";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,24 +20,24 @@ const cinzel = Cinzel({
 
 export const metadata: Metadata = {
   title: {
-    default: "Of Blood | Industrial Occult Metal",
+    default: "Of Blood | Cosmic Death Metal",
     template: "%s | Of Blood",
   },
-  description: "Industrial occult metal. Tendrils of descending divinity wrapped in black, red, and gold.",
-  keywords: ["metal", "industrial", "occult", "music", "band"],
+  description: "Cosmic death metal exploring cosmic horror, existential dread, and apocalyptic themes. Tendrils of descending divinity wrapped in black, red, and gold.",
+  keywords: ["metal", "black metal", "atmospheric", "cosmic horror", "music", "band"],
   authors: [{ name: "Of Blood" }],
   creator: "Of Blood",
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Of Blood",
-    title: "Of Blood | Industrial Occult Metal",
-    description: "Industrial occult metal. Tendrils of descending divinity wrapped in black, red, and gold.",
+    title: "Of Blood | Cosmic Death Metal",
+    description: "Cosmic death metal exploring cosmic horror, existential dread, and apocalyptic themes. Tendrils of descending divinity wrapped in black, red, and gold.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Of Blood | Industrial Occult Metal",
-    description: "Industrial occult metal. Tendrils of descending divinity wrapped in black, red, and gold.",
+    title: "Of Blood | Cosmic Death Metal",
+    description: "Cosmic death metal exploring cosmic horror, existential dread, and apocalyptic themes. Tendrils of descending divinity wrapped in black, red, and gold.",
   },
   robots: {
     index: true,
@@ -51,11 +53,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${cinzel.variable}`}>
       <body className="antialiased">
-        <Header />
-        <main className="min-h-screen pt-20">
-          {children}
-        </main>
-        <Footer />
+        <AudioProvider>
+          <Header />
+          <main className="min-h-screen pt-20 pb-32 md:pb-36">
+            {children}
+          </main>
+          <Footer />
+          <AudioPlayer />
+        </AudioProvider>
       </body>
     </html>
   );
