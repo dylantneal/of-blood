@@ -39,7 +39,7 @@ export function Footer() {
           <div className="space-y-4">
             <Logo />
             <p className="text-sm text-foreground/70 max-w-xs">
-              Cosmic death metal exploring cosmic horror, existential dread, and apocalyptic themes. Tendrils of descending divinity wrapped in black, red, and gold.
+              Death metal exploring themes of cosmic horror, existential dread, and apocalyptic themes.
             </p>
             {/* Social Links */}
             <div className="flex gap-4 pt-4">

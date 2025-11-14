@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
+import { PressAssetCard } from "@/components/press/press-asset-card";
 import { 
   Mail, 
   MapPin, 
@@ -12,7 +13,6 @@ import {
   Disc, 
   Instagram, 
   Youtube, 
-  Download,
   ExternalLink,
   Calendar,
   Users
@@ -102,7 +102,7 @@ export default function PressPage() {
                   <Music2 className="w-5 h-5 text-gold" />
                   <CardTitle className="text-lg font-display">Genre</CardTitle>
                 </div>
-                <p className="text-foreground/80">Cosmic Death Metal</p>
+                <p className="text-foreground/80">Blackened Death Metal</p>
               </CardContent>
             </Card>
 
@@ -137,12 +137,12 @@ export default function PressPage() {
               About Of Blood
             </h2>
             <div className="flex justify-center mb-8">
-              <div className="w-16 h-16 opacity-60">
+              <div className="w-48 h-48 md:w-64 md:h-64 opacity-60">
                 <Image
-                  src="/images/OfBloodSymbol.png"
-                  alt=""
-                  width={64}
-                  height={64}
+                  src="/images/OfBloodLogo.png"
+                  alt="Of Blood Logo"
+                  width={256}
+                  height={256}
                   className="object-contain"
                 />
               </div>
@@ -326,63 +326,39 @@ export default function PressPage() {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
             {/* Band Photo */}
-            <Card className="group overflow-hidden hover:border-gold/50 transition-colors">
-              <CardContent className="p-0">
-                <div className="relative aspect-[4/3] bg-muted">
-                  <Image
-                    src="/images/FullBandPhoto.png"
-                    alt="Band Photo"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-              </CardContent>
-              <CardHeader>
-                <CardTitle className="text-lg">Band Photo</CardTitle>
-                <p className="text-sm text-foreground/60">High-resolution promotional photo</p>
-              </CardHeader>
-            </Card>
+            <PressAssetCard
+              imageSrc="/images/FullBandPhoto.png"
+              alt="Band Photo"
+              title="Band Photo"
+              description="High-resolution promotional photo"
+              downloadFilename="OfBlood-BandPhoto.png"
+              aspectRatio="wide"
+            />
 
-            {/* Logo */}
-            <Card className="group overflow-hidden hover:border-gold/50 transition-colors">
-              <CardContent className="p-0">
-                <div className="relative aspect-square bg-muted flex items-center justify-center p-8">
-                  <Image
-                    src="/images/OfBlood_TextLogoTransparent.png"
-                    alt="Logo"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              </CardContent>
-              <CardHeader>
-                <CardTitle className="text-lg">Text Logo</CardTitle>
-                <p className="text-sm text-foreground/60">Transparent PNG logo</p>
-              </CardHeader>
-            </Card>
+            {/* Text Logo */}
+            <PressAssetCard
+              imageSrc="/images/OfBlood_TextLogoTransparent.png"
+              alt="Text Logo"
+              title="Text Logo"
+              description="Transparent PNG logo"
+              downloadFilename="OfBlood-TextLogo.png"
+              aspectRatio="square"
+            />
 
-            {/* Symbol */}
-            <Card className="group overflow-hidden hover:border-gold/50 transition-colors">
-              <CardContent className="p-0">
-                <div className="relative aspect-square bg-muted flex items-center justify-center p-8">
-                  <Image
-                    src="/images/OfBloodSymbol.png"
-                    alt="Symbol"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              </CardContent>
-              <CardHeader>
-                <CardTitle className="text-lg">Band Symbol</CardTitle>
-                <p className="text-sm text-foreground/60">Iconic symbol logo</p>
-              </CardHeader>
-            </Card>
+            {/* Full Logo */}
+            <PressAssetCard
+              imageSrc="/images/OfBloodLogo.png"
+              alt="Of Blood Logo"
+              title="Band Logo"
+              description="Full logo with symbol and text"
+              downloadFilename="OfBlood-Logo.png"
+              aspectRatio="square"
+            />
           </div>
 
           <div className="text-center mt-8">
             <p className="text-foreground/60 text-sm mb-4">
-              Right-click any image to download. For high-resolution versions or additional assets, please contact us.
+              Click the download button on any asset to save it to your device. For high-resolution versions or additional assets, please contact us.
             </p>
             <Button variant="ghost" asChild>
               <Link href="/contact">Request Additional Assets</Link>
@@ -419,7 +395,7 @@ export default function PressPage() {
                 <CardTitle className="text-xl font-display">Genre & Style</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 text-foreground/80">
-                <p>• Cosmic Death Metal</p>
+                <p>• Blackened Death Metal</p>
                 <p>• Death Metal foundation</p>
                 <p>• Black Metal elements</p>
                 <p>• Doom influences</p>

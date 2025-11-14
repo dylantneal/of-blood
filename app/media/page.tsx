@@ -1,108 +1,118 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { Card, CardContent } from "@/components/ui/card";
-import { Play } from "lucide-react";
+import { YouTubeVideoCard } from "@/components/media/youtube-video-card";
+import { InstagramFeed } from "@/components/media/instagram-feed";
+import { getYouTubeVideos, getInstagramPosts } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Media",
   description: "Photos, videos, and press materials from Of Blood.",
 };
 
-const videos = [
-  {
-    id: "1",
-    title: "Blood Meridian (Official Music Video)",
-    thumbnail: "/placeholder-video.jpg",
-    url: "#",
-  },
-  {
-    id: "2",
-    title: "Gates Opening (Lyric Video)",
-    thumbnail: "/placeholder-video.jpg",
-    url: "#",
-  },
-  {
-    id: "3",
-    title: "Live at The Roxy 2025",
-    thumbnail: "/placeholder-video.jpg",
-    url: "#",
-  },
-];
+export default async function MediaPage() {
+  const videos = await getYouTubeVideos();
+  const instagramPosts = await getInstagramPosts();
 
-const photos = Array.from({ length: 9 }, (_, i) => ({
-  id: String(i + 1),
-  url: "/placeholder-photo.jpg",
-  alt: `Of Blood photo ${i + 1}`,
-}));
+  // Filter out placeholder videos (videos without a videoId)
+  const validVideos = videos.filter((video) => video.videoId && video.videoId.trim() !== "");
 
-export default function MediaPage() {
   return (
     <>
       {/* Header */}
-      <Section className="pt-32 pb-16">
+      <Section className="pt-32 pb-6">
         <Container size="narrow" className="text-center">
-          <h1 className="font-display text-5xl md:text-7xl font-bold mb-6">Media</h1>
-          <p className="text-xl text-foreground/70">
-            Visuals from the void. Press materials and moments from the ritual.
+          <div className="relative">
+            {/* Decorative line above */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+            
+            {/* Title with enhanced glow effect */}
+            <h1 className="font-display text-5xl md:text-7xl font-bold mb-4 relative inline-block mt-8">
+              <span className="relative z-10">
+                Media
+              </span>
+              {/* Multiple glow layers for depth */}
+              <span 
+                className="absolute inset-0 blur-3xl opacity-50 text-primary -z-10"
+                style={{ 
+                  filter: 'blur(50px)',
+                  textShadow: '0 0 80px rgba(179, 10, 10, 0.8), 0 0 120px rgba(179, 10, 10, 0.5)'
+                }}
+              >
+                Media
+              </span>
+              <span 
+                className="absolute inset-0 blur-2xl opacity-30 text-primary -z-20"
+                style={{ 
+                  filter: 'blur(30px)',
+                }}
+              >
+                Media
+              </span>
+            </h1>
+            
+            {/* Decorative line below */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+          </div>
+          <p className="text-base text-foreground/60 max-w-xl mx-auto uppercase tracking-wider mt-3">
+            Videos and Photos
           </p>
         </Container>
       </Section>
 
       {/* Videos */}
-      <Section>
+      <Section className="relative pt-4 pb-16">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
         <Container>
-          <h2 className="font-display text-3xl font-bold mb-8">Videos</h2>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {videos.map((video) => (
-              <Card
-                key={video.id}
-                className="group overflow-hidden hover:border-primary/50 transition-colors cursor-pointer"
-              >
-                <CardContent className="p-0">
-                  <a href={video.url} target="_blank" rel="noopener noreferrer">
-                    <div className="relative aspect-video bg-muted">
-                      {/* Placeholder */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center group-hover:bg-primary/40 transition-colors">
-                          <Play className="w-8 h-8 text-gold" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">
-                        {video.title}
-                      </h3>
-                    </div>
-                  </a>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="mb-12 relative">
+            <div className="flex items-center gap-6 mb-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-primary/40 to-primary/60" />
+              <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">Videos</h2>
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-primary/40 to-primary/60" />
+            </div>
+            <p className="text-sm text-foreground/60 text-center max-w-xl mx-auto uppercase tracking-wider">
+              Official music videos, live performances, and behind-the-scenes content
+            </p>
           </div>
+          {validVideos.length > 0 ? (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {validVideos.map((video) => (
+                <YouTubeVideoCard key={video.id} video={video} />
+              ))}
+            </div>
+          ) : (
+            <div className="p-16 border border-line/50 bg-muted/20 rounded-lg text-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-gold/5" />
+              <div className="relative z-10">
+                <p className="font-display text-xl font-semibold mb-2 text-foreground/90">
+                  No Videos Available
+                </p>
+                <p className="text-foreground/70">
+                  Add YouTube videos by editing <code className="bg-muted px-2 py-1 rounded text-sm border border-line/50">data/videos.json</code>
+                </p>
+              </div>
+            </div>
+          )}
         </Container>
       </Section>
 
       {/* Photos */}
-      <Section>
+      <Section className="relative pt-20 pb-16">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gold/5 to-transparent pointer-events-none" />
         <Container>
-          <h2 className="font-display text-3xl font-bold mb-8">Photos</h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {photos.map((photo) => (
-              <div
-                key={photo.id}
-                className="group relative aspect-square bg-muted overflow-hidden hover:ring-2 hover:ring-primary/50 transition-all cursor-pointer"
-              >
-                {/* Placeholder */}
-                <div className="absolute inset-0 flex items-center justify-center text-gold/30 text-4xl font-display">
-                  OB
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-            ))}
+          <div className="mb-12 relative">
+            <div className="flex items-center gap-6 mb-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-gold/60" />
+              <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">Photos</h2>
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-gold/40 to-gold/60" />
+            </div>
+            <p className="text-sm text-foreground/60 text-center max-w-xl mx-auto uppercase tracking-wider">
+              Behind-the-scenes moments, live shots, and visual content
+            </p>
           </div>
+          <InstagramFeed posts={instagramPosts} />
         </Container>
       </Section>
     </>
   );
 }
-

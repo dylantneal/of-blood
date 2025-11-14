@@ -1,6 +1,6 @@
 # Of Blood - Official Website
 
-Cosmic death metal band website built with Next.js 14, React, Tailwind CSS, and Framer Motion.
+Blackened death metal band website built with Next.js 14, React, Tailwind CSS, and Framer Motion.
 
 ## Features
 

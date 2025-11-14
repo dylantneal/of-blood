@@ -26,9 +26,12 @@ const buttonVariants = cva(
   }
 );
 
+type ButtonVariantProps = VariantProps<typeof buttonVariants>;
+
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'variant'> {
+  variant?: 'primary' | 'ghost' | 'gold' | 'link';
+  size?: 'default' | 'sm' | 'lg' | 'icon';
   asChild?: boolean;
 }
 

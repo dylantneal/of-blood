@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "type": "image",
+    "mediaUrl": "/images/FullBandPhoto.png",
+    "caption": "Our first full band photo",
+    "date": "2025-01-01"
+  },
+  {
+    "id": "2",
+    "type": "image",
+    "mediaUrl": "/images/OfBloodPoster.png"
+  },
+  {
+    "id": "3",
+    "type": "youtube",
+    "mediaUrl": "AuMok7YqgZE",
+    "caption": "Live performance",
+    "thumbnailUrl": "https://img.youtube.com/vi/AuMok7YqgZE/maxresdefault.jpg"
+  }
+]
+

@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     await resend.emails.send({
       from: "Of Blood Website <website@of-blood.com>",
       to: "ofbloodband@gmail.com",
-      reply_to: email,
+      replyTo: email,
       subject: subject,
       html: htmlContent,
     });

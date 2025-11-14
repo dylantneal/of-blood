@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingBag } from "lucide-react";
 import { Logo } from "./logo";
 import { Container } from "../ui/container";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "@/contexts/cart-context";
+import { CartDrawer } from "@/components/cart/cart-drawer";
 
 const navigation = [
   { name: "Music", href: "/music" },
@@ -21,7 +23,9 @@ const navigation = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const pathname = usePathname();
+  const { cart } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +34,17 @@ export function Header() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Listen for cart item added events to auto-open cart drawer
+  useEffect(() => {
+    const handleCartItemAdded = () => {
+      setIsCartOpen(true);
+      // Don't refresh here - the cart drawer will refresh when it opens
+    };
+
+    window.addEventListener("cart-item-added", handleCartItemAdded);
+    return () => window.removeEventListener("cart-item-added", handleCartItemAdded);
   }, []);
 
   return (
@@ -74,18 +89,35 @@ export function Header() {
             })}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-foreground hover:text-primary transition-all duration-300 hover:scale-110"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+          {/* Cart & Mobile Menu */}
+          <div className="flex items-center gap-4">
+            {/* Cart Button */}
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 text-foreground hover:text-primary transition-all duration-300 hover:scale-110"
+              aria-label="Open cart"
+            >
+              <ShoppingBag className="h-6 w-6" />
+              {cart && cart.totalQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                  {cart.totalQuantity}
+                </span>
+              )}
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 text-foreground hover:text-primary transition-all duration-300 hover:scale-110"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
       </Container>
 
@@ -123,6 +155,9 @@ export function Header() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Cart Drawer */}
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   );
 }
