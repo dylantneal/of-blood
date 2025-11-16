@@ -1,8 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createPrintfulOrder } from "@/lib/printful";
 import { Resend } from "resend";
+import crypto from "crypto";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+function verifyShopifySignature(rawBody: string, hmacHeader: string, secret: string) {
+  const generatedHash = crypto
+    .createHmac("sha256", secret)
+    .update(rawBody, "utf8")
+    .digest("base64");
+
+  const generatedBuffer = Buffer.from(generatedHash, "base64");
+  const headerBuffer = Buffer.from(hmacHeader, "base64");
+
+  if (generatedBuffer.length !== headerBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(generatedBuffer, headerBuffer);
+}
 
 /**
  * Shopify webhook handler for order creation
@@ -16,14 +33,29 @@ const resend = new Resend(process.env.RESEND_API_KEY);
  */
 export async function POST(request: NextRequest) {
   try {
-    // Verify webhook (optional but recommended)
+    const rawBody = await request.text();
+
+    // Verify webhook signature (required for security)
     const webhookSecret = process.env.SHOPIFY_WEBHOOK_SECRET;
     if (webhookSecret) {
       const hmac = request.headers.get("x-shopify-hmac-sha256");
-      // In production, verify HMAC signature here
+      if (!hmac) {
+        return NextResponse.json(
+          { error: "Missing Shopify HMAC signature" },
+          { status: 401 }
+        );
+      }
+
+      const isValid = verifyShopifySignature(rawBody, hmac, webhookSecret);
+      if (!isValid) {
+        return NextResponse.json(
+          { error: "Invalid Shopify HMAC signature" },
+          { status: 401 }
+        );
+      }
     }
 
-    const order = await request.json();
+    const order = JSON.parse(rawBody);
 
     // Only process paid orders
     if (order.financial_status !== "paid") {

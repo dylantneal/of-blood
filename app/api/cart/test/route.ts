@@ -6,6 +6,10 @@ import { createCart, addToCart, getCart } from "@/lib/shopify";
  * Visit: /api/cart/test to see if Shopify integration is working
  */
 export async function GET() {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   const results: any = {
     timestamp: new Date().toISOString(),
     tests: {},
