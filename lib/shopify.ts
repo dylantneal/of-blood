@@ -164,7 +164,7 @@ export async function getProducts(first = 12) {
       variables: { first },
     });
 
-    return data.products.edges.map(({ node }: any) => ({
+    const products = data.products.edges.map(({ node }: any) => ({
       id: node.id,
       title: node.title,
       handle: node.handle,
@@ -173,6 +173,8 @@ export async function getProducts(first = 12) {
       image: node.images.edges[0]?.node.url || '',
       tags: node.tags,
     }));
+
+    return products;
   } catch (error) {
     console.error('Error fetching products:', error);
     return [];
@@ -341,6 +343,10 @@ export async function getCart(cartId: string) {
                 ... on ProductVariant {
                   id
                   title
+                  image {
+                    url
+                    altText
+                  }
                   price {
                     amount
                     currencyCode
@@ -406,6 +412,10 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
                   ... on ProductVariant {
                     id
                     title
+                    image {
+                      url
+                      altText
+                    }
                     price {
                       amount
                       currencyCode
@@ -474,6 +484,41 @@ export async function updateCartLine(cartId: string, lineId: string, quantity: n
               currencyCode
             }
           }
+          lines(first: 100) {
+            edges {
+              node {
+                id
+                quantity
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                    title
+                    image {
+                      url
+                      altText
+                    }
+                    price {
+                      amount
+                      currencyCode
+                    }
+                    product {
+                      id
+                      title
+                      handle
+                      images(first: 1) {
+                        edges {
+                          node {
+                            url
+                            altText
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
         userErrors {
           field
@@ -493,12 +538,13 @@ export async function updateCartLine(cartId: string, lineId: string, quantity: n
     });
 
     if (data.cartLinesUpdate.userErrors.length > 0) {
+      console.error('[Shopify] Update error:', data.cartLinesUpdate.userErrors);
       throw new Error(data.cartLinesUpdate.userErrors[0].message);
     }
 
     return data.cartLinesUpdate.cart;
   } catch (error) {
-    console.error('Error updating cart:', error);
+    console.error('[Shopify] Error updating cart:', error);
     throw error;
   }
 }
@@ -520,6 +566,41 @@ export async function removeCartLine(cartId: string, lineId: string) {
               currencyCode
             }
           }
+          lines(first: 100) {
+            edges {
+              node {
+                id
+                quantity
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                    title
+                    image {
+                      url
+                      altText
+                    }
+                    price {
+                      amount
+                      currencyCode
+                    }
+                    product {
+                      id
+                      title
+                      handle
+                      images(first: 1) {
+                        edges {
+                          node {
+                            url
+                            altText
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
         userErrors {
           field
@@ -539,12 +620,13 @@ export async function removeCartLine(cartId: string, lineId: string) {
     });
 
     if (data.cartLinesRemove.userErrors.length > 0) {
+      console.error('[Shopify] Remove error:', data.cartLinesRemove.userErrors);
       throw new Error(data.cartLinesRemove.userErrors[0].message);
     }
 
     return data.cartLinesRemove.cart;
   } catch (error) {
-    console.error('Error removing from cart:', error);
+    console.error('[Shopify] Error removing from cart:', error);
     throw error;
   }
 }

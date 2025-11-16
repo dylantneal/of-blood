@@ -64,7 +64,7 @@ export default function LinksPage() {
           <div className="relative w-24 h-24 sm:w-28 sm:h-28">
             <div className="absolute inset-0 bg-primary/20 blur-2xl" />
             <Image
-              src="/images/OfBloodSymbol.png"
+              src="/images/logos/OfBloodSymbol.png"
               alt="Of Blood"
               fill
               className="object-contain drop-shadow-[0_0_20px_rgba(179,10,10,0.4)]"
@@ -75,7 +75,7 @@ export default function LinksPage() {
           {/* Text Logo */}
           <div className="relative w-48 h-12 sm:w-56 sm:h-14">
             <Image
-              src="/images/OfBlood_TextLogoTransparent.png"
+              src="/images/logos/OfBlood_TextLogoTransparent.png"
               alt="Of Blood"
               fill
               className="object-contain"

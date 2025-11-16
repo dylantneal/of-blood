@@ -9,7 +9,6 @@ import { Cart, CartItem } from "./types";
  * Safely transform Shopify cart response to our Cart type
  */
 export function transformShopifyCart(shopifyCart: any): Cart {
-  console.log('[Cart Utils] Transforming Shopify cart:', JSON.stringify(shopifyCart, null, 2));
 
   // Validate cart structure
   if (!shopifyCart) {
@@ -22,7 +21,6 @@ export function transformShopifyCart(shopifyCart: any): Cart {
 
   // Safely extract lines
   const lines = shopifyCart.lines?.edges || [];
-  console.log(`[Cart Utils] Found ${lines.length} line(s) in cart`);
 
   // Transform cart items
   const items: CartItem[] = lines
@@ -67,7 +65,6 @@ export function transformShopifyCart(shopifyCart: any): Cart {
           handle: product.handle || '',
         };
 
-        console.log(`[Cart Utils] Transformed item ${index}:`, item);
         return item;
       } catch (error) {
         console.error(`[Cart Utils] Error transforming line ${index}:`, error);
@@ -75,8 +72,6 @@ export function transformShopifyCart(shopifyCart: any): Cart {
       }
     })
     .filter((item: CartItem | null): item is CartItem => item !== null);
-
-  console.log(`[Cart Utils] Successfully transformed ${items.length} item(s)`);
 
   // Extract total amount safely
   const totalAmount = shopifyCart.cost?.totalAmount?.amount 
@@ -93,13 +88,6 @@ export function transformShopifyCart(shopifyCart: any): Cart {
     currencyCode,
     items,
   };
-
-  console.log('[Cart Utils] Final transformed cart:', {
-    id: cart.id,
-    totalQuantity: cart.totalQuantity,
-    totalAmount: cart.totalAmount,
-    itemsCount: cart.items.length,
-  });
 
   return cart;
 }

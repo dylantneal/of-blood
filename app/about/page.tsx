@@ -45,7 +45,7 @@ export default function AboutPage() {
             
             <div className="relative aspect-[21/9] w-full border-2 border-gold/50 overflow-hidden shadow-2xl shadow-black/60">
               <Image
-                src="/images/FullBandPhoto.png"
+                src="/images/photos/FullBandPhoto.png"
                 alt="Of Blood band members"
                 fill
                 className="object-cover"
@@ -72,7 +72,7 @@ export default function AboutPage() {
           <div className="flex justify-center mb-16">
             <div className="relative w-24 h-24 opacity-90">
               <Image
-                src="/images/OfBloodSymbol.png"
+                src="/images/logos/OfBloodSymbol.png"
                 alt=""
                 fill
                 className="object-contain drop-shadow-[0_0_15px_rgba(179,10,10,0.4)]"
@@ -103,10 +103,10 @@ export default function AboutPage() {
         {/* Background symbol pattern */}
         <div className="absolute inset-0 opacity-[0.02]">
           <div className="absolute top-20 left-10 w-32 h-32">
-            <Image src="/images/OfBloodSymbol.png" alt="" fill className="object-contain" />
+            <Image src="/images/logos/OfBloodSymbol.png" alt="" fill className="object-contain" />
           </div>
           <div className="absolute bottom-20 right-10 w-32 h-32">
-            <Image src="/images/OfBloodSymbol.png" alt="" fill className="object-contain" />
+            <Image src="/images/logos/OfBloodSymbol.png" alt="" fill className="object-contain" />
           </div>
         </div>
         
@@ -118,7 +118,7 @@ export default function AboutPage() {
             <div className="flex justify-center mb-8">
               <div className="w-12 h-12 opacity-40">
                 <Image
-                  src="/images/OfBloodSymbol.png"
+                  src="/images/logos/OfBloodSymbol.png"
                   alt=""
                   width={48}
                   height={48}
@@ -167,7 +167,7 @@ export default function AboutPage() {
             <div className="flex justify-center pt-8">
               <div className="w-16 h-16 opacity-50">
                 <Image
-                  src="/images/OfBloodSymbol.png"
+                  src="/images/logos/OfBloodSymbol.png"
                   alt=""
                   width={64}
                   height={64}

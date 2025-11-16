@@ -7,8 +7,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { cartId, variantId, quantity } = body;
 
-    console.log('[API /api/cart/add] Request:', { cartId, variantId, quantity });
-
     if (!cartId || !variantId || !quantity) {
       return NextResponse.json(
         { error: "cartId, variantId, and quantity are required" },

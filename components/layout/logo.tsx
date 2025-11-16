@@ -13,7 +13,7 @@ export function Logo({ className, showWordmark = true }: LogoProps) {
       {/* Symbol Logo */}
       <div className="relative h-10 w-10 transition-all duration-300 group-hover:opacity-80">
         <Image
-          src="/images/OfBloodSymbol.png"
+          src="/images/logos/OfBloodSymbol.png"
           alt="Of Blood Symbol"
           width={40}
           height={40}
@@ -24,7 +24,7 @@ export function Logo({ className, showWordmark = true }: LogoProps) {
       {showWordmark && (
         <div className="relative h-8 w-32 transition-all duration-300 group-hover:opacity-80">
           <Image
-            src="/images/OfBlood_TextLogoTransparent.png"
+            src="/images/logos/OfBlood_TextLogoTransparent.png"
             alt="Of Blood"
             fill
             className="object-contain object-left"

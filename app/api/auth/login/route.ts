@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import {
+  ADMIN_SESSION_COOKIE,
+  ADMIN_SESSION_COOKIE_OPTIONS,
+  createSessionToken,
+} from "@/lib/auth";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
@@ -31,15 +36,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Set authenticated cookie (expires in 7 days)
     const cookieStore = await cookies();
-    cookieStore.set("admin-auth", "authenticated", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: "/",
-    });
+    const sessionToken = createSessionToken();
+    cookieStore.set(ADMIN_SESSION_COOKIE, sessionToken, ADMIN_SESSION_COOKIE_OPTIONS);
 
     return NextResponse.json({ success: true });
   } catch (error) {

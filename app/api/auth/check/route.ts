@@ -1,16 +1,10 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { isAuthenticated } from "@/lib/auth";
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const authCookie = cookieStore.get("admin-auth");
-
-    if (authCookie && authCookie.value === "authenticated") {
-      return NextResponse.json({ authenticated: true });
-    }
-
-    return NextResponse.json({ authenticated: false });
+    const authenticated = await isAuthenticated();
+    return NextResponse.json({ authenticated });
   } catch (error) {
     console.error("Auth check error:", error);
     return NextResponse.json({ authenticated: false });

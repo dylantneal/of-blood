@@ -1,29 +1,101 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { createHmac, timingSafeEqual } from "crypto";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const PRINTFUL_SIGNATURE_HEADER = "x-printful-signature";
+
+function safeCompareSignature(expected: string, received: string): boolean {
+  const expectedBuffer = Buffer.from(expected);
+  const receivedBuffer = Buffer.from(received);
+
+  if (expectedBuffer.length !== receivedBuffer.length) {
+    return false;
+  }
+
+  return timingSafeEqual(expectedBuffer, receivedBuffer);
+}
+
+function normalizeCandidate(signature: string): string[] {
+  const trimmed = signature.trim();
+  if (!trimmed.includes("=")) {
+    return [trimmed];
+  }
+
+  const firstEquals = trimmed.indexOf("=");
+  const value = trimmed.slice(firstEquals + 1);
+  return [trimmed, value];
+}
+
+function verifyPrintfulSignature(rawBody: string, headerSignature: string | null, secret: string): boolean {
+  if (!headerSignature) {
+    return false;
+  }
+
+  const candidates = normalizeCandidate(headerSignature);
+  const algorithms: Array<"sha256" | "sha1"> = ["sha256", "sha1"];
+
+  for (const algorithm of algorithms) {
+    const digestBuffer = createHmac(algorithm, secret).update(rawBody).digest();
+    const digestHex = digestBuffer.toString("hex");
+    const digestBase64 = digestBuffer.toString("base64");
+
+    for (const candidate of candidates) {
+      if (safeCompareSignature(digestHex, candidate) || safeCompareSignature(digestBase64, candidate)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
 
 /**
  * Printful webhook handler for order updates
  * This is called by Printful when order status changes (shipped, etc.)
- * 
- * To set up:
- * 1. Go to Printful Dashboard > Settings > Webhooks
- * 2. Add webhook URL: https://your-domain.com/api/webhooks/printful
- * 3. Select events: order.updated, package.shipped
  */
 export async function POST(request: NextRequest) {
   try {
-    const webhook = await request.json();
+    const rawBody = await request.text();
+    const webhookSecret = process.env.PRINTFUL_WEBHOOK_SECRET;
+
+    if (!webhookSecret) {
+      console.error("PRINTFUL_WEBHOOK_SECRET is not configured");
+      return NextResponse.json(
+        { error: "Webhook secret not configured" },
+        { status: 500 }
+      );
+    }
+
+    const signature = request.headers.get(PRINTFUL_SIGNATURE_HEADER);
+    const isValid = verifyPrintfulSignature(rawBody, signature, webhookSecret);
+
+    if (!isValid) {
+      console.error("Invalid Printful signature");
+      return NextResponse.json(
+        { error: "Invalid signature" },
+        { status: 401 }
+      );
+    }
+
+    let webhook: any;
+    try {
+      webhook = JSON.parse(rawBody);
+    } catch (parseError) {
+      console.error("Failed to parse Printful webhook payload", parseError);
+      return NextResponse.json(
+        { error: "Invalid payload" },
+        { status: 400 }
+      );
+    }
+
     const { type, data } = webhook;
 
-    // Handle different webhook types
     if (type === "package.shipped") {
-      const order = data.order;
-      const shipment = data.shipment;
+      const order = data?.order;
+      const shipment = data?.shipment;
 
-      // Send shipping confirmation email
-      if (order.recipient.email) {
+      if (order?.recipient?.email && shipment) {
         try {
           await resend.emails.send({
             from: "Of Blood <orders@of-blood.com>",
@@ -72,7 +144,7 @@ export async function POST(request: NextRequest) {
     console.error("Printful webhook error:", error);
     return NextResponse.json(
       { error: error.message },
-      { status: 200 }
+      { status: 500 }
     );
   }
 }

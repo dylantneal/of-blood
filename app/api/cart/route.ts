@@ -19,7 +19,6 @@ export async function GET(request: NextRequest) {
 
     // Decode the cartId in case it was URL encoded
     const decodedCartId = decodeURIComponent(cartId);
-    console.log('[API /api/cart GET] Fetching cart with ID:', decodedCartId);
     
     const shopifyCart = await getCart(decodedCartId);
     

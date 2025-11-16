@@ -14,14 +14,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await updateCartLine(cartId, lineId, quantity);
-    
-    // Fetch updated cart
-    const shopifyCart = await getCart(cartId);
+    // Update the line and get back the updated cart directly
+    const shopifyCart = await updateCartLine(cartId, lineId, quantity);
 
     if (!shopifyCart) {
       return NextResponse.json(
-        { error: "Cart not found" },
+        { error: "Cart not found after update" },
         { status: 404 }
       );
     }

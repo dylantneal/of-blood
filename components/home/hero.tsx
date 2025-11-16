@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { AnimatedBackground } from "./animated-background";
@@ -58,7 +59,7 @@ export function Hero() {
                   }}
                 >
                   <Image
-                    src="/images/OfBloodLogo.png"
+                    src="/images/logos/OfBloodLogo.png"
                     alt=""
                     width={800}
                     height={800}
@@ -70,7 +71,7 @@ export function Hero() {
                 
                 {/* Main logo */}
                 <Image
-                  src="/images/OfBloodLogo.png"
+                  src="/images/logos/OfBloodLogo.png"
                   alt="Of Blood"
                   width={800}
                   height={800}
@@ -88,13 +89,13 @@ export function Hero() {
               className="flex flex-col sm:flex-row gap-4 justify-center pt-4"
             >
               <Button variant="primary" size="lg" asChild>
-                <a href="/music">Listen</a>
+                <Link href="/music">Listen</Link>
               </Button>
               <Button variant="ghost" size="lg" asChild>
-                <a href="/tour">Tour Dates</a>
+                <Link href="/tour">Tour Dates</Link>
               </Button>
               <Button variant="gold" size="lg" asChild>
-                <a href="/merch">Shop</a>
+                <Link href="/merch">Shop</Link>
               </Button>
             </motion.div>
           </motion.div>

@@ -11,7 +11,7 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: '#B30A0A',
     icons: [
       {
-        src: '/images/OfBloodSymbol.png',
+        src: '/images/logos/OfBloodSymbol.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any',

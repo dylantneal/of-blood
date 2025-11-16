@@ -2,21 +2,54 @@
   {
     "id": "1",
     "type": "image",
-    "mediaUrl": "/images/FullBandPhoto.png",
-    "caption": "Our first full band photo",
+    "mediaUrl": "/images/instagram/Priest.png",
     "date": "2025-01-01"
   },
   {
     "id": "2",
     "type": "image",
-    "mediaUrl": "/images/OfBloodPoster.png"
+    "mediaUrl": "/images/instagram/OfBloodPoster.png"
   },
   {
-    "id": "3",
-    "type": "youtube",
-    "mediaUrl": "AuMok7YqgZE",
-    "caption": "Live performance",
-    "thumbnailUrl": "https://img.youtube.com/vi/AuMok7YqgZE/maxresdefault.jpg"
+    "id": "4",
+    "type": "image",
+    "mediaUrl": "/images/instagram/Eye.png",
+    "caption":  "Collage of nightmares."
+  },
+  {
+    "id": "5",
+    "type": "image",
+    "mediaUrl": "/images/instagram/PrimordialTerror.png",
+    "caption": "Primordial Terror poster art."
+  },
+  {
+    "id": "6",
+    "type": "image",
+    "mediaUrl": "/images/instagram/Shirt.png"
+  },
+  {
+    "id": "7",
+    "type": "image",
+    "mediaUrl": "/images/instagram/Bloodthirst.png",
+    "caption": "The blood thirst never ceases."
+  },
+  {
+    "id": "8",
+    "type": "image",
+    "mediaUrl": "/images/instagram/walker1.png",
+    "caption": "Ash-stained procession emerging from the flame fields."
+  },
+  {
+    "id": "9",
+    "type": "image",
+    "mediaUrl": "/images/instagram/walker2.png",
+    "caption": "Infernal warden invoking Of Blood above the blast furnace."
+  },
+  {
+    "id": "10",
+    "type": "image",
+    "mediaUrl": "/images/instagram/warden.png",
+    "caption": "Molten wanderers pacing the slag thoroughfare."
   }
 ]
 

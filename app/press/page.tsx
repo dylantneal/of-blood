@@ -63,7 +63,7 @@ export default function PressPage() {
             
             <div className="relative aspect-[21/9] w-full border-2 border-gold/50 overflow-hidden shadow-2xl shadow-black/60">
               <Image
-                src="/images/FullBandPhoto.png"
+                src="/images/photos/FullBandPhoto.png"
                 alt="Of Blood - Full Band Photo"
                 fill
                 className="object-cover"
@@ -139,7 +139,7 @@ export default function PressPage() {
             <div className="flex justify-center mb-8">
               <div className="w-48 h-48 md:w-64 md:h-64 opacity-60">
                 <Image
-                  src="/images/OfBloodLogo.png"
+                  src="/images/logos/OfBloodLogo.png"
                   alt="Of Blood Logo"
                   width={256}
                   height={256}
@@ -327,7 +327,7 @@ export default function PressPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
             {/* Band Photo */}
             <PressAssetCard
-              imageSrc="/images/FullBandPhoto.png"
+              imageSrc="/images/photos/FullBandPhoto.png"
               alt="Band Photo"
               title="Band Photo"
               description="High-resolution promotional photo"
@@ -337,7 +337,7 @@ export default function PressPage() {
 
             {/* Text Logo */}
             <PressAssetCard
-              imageSrc="/images/OfBlood_TextLogoTransparent.png"
+              imageSrc="/images/logos/OfBlood_TextLogoTransparent.png"
               alt="Text Logo"
               title="Text Logo"
               description="Transparent PNG logo"
@@ -347,7 +347,7 @@ export default function PressPage() {
 
             {/* Full Logo */}
             <PressAssetCard
-              imageSrc="/images/OfBloodLogo.png"
+              imageSrc="/images/logos/OfBloodLogo.png"
               alt="Of Blood Logo"
               title="Band Logo"
               description="Full logo with symbol and text"
