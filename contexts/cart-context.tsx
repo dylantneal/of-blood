@@ -26,13 +26,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const refreshCart = useCallback(async () => {
     const cartId = localStorage.getItem(CART_ID_KEY);
     if (!cartId) {
-      if (DEBUG_MODE) console.log('[Cart Context] No cart ID found, skipping refresh');
+      console.log('[Cart Context] No cart ID found, skipping refresh');
+      setCart(null);
       return;
     }
 
     // Prevent multiple simultaneous refresh calls
     if (isRefreshingRef.current) {
-      if (DEBUG_MODE) console.log('[Cart Context] Refresh already in progress, skipping');
+      console.log('[Cart Context] Refresh already in progress, skipping');
       return;
     }
     isRefreshingRef.current = true;
@@ -41,21 +42,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       // URL encode the cartId to handle special characters like ?key=
       const encodedCartId = encodeURIComponent(cartId);
-      if (DEBUG_MODE) console.log('[Cart Context] Refreshing cart:', cartId);
+      console.log('[Cart Context] Refreshing cart ID:', cartId.substring(0, 30) + '...');
       
       const response = await fetch(`/api/cart?cartId=${encodedCartId}`);
       if (response.ok) {
         const cartData = await response.json();
-        if (DEBUG_MODE) console.log('[Cart Context] Cart refreshed successfully:', cartData);
+        console.log('[Cart Context] ✓ Cart refreshed. Total items:', cartData.totalQuantity, '| Line items:', cartData.items?.length || 0);
+        
+        if (cartData.items) {
+          console.log('[Cart Context] ✓ Cart contents:', cartData.items.map((i: any) => 
+            `${i.title} (${i.variantTitle}) x${i.quantity}`
+          ));
+        }
+        
         setCart(cartData);
       } else {
-        console.warn('[Cart Context] Failed to refresh cart, clearing invalid cart');
-        // Cart might be invalid, clear it
+        console.warn('[Cart Context] ⚠️ Failed to refresh cart (invalid/expired), clearing cart ID');
+        // Cart might be invalid or expired, clear it
         localStorage.removeItem(CART_ID_KEY);
         setCart(null);
       }
     } catch (error) {
-      console.error("[Cart Context] Error refreshing cart:", error);
+      console.error("[Cart Context] ✗ Error refreshing cart:", error);
+      // Don't clear cart on network errors, just keep the old state
     } finally {
       setIsLoading(false);
       isRefreshingRef.current = false;
@@ -66,19 +75,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const cartId = localStorage.getItem(CART_ID_KEY);
     if (cartId) {
-      if (DEBUG_MODE) console.log('[Cart Context] Loading cart on mount. Cart ID:', cartId);
+      console.log('[Cart Context] Loading cart on mount. Cart ID:', cartId);
       refreshCart();
+    } else {
+      console.log('[Cart Context] No cart ID found on mount');
     }
   }, [refreshCart]);
 
   const addItem = async (variantId: string, quantity: number) => {
+    console.log('[Cart Context] ========== ADD ITEM ==========');
+    console.log('[Cart Context] Request:', { variantId, quantity });
     setIsLoading(true);
     try {
       let cartId = localStorage.getItem(CART_ID_KEY);
 
       // Create cart if it doesn't exist
       if (!cartId) {
-        if (DEBUG_MODE) console.log('[Cart Context] No cart exists, creating new cart');
+        console.log('[Cart Context] No cart exists, creating new cart');
         const createResponse = await fetch("/api/cart", {
           method: "POST",
         });
@@ -87,12 +100,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cartId = newCart.id as string;
         if (cartId) {
           localStorage.setItem(CART_ID_KEY, cartId);
-          if (DEBUG_MODE) console.log('[Cart Context] New cart created:', cartId);
+          console.log('[Cart Context] ✓ New cart created:', cartId);
         }
       }
 
       // Add item to cart
-      if (DEBUG_MODE) console.log('[Cart Context] Adding item to cart:', { cartId, variantId, quantity });
+      console.log('[Cart Context] Sending to API:', { cartId, variantId, quantity });
       const response = await fetch("/api/cart/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -101,14 +114,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       if (!response.ok) {
         const error = await response.json();
+        console.error('[Cart Context] API returned error:', error);
         throw new Error(error.message || "Failed to add item to cart");
       }
 
       const cartData = await response.json();
-      if (DEBUG_MODE) console.log('[Cart Context] Item added successfully:', cartData);
+      console.log('[Cart Context] ✓ API Response - Total items in cart:', cartData.totalQuantity);
+      console.log('[Cart Context] ✓ Items breakdown:', cartData.items?.map((i: any) => ({ 
+        title: i.title, 
+        variant: i.variantTitle,
+        qty: i.quantity 
+      })));
+      
+      // CRITICAL: Set the new cart state
       setCart(cartData);
+      console.log('[Cart Context] ✓ Cart state updated');
     } catch (error) {
-      console.error("[Cart Context] Error adding to cart:", error);
+      console.error("[Cart Context] ✗ Error adding to cart:", error);
       throw error;
     } finally {
       setIsLoading(false);

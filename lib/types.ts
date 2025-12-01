@@ -1,5 +1,14 @@
 // Core data types for Of Blood
 
+export type ShowMedia = {
+  id?: string;
+  type: 'image' | 'youtube';
+  url: string;
+  title?: string;
+  caption?: string;
+  thumbnail?: string;
+};
+
 export type Show = {
   id: string;
   date: string;
@@ -9,6 +18,7 @@ export type Show = {
   ticketUrl?: string;
   onSale?: boolean;
   isSoldOut?: boolean;
+  media?: ShowMedia[];
 };
 
 export type Track = {

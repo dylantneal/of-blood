@@ -16,7 +16,11 @@ const config: Config = {
           DEFAULT: "var(--primary)",
           foreground: "var(--fg)",
         },
-        gold: "var(--gold)",
+        gold: {
+          DEFAULT: "var(--gold)",
+          antique: "var(--gold-antique)",
+          light: "var(--gold-light)",
+        },
         muted: {
           DEFAULT: "var(--muted)",
           foreground: "var(--fg)",
@@ -26,9 +30,6 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-body)", "system-ui", "sans-serif"],
         display: ["var(--font-display)", "serif"],
-      },
-      backgroundImage: {
-        'grain': 'url("/noise.png")',
       },
       animation: {
         'marquee': 'marquee 30s linear infinite',

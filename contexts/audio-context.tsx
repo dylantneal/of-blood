@@ -59,81 +59,64 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
   // Initialize audio element
   useEffect(() => {
-    if (!audioRef.current) {
-      const audio = new Audio();
-      audioRef.current = audio;
+    const audio = audioRef.current;
+    if (!audio) return;
 
-      // Event listeners
-      const handleLoadedMetadata = () => {
-        if (audioRef.current) {
-          const duration = audioRef.current.duration;
-          if (isFinite(duration) && duration > 0) {
-            setDuration(duration);
-          }
-        }
-      };
+    const handleLoadedMetadata = () => {
+      if (audio.duration && isFinite(audio.duration) && audio.duration > 0) {
+        setDuration(audio.duration);
+      }
+    };
 
-      const handleLoadedData = () => {
-        if (audioRef.current) {
-          const duration = audioRef.current.duration;
-          if (isFinite(duration) && duration > 0) {
-            setDuration(duration);
-          }
-        }
-      };
+    const handleLoadedData = () => {
+      if (audio.duration && isFinite(audio.duration) && audio.duration > 0) {
+        setDuration(audio.duration);
+      }
+    };
 
-      const handleTimeUpdate = () => {
-        if (audioRef.current) {
-          setCurrentTime(audioRef.current.currentTime);
-        }
-      };
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+    };
 
-      const handleEnded = () => {
-        // Use a timeout to ensure state is up to date
-        setTimeout(() => {
-          handleTrackEnd();
-        }, 0);
-      };
+    const handleEnded = () => {
+      setTimeout(() => {
+        handleTrackEnd();
+      }, 0);
+    };
 
-      const handlePlay = () => {
-        setIsPlaying(true);
-      };
+    const handlePlay = () => {
+      setIsPlaying(true);
+    };
 
-      const handlePause = () => {
-        setIsPlaying(false);
-      };
+    const handlePause = () => {
+      setIsPlaying(false);
+    };
 
-      const handleError = (e: Event) => {
-        console.error("Audio error:", e);
-        setIsPlaying(false);
-      };
+    const handleError = (e: Event) => {
+      console.error("Audio error:", e);
+      setIsPlaying(false);
+    };
 
-      // Add multiple listeners to ensure duration is captured
-      audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-      audio.addEventListener("loadeddata", handleLoadedData);
-      audio.addEventListener("canplay", handleLoadedMetadata);
-      audio.addEventListener("timeupdate", handleTimeUpdate);
-      audio.addEventListener("ended", handleEnded);
-      audio.addEventListener("play", handlePlay);
-      audio.addEventListener("pause", handlePause);
-      audio.addEventListener("error", handleError);
-
-      // Cleanup
-      return () => {
-        audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-        audio.removeEventListener("loadeddata", handleLoadedData);
-        audio.removeEventListener("canplay", handleLoadedMetadata);
-        audio.removeEventListener("timeupdate", handleTimeUpdate);
-        audio.removeEventListener("ended", handleEnded);
-        audio.removeEventListener("play", handlePlay);
-        audio.removeEventListener("pause", handlePause);
-        audio.removeEventListener("error", handleError);
-      };
-    }
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("loadeddata", handleLoadedData);
+    audio.addEventListener("canplay", handleLoadedMetadata);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
+    audio.addEventListener("error", handleError);
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
+      audio.pause();
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.removeEventListener("loadeddata", handleLoadedData);
+      audio.removeEventListener("canplay", handleLoadedMetadata);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("pause", handlePause);
+      audio.removeEventListener("error", handleError);
+      if (audioRef.current === audio) {
         audioRef.current = null;
       }
     };

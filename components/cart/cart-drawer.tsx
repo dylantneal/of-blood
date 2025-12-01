@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useCart } from "@/contexts/cart-context";
 import { formatPrice } from "@/lib/utils";
 import { ShoppingBag, Plus, Minus, X } from "lucide-react";
@@ -11,24 +12,55 @@ interface TestProps {
 }
 
 export function CartDrawer({ isOpen, onClose }: TestProps) {
-  const { cart, isLoading, updateItem, removeItem, refreshCart } = useCart();
+  const { cart, isLoading, updateItem, removeItem, refreshCart, clearCart } = useCart();
+  
+  // Refresh cart when drawer opens, but only if it's been open for a while
+  // Don't refresh immediately to avoid overwriting fresh add operations
+  useEffect(() => {
+    if (isOpen) {
+      console.log('[Cart Drawer] Opened - using current cart state (not refreshing immediately)');
+      // Only refresh if drawer stays open for more than 1 second
+      // This avoids race conditions with add operations
+      const timer = setTimeout(() => {
+        console.log('[Cart Drawer] Refreshing cart after delay...');
+        refreshCart();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, refreshCart]);
+  
+  // Debug: Log current cart items and their IDs
+  useEffect(() => {
+    if (cart?.items) {
+      console.log('[Cart Drawer] Current cart items:', cart.items.map(item => ({
+        id: item.id,
+        title: item.title,
+        variantId: item.variantId,
+        quantity: item.quantity
+      })));
+    }
+  }, [cart]);
   
   const handleUpdateQuantity = async (lineId: string, newQuantity: number) => {
     try {
+      console.log('[Cart Drawer] Updating quantity for item:', lineId, 'to', newQuantity);
       await updateItem(lineId, newQuantity);
-      await refreshCart();
+      // Don't call refreshCart - updateItem already updates the cart state
+      console.log('[Cart Drawer] Quantity updated successfully');
     } catch (error) {
-      console.error('Failed to update quantity:', error);
+      console.error('[Cart Drawer] Failed to update quantity:', error);
       alert('Failed to update quantity. Please try again.');
     }
   };
 
   const handleRemove = async (lineId: string) => {
     try {
+      console.log('[Cart Drawer] Removing item:', lineId);
       await removeItem(lineId);
-      await refreshCart();
+      // Don't call refreshCart - removeItem already updates the cart state
+      console.log('[Cart Drawer] Item removed successfully');
     } catch (error) {
-      console.error('Failed to remove item:', error);
+      console.error('[Cart Drawer] Failed to remove item:', error);
       alert('Failed to remove item. Please try again.');
     }
   };
@@ -77,15 +109,52 @@ export function CartDrawer({ isOpen, onClose }: TestProps) {
           flexShrink: 0,
           backgroundColor: '#0A0A0A',
         }}>
-          <h2 style={{ 
-            fontSize: '24px', 
-            fontWeight: 'bold', 
-            color: '#F2F2F2',
-            fontFamily: 'var(--font-display), serif',
-            letterSpacing: '0.05em',
-          }}>
-            Cart
-          </h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <h2 style={{ 
+              fontSize: '24px', 
+              fontWeight: 'bold', 
+              color: '#F2F2F2',
+              fontFamily: 'var(--font-display), serif',
+              letterSpacing: '0.05em',
+            }}>
+              Collection
+            </h2>
+            {/* Clear Cart Button - for debugging */}
+            {cart && cart.items && cart.items.length > 0 && (
+              <button
+                onClick={() => {
+                  if (window.confirm('Clear your entire collection? This cannot be undone.')) {
+                    console.log('[Cart Drawer] Clearing cart...');
+                    clearCart();
+                    onClose();
+                  }
+                }}
+                style={{
+                  padding: '4px 8px',
+                  fontSize: '10px',
+                  backgroundColor: 'transparent',
+                  border: '1px solid #2A2A2A',
+                  color: '#666',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  transition: 'all 0.3s',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1A1A1A';
+                  e.currentTarget.style.color = '#B30A0A';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#666';
+                }}
+                title="Clear entire collection"
+              >
+                Clear All
+              </button>
+            )}
+          </div>
           <button
             onClick={onClose}
             style={{ 
@@ -126,7 +195,7 @@ export function CartDrawer({ isOpen, onClose }: TestProps) {
               justifyContent: 'center',
               zIndex: 10,
             }}>
-              <div style={{ color: '#C9A227', fontSize: '16px' }}>Updating cart...</div>
+              <div style={{ color: '#C9A227', fontSize: '16px' }}>Updating collection...</div>
             </div>
           )}
           
@@ -157,7 +226,7 @@ export function CartDrawer({ isOpen, onClose }: TestProps) {
                 color: '#F2F2F2',
                 fontFamily: 'var(--font-display), serif'
               }}>
-                Your cart is empty
+                Your collection is empty
               </p>
               <p style={{ color: '#999', marginBottom: '24px' }}>
                 Add some items to get started
@@ -461,7 +530,7 @@ export function CartDrawer({ isOpen, onClose }: TestProps) {
                 e.currentTarget.style.color = '#999';
               }}
             >
-              Continue Shopping
+              Continue Collecting
             </button>
           </div>
         )}

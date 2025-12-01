@@ -91,6 +91,19 @@ pnpm dev
   - Static assets (images, icons, etc.)
 ```
 
+## Documentation
+
+Detailed playbooks and setup guides now live under `docs/`:
+
+- `docs/setup/` – environment setup, quick start instructions
+- `docs/media/` – media page walkthroughs, Instagram feed + video hosting notes
+- `docs/commerce/` – Shopify/Printful integration guides and storefront token steps  
+  - `docs/commerce/cart/` – cart debugging postmortems and fixes
+- `docs/audio/` – audio player setup
+- `docs/tour/` – tour date publishing checklist
+
+Browse the relevant folder for the latest instructions before changing those subsystems.
+
 ## Key Pages
 
 - `/` - Home with hero, featured release, tour ticker, merch, newsletter

@@ -63,7 +63,21 @@ You can also edit `data/shows.json` directly. Here's the format:
     "venue": "The Roxy Theatre",
     "ticketUrl": "https://example.com/tickets",
     "onSale": true,
-    "isSoldOut": false
+    "isSoldOut": false,
+    "media": [
+      {
+        "type": "image",
+        "url": "/images/tour/la-roxy.jpg",
+        "title": "Pre-show Ritual",
+        "caption": "Shot by Jane Doe"
+      },
+      {
+        "type": "youtube",
+        "url": "https://youtu.be/yourVideoId",
+        "title": "Full Set Recap",
+        "caption": "Fan footage by HexCamera"
+      }
+    ]
   }
 ]
 ```
@@ -77,6 +91,14 @@ You can also edit `data/shows.json` directly. Here's the format:
 - `ticketUrl`: Full URL to ticket sales page (optional)
 - `onSale`: `true` if tickets are available, `false` otherwise (optional, defaults to false)
 - `isSoldOut`: `true` if sold out, `false` otherwise (optional, defaults to false)
+- `media`: Optional array of photos and videos for that show. Use objects with:
+  - `type`: `"image"` or `"youtube"`
+  - `url`: Path to the image (e.g., `/images/tour/date.jpg`) or a YouTube link/ID
+  - `title` (optional): Short title used as the caption headline
+  - `caption` (optional): Supporting text such as the photographer credit
+  - `thumbnail` (optional): Override image for video previews if you want
+
+> 💡 For images hosted externally, add the domain to `next.config.mjs` `images.remotePatterns` so Next.js can optimize them, or save the files under `/public/images/tour`.
 
 ## Where Tour Dates Appear
 
@@ -86,8 +108,9 @@ You can also edit `data/shows.json` directly. Here's the format:
 ## Tips
 
 - Dates are automatically sorted chronologically
-- Only future dates appear on the home page tour ticker
+- Only future dates appear on the home page tour ticker, but the `/tour` page now lists every show (past + future). Past shows automatically get a blood-red strikethrough and their ticket CTA switches to **Unavailable**.
 - Make sure dates are in the future for them to show as "upcoming"
 - Use the "On Sale" checkbox to control ticket button visibility
 - Use "Sold Out" to mark shows that are no longer available
+- Add photos and YouTube recaps to celebrate past rituals—each show can have as many `media` entries as you like.
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Cinzel } from "next/font/google";
-import { Header } from "@/components/layout/header";
+import Header from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { AudioProvider } from "@/contexts/audio-context";
 import { CartProvider } from "@/contexts/cart-context";

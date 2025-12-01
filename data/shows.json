@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "id": "label808-2025-11-08",
+    "date": "2025-11-08",
+    "city": "Roselle",
+    "state": "IL",
+    "venue": "Label808",
+    "onSale": false,
+    "isSoldOut": false,
+    "media": [
+      {
+        "type": "youtube",
+        "url": "https://www.youtube.com/watch?v=BNCoWC7yVgU",
+        "title": "Label808 Ritual Recap",
+        "caption": "Live footage from November 8, 2025"
+      }
+    ]
+  }
+]

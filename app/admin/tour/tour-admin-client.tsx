@@ -6,8 +6,9 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Show } from "@/lib/types";
+import { Show, ShowMedia } from "@/lib/types";
 import { Trash2, Plus, Copy, Check, LogOut } from "lucide-react";
 
 export function TourAdminClient() {
@@ -66,6 +67,7 @@ export function TourAdminClient() {
       ticketUrl: "",
       onSale: false,
       isSoldOut: false,
+      media: [],
     };
     setShows([...shows, newShow]);
   };
@@ -78,6 +80,54 @@ export function TourAdminClient() {
 
   const deleteShow = (id: string) => {
     setShows(shows.filter((show) => show.id !== id));
+  };
+
+  const addMediaItem = (showId: string) => {
+    const newMedia: ShowMedia = {
+      id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `media-${Date.now()}`,
+      type: "image",
+      url: "",
+      title: "",
+      caption: "",
+      thumbnail: "",
+    };
+
+    setShows(
+      shows.map((show) =>
+        show.id === showId
+          ? { ...show, media: [...(show.media ?? []), newMedia] }
+          : show
+      )
+    );
+  };
+
+  const updateMediaItem = (
+    showId: string,
+    index: number,
+    field: keyof ShowMedia,
+    value: string
+  ) => {
+    setShows((prev) =>
+      prev.map((show) => {
+        if (show.id !== showId) return show;
+        const mediaItems = [...(show.media ?? [])];
+        const current = mediaItems[index];
+        if (!current) return show;
+        mediaItems[index] = { ...current, [field]: value };
+        return { ...show, media: mediaItems };
+      })
+    );
+  };
+
+  const removeMediaItem = (showId: string, index: number) => {
+    setShows((prev) =>
+      prev.map((show) => {
+        if (show.id !== showId) return show;
+        const mediaItems = [...(show.media ?? [])];
+        mediaItems.splice(index, 1);
+        return { ...show, media: mediaItems };
+      })
+    );
   };
 
   const copyToClipboard = () => {
@@ -207,6 +257,135 @@ export function TourAdminClient() {
                       />
                       <span className="text-sm">Sold Out</span>
                     </label>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-sm font-medium">Media Archive</p>
+                        <p className="text-xs text-foreground/60">
+                          Attach photos or YouTube links for this ritual.
+                        </p>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => addMediaItem(show.id)}
+                        className="gap-2"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Media
+                      </Button>
+                    </div>
+
+                    <div className="space-y-3">
+                      {show.media && show.media.length > 0 ? (
+                        show.media.map((mediaItem, mediaIndex) => (
+                          <div
+                            key={mediaItem.id || `${show.id}-media-${mediaIndex}`}
+                            className="border border-line/50 rounded-md p-4 space-y-4"
+                          >
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs uppercase tracking-[0.3em] text-foreground/60">
+                                Artifact #{mediaIndex + 1}
+                              </p>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeMediaItem(show.id, mediaIndex)}
+                                className="text-destructive hover:text-destructive"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+
+                            <div className="grid gap-4 md:grid-cols-2">
+                              <div>
+                                <label className="block text-sm font-medium mb-2">Type</label>
+                                <select
+                                  value={mediaItem.type}
+                                  onChange={(e) =>
+                                    updateMediaItem(
+                                      show.id,
+                                      mediaIndex,
+                                      "type",
+                                      e.target.value as ShowMedia["type"]
+                                    )
+                                  }
+                                  className="w-full rounded border border-line bg-background px-3 py-2 text-sm"
+                                >
+                                  <option value="image">Image</option>
+                                  <option value="youtube">YouTube</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium mb-2">
+                                  {mediaItem.type === "image"
+                                    ? "Image URL or Path *"
+                                    : "YouTube URL or ID *"}
+                                </label>
+                                <Input
+                                  type="text"
+                                  value={mediaItem.url}
+                                  onChange={(e) =>
+                                    updateMediaItem(show.id, mediaIndex, "url", e.target.value)
+                                  }
+                                  placeholder={
+                                    mediaItem.type === "image"
+                                      ? "/images/tour/ritual.jpg"
+                                      : "https://youtu.be/abc123"
+                                  }
+                                  required
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium mb-2">Title</label>
+                                <Input
+                                  type="text"
+                                  value={mediaItem.title || ""}
+                                  onChange={(e) =>
+                                    updateMediaItem(show.id, mediaIndex, "title", e.target.value)
+                                  }
+                                  placeholder="Blood Moon Ceremony"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium mb-2">
+                                  Caption / Credit
+                                </label>
+                                <Textarea
+                                  value={mediaItem.caption || ""}
+                                  onChange={(e) =>
+                                    updateMediaItem(show.id, mediaIndex, "caption", e.target.value)
+                                  }
+                                  placeholder="Shot by Hex Lens Collective"
+                                  rows={2}
+                                />
+                              </div>
+                              <div className="md:col-span-2">
+                                <label className="block text-sm font-medium mb-2">
+                                  Custom Thumbnail (optional)
+                                </label>
+                                <Input
+                                  type="text"
+                                  value={mediaItem.thumbnail || ""}
+                                  onChange={(e) =>
+                                    updateMediaItem(show.id, mediaIndex, "thumbnail", e.target.value)
+                                  }
+                                  placeholder="https://img.youtube.com/..."
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="border border-dashed border-line/60 rounded-md p-4 text-sm text-foreground/60">
+                          No media yet. Click “Add Media” to attach photos or recap videos.
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>

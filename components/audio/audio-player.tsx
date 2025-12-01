@@ -40,18 +40,18 @@ export function AudioPlayer() {
     }
   };
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTime = parseFloat(e.target.value);
-    seek(newTime);
-  };
-
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
     setIsMuted(newVolume === 0);
   };
 
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+  const progress = duration > 0 ? Math.min((currentTime / duration) * 100, 100) : 0;
+
+  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = parseFloat(e.target.value);
+    seek(newTime);
+  };
 
   return (
     <AnimatePresence>
@@ -128,17 +128,44 @@ export function AudioPlayer() {
           /* Expanded View */
           <div className="flex flex-col h-full">
             {/* Progress Bar */}
-            <div className="relative h-1 bg-line group cursor-pointer" onClick={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              const x = e.clientX - rect.left;
-              const percentage = x / rect.width;
-              seek(percentage * duration);
-            }}>
-              <motion.div
-                className="absolute top-0 left-0 h-full bg-primary"
-                style={{ width: `${progress}%` }}
-                transition={{ duration: 0.1 }}
-              />
+            <div className="flex items-center gap-4 px-4 md:px-8 py-3">
+              <span className="font-mono text-xs text-foreground/60 w-12">
+                {formatTime(currentTime)}
+              </span>
+              <div className="relative flex-1 h-2">
+                <div className="absolute inset-0 rounded-full bg-line/60" />
+                <motion.div
+                  className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary via-primary/90 to-red-600 shadow-[0_0_15px_rgba(179,10,10,0.5)]"
+                  style={{ width: `${progress}%` }}
+                  transition={{ duration: 0.1 }}
+                />
+                <input
+                  type="range"
+                  min={0}
+                  max={duration || 0}
+                  step="0.1"
+                  value={duration ? Math.min(currentTime, duration) : 0}
+                  onChange={handleProgressChange}
+                  disabled={!duration}
+                  className="absolute inset-0 w-full appearance-none bg-transparent cursor-pointer
+                    [&::-webkit-slider-thumb]:appearance-none
+                    [&::-webkit-slider-thumb]:w-3
+                    [&::-webkit-slider-thumb]:h-3
+                    [&::-webkit-slider-thumb]:rounded-full
+                    [&::-webkit-slider-thumb]:bg-white
+                    [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(179,10,10,0.8)]
+                    [&::-moz-range-thumb]:appearance-none
+                    [&::-moz-range-thumb]:w-3
+                    [&::-moz-range-thumb]:h-3
+                    [&::-moz-range-thumb]:rounded-full
+                    [&::-moz-range-thumb]:bg-white
+                    [&::-moz-range-thumb]:border-none
+                  "
+                />
+              </div>
+              <span className="font-mono text-xs text-foreground/60 w-12 text-right">
+                {formatTime(duration)}
+              </span>
             </div>
 
             {/* Main Controls */}

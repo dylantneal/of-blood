@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ShoppingBag } from "lucide-react";
+import { Menu, X, Package } from "lucide-react";
 import { Logo } from "./logo";
 import { Container } from "../ui/container";
 import { cn } from "@/lib/utils";
@@ -13,14 +13,14 @@ import { CartDrawer } from "@/components/cart/cart-drawer";
 
 const navigation = [
   { name: "Music", href: "/music" },
+  { name: "Media", href: "/media" },
   { name: "Tour", href: "/tour" },
   { name: "Merch", href: "/merch" },
-  { name: "Media", href: "/media" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
 ];
 
-export function Header() {
+export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -95,9 +95,9 @@ export function Header() {
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative p-2 text-foreground hover:text-primary transition-all duration-300 hover:scale-110"
-              aria-label="Open cart"
+              aria-label="Open collection"
             >
-              <ShoppingBag className="h-6 w-6" />
+              <Package className="h-6 w-6" />
               {cart && cart.totalQuantity > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
                   {cart.totalQuantity}

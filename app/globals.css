@@ -3,11 +3,13 @@
 @tailwind utilities;
 
 :root {
-  /* Color system - blackened death metal elegance */
+  /* Color system - industrial occult elegance */
   --bg: #0A0A0A;
   --fg: #F2F2F2;
   --primary: #B30A0A;
   --gold: #C9A227;
+  --gold-antique: #B8941E;
+  --gold-light: #D4AC39;
   --muted: #1A1A1A;
   --line: #2A2A2A;
   
@@ -78,7 +80,7 @@
   
   /* Glow effect for red accents */
   .glow-red {
-    filter: drop-shadow(0 0 20px rgba(179, 10, 10, 0.5)) drop-shadow(0 0 40px rgba(179, 10, 10, 0.3));
+    text-shadow: 0 0 20px rgba(179, 10, 10, 0.5);
   }
   
   .glow-gold {
@@ -93,11 +95,146 @@
     background-clip: text;
   }
   
-  /* Glass morphism effect */
-  .glass {
-    background: rgba(10, 10, 10, 0.4);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(242, 242, 242, 0.1);
+  /* Occult-Luxury Typography */
+  .product-title {
+    letter-spacing: 0.02em;
+    text-shadow: 
+      inset 0 1px 2px rgba(0, 0, 0, 0.3),
+      0 1px 1px rgba(242, 242, 242, 0.05);
+    transition: all 0.3s ease;
+  }
+  
+  .product-title:hover {
+    background: linear-gradient(
+      135deg,
+      var(--fg) 0%,
+      var(--primary) 50%,
+      var(--fg) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: luxury-sheen 2s ease infinite;
+  }
+  
+  @keyframes luxury-sheen {
+    0%, 100% {
+      background-position: 0% center;
+    }
+    50% {
+      background-position: 100% center;
+    }
+  }
+  
+  /* Antique Gold Price with Emboss */
+  .price-antique {
+    color: var(--gold-antique);
+    text-shadow: 
+      0 1px 0 rgba(212, 172, 57, 0.3),
+      0 -1px 0 rgba(0, 0, 0, 0.5),
+      0 2px 4px rgba(0, 0, 0, 0.4);
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+  
+  /* Occult glyph/sigil styling */
+  .occult-glyph {
+    display: inline-block;
+    color: var(--gold);
+    font-size: 0.75em;
+    margin-right: 0.35rem;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 4px rgba(201, 162, 39, 0.4));
+    vertical-align: middle;
+  }
+  
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--muted);
+    border-radius: 3px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--gold-antique), var(--primary));
+    border-radius: 3px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--gold), var(--primary));
+  }
+  
+  /* Firefox scrollbar */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-antique) var(--muted);
+  }
+  
+  /* Occult hover glow */
+  .occult-hover {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .occult-hover:hover {
+    box-shadow: 
+      0 0 30px rgba(179, 10, 10, 0.4),
+      0 0 60px rgba(179, 10, 10, 0.2),
+      inset 0 0 20px rgba(179, 10, 10, 0.1);
+    border-color: rgba(179, 10, 10, 0.8);
+  }
+  
+  /* Artifact glow - for product cards */
+  .artifact-glow {
+    position: relative;
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Red glow backdrop that appears on hover */
+  .artifact-glow::before {
+    content: '';
+    position: absolute;
+    inset: -60px;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(179, 10, 10, 0.5) 0%,
+      rgba(179, 10, 10, 0.3) 30%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .artifact-glow:hover {
+    box-shadow: 
+      0 0 30px rgba(179, 10, 10, 0.5),
+      0 0 60px rgba(179, 10, 10, 0.3),
+      0 8px 32px rgba(0, 0, 0, 0.6);
+    transform: translateY(-8px) scale(1.02);
+  }
+  
+  /* Show red glow backdrop on hover with pulse */
+  .artifact-glow:hover::before {
+    opacity: 1;
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes glow-pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.85;
+    }
   }
 }
 
