@@ -84,8 +84,9 @@ export async function POST(request: NextRequest) {
       if (response.status === 409 || errorMessage?.includes("already exists") || errorMessage?.includes("duplicate")) {
         // Send welcome email even if already subscribed
         try {
+          const fromEmailDomain = process.env.FROM_EMAIL_DOMAIN || "of-blood.com";
           await resend.emails.send({
-            from: "Of Blood <newsletter@of-blood.com>",
+            from: `Of Blood <newsletter@${fromEmailDomain}>`,
             to: email,
             subject: "Welcome to the Blood Pact",
             html: `
@@ -153,8 +154,9 @@ export async function POST(request: NextRequest) {
 
     // Send confirmation email to the subscriber
     try {
+      const fromEmailDomain = process.env.FROM_EMAIL_DOMAIN || "of-blood.com";
       await resend.emails.send({
-        from: "Of Blood <onboarding@resend.dev>",
+        from: `Of Blood <newsletter@${fromEmailDomain}>`,
         to: email,
         subject: "Welcome to the Blood Pact",
         html: `
