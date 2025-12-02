@@ -1,0 +1,34 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Force LF line endings for shell scripts
+*.sh text eol=lf
+
+# Force LF line endings for GitHub workflows
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Documents
+*.md text
+*.txt text
+
+# Source code
+*.js text
+*.jsx text
+*.ts text
+*.tsx text
+*.json text
+*.css text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mp3 binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+

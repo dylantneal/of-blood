@@ -1,0 +1,158 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  deploy-preview:
+    name: Deploy Preview (PR)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    environment:
+      name: preview
+      url: ${{ steps.deploy.outputs.url }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      
+      - name: Build Project Artifacts
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      
+      - name: Deploy Preview to Vercel
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+          echo "### 🚀 Preview Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Preview URL: $url" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Comment PR with preview URL
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const url = '${{ steps.deploy.outputs.url }}';
+            const comment = `### 🚀 Preview Deployment Ready!
+            
+            **Preview URL:** ${url}
+            
+            ✅ This preview deployment includes all changes from this PR.
+            🔍 Test thoroughly before merging to production.
+            ⏱️ Preview will remain active until the PR is closed.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  deploy-production:
+    name: Deploy Production
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://of-blood.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      
+      - name: Deploy Production to Vercel
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+          echo "### 🎉 Production Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Production URL: https://of-blood.com" >> $GITHUB_STEP_SUMMARY
+          echo "Vercel URL: $url" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Create deployment tag
+        run: |
+          TAG="deploy-$(date +%Y%m%d-%H%M%S)"
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a $TAG -m "Production deployment"
+          git push origin $TAG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Notify deployment success
+        run: |
+          echo "✅ Production deployment successful!" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 Live at: https://of-blood.com" >> $GITHUB_STEP_SUMMARY
+
+  post-deploy-checks:
+    name: Post-Deployment Verification
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Wait for deployment to be live
+        run: sleep 30
+      
+      - name: Check production site health
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://of-blood.com)
+          if [ $response -eq 200 ]; then
+            echo "✅ Production site is healthy (HTTP $response)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Production site health check failed (HTTP $response)" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+      
+      - name: Check key pages
+        run: |
+          pages=("/" "/music" "/tour" "/merch" "/contact")
+          echo "### Page Health Checks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          for page in "${pages[@]}"; do
+            response=$(curl -s -o /dev/null -w "%{http_code}" "https://of-blood.com$page")
+            if [ $response -eq 200 ]; then
+              echo "✅ $page - OK" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ $page - Failed (HTTP $response)" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+

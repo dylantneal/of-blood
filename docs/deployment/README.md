@@ -1,3 +1,31 @@
+# 🚀 Deployment Documentation
+
+## 🤖 Automated CI/CD Pipeline (Recommended)
+
+**Setup Time**: 10 minutes | **Maintenance**: ~15 min/week
+
+This project includes a comprehensive automated CI/CD pipeline for secure, reliable deployments:
+
+### Features
+- ✅ Automated testing and linting on every push
+- 🔒 Security scanning (dependencies, secrets, CodeQL)
+- 📦 Automated builds with Next.js
+- 🚀 Preview deployments for every PR
+- 🌐 Production deployments on merge to main
+- 🔄 Automated dependency updates (Dependabot)
+- 🎯 Lighthouse performance audits
+- 🔙 Easy rollback capabilities
+
+### Quick Links
+- **[CI/CD Quick Start](./cicd-quick-start.md)** - Get set up in 10 minutes
+- **[Full CI/CD Documentation](./cicd-pipeline.md)** - Complete guide with architecture and troubleshooting
+
+---
+
+## 📖 Manual Deployment Guide
+
+Prefer manual deployment? Follow this 15-minute guide:
+
 # 🚀 Quick Start - Deploy in 15 Minutes
 
 Your code is ready on GitHub. Follow these steps to get live ASAP.

@@ -1,0 +1,215 @@
+name: Security Scanning
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run security scan daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run npm audit
+        run: |
+          npm audit --audit-level=moderate --json > audit-results.json || true
+          
+          # Parse and display results
+          if [ -s audit-results.json ]; then
+            echo "### 🔒 Security Audit Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            vulnerabilities=$(jq '.metadata.vulnerabilities' audit-results.json)
+            echo "**Vulnerability Summary:**" >> $GITHUB_STEP_SUMMARY
+            echo "- Critical: $(echo $vulnerabilities | jq '.critical')" >> $GITHUB_STEP_SUMMARY
+            echo "- High: $(echo $vulnerabilities | jq '.high')" >> $GITHUB_STEP_SUMMARY
+            echo "- Moderate: $(echo $vulnerabilities | jq '.moderate')" >> $GITHUB_STEP_SUMMARY
+            echo "- Low: $(echo $vulnerabilities | jq '.low')" >> $GITHUB_STEP_SUMMARY
+            
+            # Fail if critical or high vulnerabilities found
+            critical=$(echo $vulnerabilities | jq '.critical')
+            high=$(echo $vulnerabilities | jq '.high')
+            
+            if [ "$critical" -gt 0 ] || [ "$high" -gt 0 ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "❌ **Action Required:** Critical or High severity vulnerabilities found!" >> $GITHUB_STEP_SUMMARY
+              echo "Run \`npm audit fix\` locally to resolve." >> $GITHUB_STEP_SUMMARY
+              exit 1
+            fi
+          fi
+      
+      - name: Upload audit results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-audit-results
+          path: audit-results.json
+
+  code-scanning:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, typescript
+          queries: security-and-quality
+      
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  secret-scanning:
+    name: Secret & Credential Scanning
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for better secret detection
+      
+      - name: TruffleHog Secret Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified
+      
+      - name: GitGuardian scan
+        uses: GitGuardian/ggshield-action@master
+        env:
+          GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
+          GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
+          GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+        continue-on-error: true
+
+  env-file-check:
+    name: Check for Exposed Secrets
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check for .env files in git
+        run: |
+          if git ls-files | grep -E '\.env$|\.env\.local$|\.env\.production$'; then
+            echo "❌ ERROR: .env files found in git!" >> $GITHUB_STEP_SUMMARY
+            echo "Remove them immediately with: git rm --cached .env" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ No .env files found in git" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Check for hardcoded secrets patterns
+        run: |
+          echo "### 🔍 Hardcoded Secret Patterns Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          patterns=(
+            "password.*=.*['\"].*['\"]"
+            "api[_-]?key.*=.*['\"].*['\"]"
+            "secret.*=.*['\"].*['\"]"
+            "token.*=.*['\"].*['\"]"
+            "AWS_ACCESS_KEY"
+            "PRIVATE_KEY"
+          )
+          
+          found=0
+          for pattern in "${patterns[@]}"; do
+            if grep -rniE "$pattern" app/ components/ lib/ --exclude-dir=node_modules 2>/dev/null; then
+              found=1
+            fi
+          done
+          
+          if [ $found -eq 1 ]; then
+            echo "⚠️  Warning: Potential hardcoded secrets found" >> $GITHUB_STEP_SUMMARY
+            echo "Review the matches above and ensure no real credentials are committed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ No obvious hardcoded secrets found" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  lighthouse-security:
+    name: Lighthouse Security Headers Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: dummy.myshopify.com
+          NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN: dummy-token
+      
+      - name: Start application
+        run: npm start &
+        env:
+          PORT: 3000
+      
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000
+      
+      - name: Check security headers
+        run: |
+          echo "### 🔒 Security Headers Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          headers=$(curl -s -I http://localhost:3000)
+          
+          # Check for important security headers
+          if echo "$headers" | grep -i "X-Frame-Options"; then
+            echo "✅ X-Frame-Options present" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️  X-Frame-Options missing" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if echo "$headers" | grep -i "X-Content-Type-Options"; then
+            echo "✅ X-Content-Type-Options present" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️  X-Content-Type-Options missing" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if echo "$headers" | grep -i "Strict-Transport-Security"; then
+            echo "✅ HSTS header present" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️  HSTS header missing (OK if behind proxy)" >> $GITHUB_STEP_SUMMARY
+          fi
+
