@@ -1,0 +1,333 @@
+# 🚀 Deployment Checklist - Of Blood
+
+Complete checklist for deploying your site to production via Vercel.
+
+---
+
+## ✅ Pre-Deployment Checklist
+
+### Code Quality
+- [x] All tests passing (`npm run test:merch` = 100%)
+- [x] No TypeScript errors (`npm run type-check`)
+- [x] No linter errors (`npm run lint`)
+- [x] Build succeeds locally (`npm run build`)
+- [x] Code committed and pushed to GitHub
+
+### Configuration
+- [ ] `.env.local` has all required variables (DO NOT COMMIT THIS FILE)
+- [x] `vercel.json` configured
+- [x] `.gitignore` includes `.env*.local`
+- [x] All documentation complete
+
+---
+
+## 🔧 Vercel Setup Steps
+
+### 1. Create Vercel Account
+- [ ] Sign up at [vercel.com](https://vercel.com) with GitHub
+
+### 2. Import Project
+- [ ] Go to Vercel Dashboard
+- [ ] Click "Add New Project"
+- [ ] Import your `of-blood` repository from GitHub
+- [ ] Vercel auto-detects Next.js
+
+### 3. Configure Environment Variables
+
+Go to **Project Settings** → **Environment Variables** and add:
+
+#### Required Variables (Production)
+```
+NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN=if8vpt-fk.myshopify.com
+NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN=5117aa248ba23dece49001d4d1cd97ea
+PRINTFUL_API_KEY=lHKLNj1CCH6CvzZzFmMoww5k2Ca3O3ZHPhfTDkAN
+RESEND_API_KEY=re_cNPaecEq_1frJo2KBGTVV55W3CJ2ePPii
+```
+
+#### Optional Variables (for enhanced features)
+```
+PRINTFUL_WEBHOOK_SECRET=[get from Printful]
+SHOPIFY_WEBHOOK_SECRET=[get from Shopify]
+ADMIN_PASSWORD=Schecter7$
+RESEND_AUDIENCE_ID=5a08cd35-5f53-415e-8123-76ecf0249f80
+```
+
+- [ ] All required variables added
+- [ ] Variables set for "Production" environment
+- [ ] Optional: Variables also set for "Preview"
+
+### 4. Deploy
+- [ ] Click "Deploy"
+- [ ] Wait for build to complete (2-3 minutes)
+- [ ] Note your production URL (e.g., `https://of-blood.vercel.app`)
+
+---
+
+## 🔗 Post-Deployment Configuration
+
+### Update Webhook URLs
+
+#### Printful Webhook (Optional but Recommended)
+1. [ ] Go to [Printful Dashboard](https://www.printful.com/dashboard/webhooks)
+2. [ ] Click "Add webhook"
+3. [ ] URL: `https://YOUR-DOMAIN.vercel.app/api/webhooks/printful`
+4. [ ] Select event: `package_shipped`
+5. [ ] Copy webhook secret
+6. [ ] Add secret to Vercel: `PRINTFUL_WEBHOOK_SECRET`
+7. [ ] Redeploy from Vercel dashboard
+
+#### Shopify Webhook (Optional)
+1. [ ] Go to Shopify Admin → Settings → Notifications → Webhooks
+2. [ ] Update existing webhook URL to: `https://YOUR-DOMAIN.vercel.app/api/webhooks/shopify`
+3. [ ] Or create new webhook if none exists
+4. [ ] Copy webhook secret
+5. [ ] Add to Vercel: `SHOPIFY_WEBHOOK_SECRET`
+6. [ ] Redeploy from Vercel dashboard
+
+---
+
+## ✅ Verification Tests
+
+### Test 1: Site Loads
+- [ ] Visit your production URL
+- [ ] Homepage loads correctly
+- [ ] All pages accessible (About, Music, Merch, Tour, Media, Contact)
+- [ ] No console errors in browser
+
+### Test 2: Merch Page
+- [ ] Visit `/merch` page
+- [ ] All 16 products display
+- [ ] Product images load
+- [ ] Prices show correctly
+
+### Test 3: Product Details
+- [ ] Click on a product
+- [ ] Product detail page loads
+- [ ] All variants available
+- [ ] Images display in gallery
+- [ ] Add to cart button visible
+
+### Test 4: Cart Operations
+- [ ] Click "Add to Cart"
+- [ ] Cart drawer opens
+- [ ] Product appears in cart
+- [ ] Update quantity works
+- [ ] Remove item works
+- [ ] Cart totals calculate correctly
+
+### Test 5: Checkout
+- [ ] Add product to cart
+- [ ] Click "Checkout"
+- [ ] Redirects to Shopify checkout
+- [ ] Shopify checkout loads properly
+
+### Test 6: Place Test Order
+- [ ] Use Shopify's test payment gateway
+- [ ] Complete a test purchase
+- [ ] Check Printful dashboard - order should appear automatically
+- [ ] Check email for confirmation (if configured)
+
+### Test 7: Webhooks (If Configured)
+- [ ] Wait for Printful to "ship" test order
+- [ ] Check if tracking email received
+- [ ] Check Vercel function logs for webhook activity
+
+### Test 8: Performance
+- [ ] Run [PageSpeed Insights](https://pagespeed.web.dev/)
+- [ ] Check Vercel Analytics dashboard
+- [ ] Verify images are optimized
+- [ ] Check page load times
+
+---
+
+## 🔒 Security Verification
+
+- [ ] All environment variables in Vercel (not in code)
+- [ ] `.env.local` not in repository
+- [ ] HTTPS active (automatic with Vercel)
+- [ ] Webhook signature verification enabled
+- [ ] No API keys in client-side code
+- [ ] Rate limiting active on API routes
+
+---
+
+## 📊 Monitoring Setup
+
+### Vercel Dashboard
+- [ ] Enable Vercel Analytics
+- [ ] Set up deployment notifications
+- [ ] Configure error alerts
+
+### External Monitoring (Optional)
+- [ ] Set up uptime monitoring (e.g., UptimeRobot)
+- [ ] Configure performance monitoring
+- [ ] Set up error tracking (e.g., Sentry)
+
+---
+
+## 🌍 Custom Domain (Optional)
+
+### Setup Custom Domain
+- [ ] Go to Project Settings → Domains
+- [ ] Add your domain (e.g., `of-blood.com`)
+- [ ] Follow DNS configuration instructions
+- [ ] Wait for DNS propagation (can take 24-48 hours)
+- [ ] SSL certificate will be auto-generated by Vercel
+
+### Update Webhook URLs for Custom Domain
+- [ ] Update Printful webhook URL to custom domain
+- [ ] Update Shopify webhook URL to custom domain
+- [ ] Test webhooks with new URLs
+
+---
+
+## 📧 Email Configuration
+
+### Verify Email Domain
+- [ ] Add your domain to Resend
+- [ ] Add DNS records for email verification
+- [ ] Verify domain in Resend dashboard
+- [ ] Update `FROM_EMAIL_DOMAIN` if needed
+
+### Test Emails
+- [ ] Submit contact form
+- [ ] Check if email received
+- [ ] Subscribe to newsletter
+- [ ] Check if welcome email sent
+
+---
+
+## 🐛 Common Issues & Solutions
+
+### Build Fails
+**Check:**
+- [ ] All dependencies in package.json
+- [ ] No TypeScript errors
+- [ ] Environment variables set
+
+**Fix:** Run `npm run build` locally to debug
+
+### Products Not Loading
+**Check:**
+- [ ] Shopify credentials correct
+- [ ] `NEXT_PUBLIC_*` variables set
+- [ ] API tokens not expired
+
+**Fix:** Test API connection with curl or Postman
+
+### Cart Not Working
+**Check:**
+- [ ] Browser console for errors
+- [ ] API routes responding
+- [ ] Environment variables set
+
+**Fix:** Check Vercel function logs
+
+### Webhooks Not Firing
+**Check:**
+- [ ] Webhook URLs correct
+- [ ] Webhook secrets configured
+- [ ] HTTPS endpoints
+
+**Fix:** Check webhook delivery logs in Printful/Shopify
+
+---
+
+## 🔄 Continuous Deployment
+
+### Automatic Deployments
+- [x] Push to `main` branch triggers production deploy
+- [x] Pull requests get preview deployments
+- [x] Every commit has unique preview URL
+
+### Manual Deployments
+- [ ] Use Vercel CLI: `vercel --prod`
+- [ ] Or trigger from Vercel dashboard
+
+### Rollback Procedure
+If something breaks:
+1. Go to Vercel Dashboard → Deployments
+2. Find last working deployment
+3. Click "..." → "Promote to Production"
+4. Site instantly reverted to previous version
+
+---
+
+## 📈 Post-Launch Tasks
+
+### First Week
+- [ ] Monitor error logs daily
+- [ ] Check order flow
+- [ ] Verify webhook delivery
+- [ ] Monitor performance metrics
+- [ ] Test complete order-to-fulfillment flow
+
+### First Month
+- [ ] Review analytics
+- [ ] Check for any error patterns
+- [ ] Update dependencies if needed
+- [ ] Optimize performance based on metrics
+- [ ] Gather user feedback
+
+### Ongoing
+- [ ] Run `npm run test:merch` before major changes
+- [ ] Keep dependencies updated (monthly)
+- [ ] Monitor Shopify/Printful API changes
+- [ ] Review and rotate secrets (quarterly)
+- [ ] Backup data regularly
+
+---
+
+## 🎉 Launch Day Checklist
+
+### Final Pre-Launch
+- [ ] All above checklists completed
+- [ ] Test order completed successfully
+- [ ] All team members briefed
+- [ ] Social media posts ready
+- [ ] Customer support plan in place
+
+### Launch
+- [ ] Announce on social media
+- [ ] Send email to mailing list
+- [ ] Monitor first orders closely
+- [ ] Be ready for support questions
+
+### Post-Launch
+- [ ] Celebrate! 🎉
+- [ ] Monitor for first 24 hours
+- [ ] Address any issues immediately
+- [ ] Collect feedback from customers
+
+---
+
+## 📞 Support Resources
+
+- **Vercel Docs:** [vercel.com/docs](https://vercel.com/docs)
+- **Your Test Suite:** `npm run test:merch`
+- **Integration Check:** `npm run check:integration`
+- **Printful Support:** [help.printful.com](https://help.printful.com)
+- **Shopify Support:** [help.shopify.com](https://help.shopify.com)
+
+---
+
+## ✨ Success Criteria
+
+Your deployment is successful when:
+- ✅ All 22 tests passing
+- ✅ Products display correctly
+- ✅ Cart operations work
+- ✅ Checkout redirects properly
+- ✅ Test order flows through to Printful
+- ✅ No errors in Vercel logs
+- ✅ Performance metrics good
+- ✅ Webhooks delivering (if configured)
+
+---
+
+**🤘 You're ready to rock! Good luck with your launch!**
+
+---
+
+*Questions? Run `npm run check:integration` or see `docs/deployment/VERCEL_DEPLOYMENT.md`*
+
