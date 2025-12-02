@@ -54,13 +54,11 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Band Photo */}
+      {/* Band Photo - Hidden until we get a better photo
       <Section className="!pt-0 !pb-16">
         <Container>
           <div className="relative">
-            {/* Glowing effect behind photo */}
             <div className="absolute inset-0 bg-primary/10 blur-3xl -z-10" />
-            
             <div className="relative aspect-[21/9] w-full border-2 border-gold/50 overflow-hidden shadow-2xl shadow-black/60">
               <Image
                 src="/images/photos/FullBandPhoto.png"
@@ -69,11 +67,8 @@ export default function AboutPage() {
                 className="object-cover"
                 priority
               />
-              {/* Gradient overlays for depth */}
               <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
               <div className="absolute inset-0 bg-gradient-to-r from-background/20 via-transparent to-background/20" />
-              
-              {/* Decorative corner accents */}
               <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-gold/80" />
               <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-gold/80" />
               <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-gold/80" />
@@ -82,6 +77,7 @@ export default function AboutPage() {
           </div>
         </Container>
       </Section>
+      */}
 
       {/* Bio */}
       <Section className="relative">
