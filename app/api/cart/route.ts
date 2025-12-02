@@ -25,11 +25,23 @@ export async function GET(request: NextRequest) {
     // Decode the cartId in case it was URL encoded
     const decodedCartId = decodeURIComponent(cartId);
     
-    const shopifyCart = await getCart(decodedCartId);
+    let shopifyCart;
+    try {
+      shopifyCart = await getCart(decodedCartId);
+    } catch (error: any) {
+      // Handle invalid cart ID format
+      if (error.message?.includes('invalid') || error.message?.includes('malformed')) {
+        return NextResponse.json(
+          { error: "Invalid cart ID format" },
+          { status: 400 }
+        );
+      }
+      throw error;
+    }
     
     if (!shopifyCart) {
       return NextResponse.json(
-        { error: "Cart not found" },
+        { error: "Cart not found or expired" },
         { status: 404 }
       );
     }
