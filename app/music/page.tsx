@@ -11,6 +11,7 @@ import { useAudio } from "@/contexts/audio-context";
 import { Release } from "@/lib/types";
 import { formatTime, cn } from "@/lib/utils";
 import { AnimatedBackground } from "@/components/home/animated-background";
+import { MusicReleaseSchema } from "@/components/seo/structured-data";
 
 const releasesData = require("@/data/releases.json") as Release[];
 

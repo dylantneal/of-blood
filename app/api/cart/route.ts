@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createCart, getCart } from "@/lib/shopify";
 import { transformShopifyCart } from "@/lib/cart-utils";
+import { RateLimiters } from "@/lib/rate-limit";
 
 /**
  * GET /api/cart - Get cart by ID
  */
 export async function GET(request: NextRequest) {
+  // Rate limiting: 30 requests per minute
+  const rateLimitResult = await RateLimiters.cart(request);
+  if (rateLimitResult) return rateLimitResult;
+
   try {
     const searchParams = request.nextUrl.searchParams;
     const cartId = searchParams.get("cartId");
@@ -45,7 +50,11 @@ export async function GET(request: NextRequest) {
 /**
  * POST /api/cart - Create a new cart
  */
-export async function POST() {
+export async function POST(request: NextRequest) {
+  // Rate limiting: 30 requests per minute
+  const rateLimitResult = await RateLimiters.cart(request);
+  if (rateLimitResult) return rateLimitResult;
+
   try {
     const cart = await createCart();
     return NextResponse.json(cart);

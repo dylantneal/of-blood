@@ -4,8 +4,26 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 
 export const metadata: Metadata = {
-  title: "About",
-  description: "The story and philosophy behind Of Blood.",
+  title: "About Of Blood | Blackened Death Metal Band Story & Philosophy",
+  description: "Learn about Of Blood, a blackened death metal band exploring cosmic horror and existential dread. Discover the philosophy, story, and dark vision behind the music.",
+  keywords: [
+    "Of Blood band",
+    "Of Blood about",
+    "Of Blood story",
+    "Of Blood members",
+    "death metal band about",
+    "Of Blood philosophy",
+    "cosmic horror metal",
+    "Of Blood bio"
+  ],
+  openGraph: {
+    title: "About | Of Blood",
+    description: "The story and philosophy behind Of Blood - blackened death metal exploring cosmic horror and existential dread.",
+    url: "https://of-blood.com/about",
+  },
+  alternates: {
+    canonical: "https://of-blood.com/about",
+  },
 };
 
 export default function AboutPage() {

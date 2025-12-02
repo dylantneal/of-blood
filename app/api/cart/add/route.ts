@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addToCart } from "@/lib/shopify";
 import { transformShopifyCart } from "@/lib/cart-utils";
+import { RateLimiters } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
+  // Rate limiting: 30 requests per minute
+  const rateLimitResult = await RateLimiters.cart(request);
+  if (rateLimitResult) return rateLimitResult;
+
   try {
     const body = await request.json();
     const { cartId, variantId, quantity } = body;

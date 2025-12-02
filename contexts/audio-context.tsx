@@ -13,6 +13,7 @@ type AudioContextType = {
   isMinimized: boolean;
   queue: Array<{ track: Track; release: Release; releaseId: string; trackIndex: number }>;
   currentQueueIndex: number;
+  error: string | null;
 
   // Actions
   playTrack: (track: Track, release: Release, releaseId: string, trackIndex: number) => void;
@@ -24,6 +25,7 @@ type AudioContextType = {
   playPrevious: () => void;
   addToQueue: (track: Track, release: Release, releaseId: string, trackIndex: number) => void;
   clearQueue: () => void;
+  clearError: () => void;
 };
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -38,6 +40,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);
   const [queue, setQueue] = useState<Array<{ track: Track; release: Release; releaseId: string; trackIndex: number }>>([]);
   const [currentQueueIndex, setCurrentQueueIndex] = useState(-1);
+  const [error, setError] = useState<string | null>(null);
   
   // Use refs to access latest state in event handlers
   const nowPlayingRef = useRef<NowPlaying>(null);
@@ -165,12 +168,19 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     releaseId: string,
     trackIndex: number
   ) => {
+    setError(null); // Clear previous errors
+    
     if (!track.audioUrl) {
-      console.warn("No audio URL for track:", track.title);
+      const errorMsg = `Unable to play "${track.title}" - audio file not available`;
+      console.warn(errorMsg);
+      setError(errorMsg);
       return;
     }
 
-    if (!audioRef.current) return;
+    if (!audioRef.current) {
+      setError('Audio player not initialized');
+      return;
+    }
 
     const audio = audioRef.current;
     
@@ -363,6 +373,10 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     setCurrentQueueIndex(-1);
   };
 
+  const clearError = () => {
+    setError(null);
+  };
+
   return (
     <AudioContext.Provider
       value={{
@@ -374,6 +388,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         isMinimized,
         queue,
         currentQueueIndex,
+        error,
         playTrack,
         playPause,
         seek,
@@ -383,6 +398,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         playPrevious,
         addToQueue,
         clearQueue,
+        clearError,
       }}
     >
       {children}

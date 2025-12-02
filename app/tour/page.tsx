@@ -8,8 +8,27 @@ import { AnimatedBackground } from "@/components/home/animated-background";
 import { getShows } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Tour Dates",
-  description: "Secure tickets for upcoming Of Blood performances and explore our show archive.",
+  title: "Tour Dates & Live Shows | Of Blood Blackened Death Metal Concerts",
+  description: "Of Blood tour dates and concert information. Get tickets for upcoming blackened death metal shows, view past performances, and experience Of Blood live. Check tour schedule and venue details.",
+  keywords: [
+    "Of Blood tour",
+    "Of Blood tour dates",
+    "Of Blood concerts",
+    "Of Blood live",
+    "Of Blood shows",
+    "death metal concerts",
+    "Of Blood tickets",
+    "black metal shows",
+    "extreme metal tour"
+  ],
+  openGraph: {
+    title: "Tour Dates | Of Blood",
+    description: "Get tickets for upcoming Of Blood blackened death metal shows. Check tour dates and venue information.",
+    url: "https://of-blood.com/tour",
+  },
+  alternates: {
+    canonical: "https://of-blood.com/tour",
+  },
 };
 
 function toLocalDate(dateString: string): Date {

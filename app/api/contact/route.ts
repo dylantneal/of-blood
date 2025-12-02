@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { RateLimiters } from "@/lib/rate-limit";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -19,6 +20,10 @@ function escapeHtml(text: string): string {
 }
 
 export async function POST(request: NextRequest) {
+  // Rate limiting: 3 requests per 5 minutes
+  const rateLimitResult = await RateLimiters.contact(request);
+  if (rateLimitResult) return rateLimitResult;
+
   try {
     const body = await request.json();
     const { name, email, venue, date, message, type } = body;

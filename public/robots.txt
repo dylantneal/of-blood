@@ -1,5 +1,13 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ofblood.band/sitemap.xml
+# Disallow admin pages
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://of-blood.com/sitemap.xml
+
+# Additional info
+# Crawl-delay: 1
 

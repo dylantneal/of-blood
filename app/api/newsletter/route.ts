@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { RateLimiters } from "@/lib/rate-limit";
 
 /**
  * Newsletter subscription endpoint using Resend Audiences
  */
 export async function POST(request: NextRequest) {
+  // Rate limiting: 2 requests per minute
+  const rateLimitResult = await RateLimiters.newsletter(request);
+  if (rateLimitResult) return rateLimitResult;
+
   const resend = new Resend(process.env.RESEND_API_KEY);
   try {
     const body = await request.json();

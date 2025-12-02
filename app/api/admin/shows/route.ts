@@ -1,8 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getShows } from "@/lib/data";
 import { isAuthenticated } from "@/lib/auth";
+import { RateLimiters } from "@/lib/rate-limit";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Rate limiting: 3 requests per minute (strict for admin endpoints)
+  const rateLimitResult = await RateLimiters.admin(request);
+  if (rateLimitResult) return rateLimitResult;
+
   try {
     // Check authentication
     const authenticated = await isAuthenticated();

@@ -5,10 +5,15 @@ import {
   ADMIN_SESSION_COOKIE_OPTIONS,
   createSessionToken,
 } from "@/lib/auth";
+import { RateLimiters } from "@/lib/rate-limit";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 export async function POST(request: NextRequest) {
+  // Rate limiting: 5 requests per minute (prevent brute force)
+  const rateLimitResult = await RateLimiters.auth(request);
+  if (rateLimitResult) return rateLimitResult;
+
   try {
     if (!ADMIN_PASSWORD) {
       console.error("ADMIN_PASSWORD environment variable is not set");

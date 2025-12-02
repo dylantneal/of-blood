@@ -11,8 +11,30 @@ import { formatPrice } from "@/lib/utils";
 import type { Product } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "Merch",
-  description: "Premium apparel and collectibles for metalheads. Official Of Blood merchandise.",
+  title: "Official Merch Store | Of Blood T-Shirts, Hoodies & Metal Apparel",
+  description: "Shop official Of Blood merchandise. Premium death metal t-shirts, hoodies, vinyl, and collectibles. Limited edition blackened death metal apparel and band merch.",
+  keywords: [
+    "Of Blood merch",
+    "Of Blood merchandise",
+    "Of Blood shirts",
+    "Of Blood t-shirts",
+    "Of Blood hoodie",
+    "Of Blood apparel",
+    "death metal merch",
+    "death metal shirts",
+    "black metal clothing",
+    "Of Blood store",
+    "Of Blood shop",
+    "metal band merch"
+  ],
+  openGraph: {
+    title: "Official Merch Store | Of Blood",
+    description: "Shop official Of Blood merchandise. Premium death metal t-shirts, hoodies, vinyl, and collectibles.",
+    url: "https://of-blood.com/merch",
+  },
+  alternates: {
+    canonical: "https://of-blood.com/merch",
+  },
 };
 
 // Revalidate this page every 60 seconds to show new products
