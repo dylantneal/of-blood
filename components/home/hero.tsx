@@ -2,8 +2,6 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { AnimatedBackground } from "./animated-background";
 
@@ -29,13 +27,13 @@ export function Hero() {
       </div>
 
       {/* Content */}
-      <Container className="relative h-full z-10">
+      <Container className="relative h-full z-30">
         <div className="flex h-full flex-col items-center justify-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="space-y-12 relative z-10"
+            className="space-y-12 relative z-30"
           >
             {/* Main Logo with enhanced glow */}
             <motion.div 
@@ -81,23 +79,6 @@ export function Hero() {
               </div>
             </motion.div>
 
-            {/* CTA Buttons with staggered animation */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center pt-4 relative z-20"
-            >
-              <Button variant="primary" size="lg" asChild>
-                <Link href="/music">Listen</Link>
-              </Button>
-              <Button variant="ghost" size="lg" asChild>
-                <Link href="/tour">Tour Dates</Link>
-              </Button>
-              <Button variant="gold" size="lg" asChild>
-                <Link href="/merch">Shop</Link>
-              </Button>
-            </motion.div>
           </motion.div>
 
           {/* Scroll Indicator with pulse effect */}
