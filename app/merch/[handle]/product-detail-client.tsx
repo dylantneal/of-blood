@@ -46,7 +46,10 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
   const selectedVariant = product.variants?.find((v) => v.id === selectedVariantId);
   const displayPrice = selectedVariant?.price || product.price;
-  const availableImages = product.images || [{ id: 'fallback', url: product.image, altText: product.title }];
+  const availableImages = (product.images || [{ id: 'fallback', url: product.image, altText: product.title }]).map(img => ({
+    ...img,
+    altText: img.altText ?? null
+  }));
   const selectedImage = availableImages[selectedImageIndex] || availableImages[0];
 
   // Group variants by option (e.g., Size, Color)

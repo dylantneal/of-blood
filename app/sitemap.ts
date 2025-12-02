@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getProducts } from '@/lib/shopify';
+import { Product } from '@/lib/types';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://of-blood.com';
@@ -66,7 +67,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let productPages: MetadataRoute.Sitemap = [];
   try {
     const products = await getProducts(50);
-    productPages = products.map((product) => ({
+    productPages = products.map((product: Product) => ({
       url: `${baseUrl}/merch/${product.handle}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,

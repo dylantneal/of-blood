@@ -91,18 +91,30 @@ pnpm dev
   - Static assets (images, icons, etc.)
 ```
 
-## Documentation
+## 📚 Documentation
 
-Detailed playbooks and setup guides now live under `docs/`:
+All documentation is organized in the [`/docs`](./docs) directory. See [`docs/README.md`](./docs/README.md) for the complete guide.
 
-- `docs/setup/` – environment setup, quick start instructions
-- `docs/media/` – media page walkthroughs, Instagram feed + video hosting notes
-- `docs/commerce/` – Shopify/Printful integration guides and storefront token steps  
-  - `docs/commerce/cart/` – cart debugging postmortems and fixes
-- `docs/audio/` – audio player setup
-- `docs/tour/` – tour date publishing checklist
+### Quick Links
+- **[Getting Started](./docs/setup/quick-start.md)** - Set up your local development environment
+- **[Deployment Guide](./docs/deployment/README.md)** - Deploy to production
+- **[Feature Guides](./docs/features)** - Audio, Commerce, Media, Tour implementations
+- **[Development](./docs/development)** - Error handling, testing, rate limiting
 
-Browse the relevant folder for the latest instructions before changing those subsystems.
+### Structure
+```
+docs/
+├── setup/          # Environment setup and configuration
+├── deployment/     # Deployment guides and checklists
+├── development/    # Development best practices
+├── seo/           # SEO implementation guides
+├── features/      # Feature-specific documentation
+│   ├── audio/     # Audio player setup
+│   ├── commerce/  # Shopify & Printful integration
+│   ├── media/     # Media gallery & Instagram
+│   └── tour/      # Tour dates management
+└── security/      # Security guidelines
+```
 
 ## Key Pages
 

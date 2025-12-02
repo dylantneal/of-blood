@@ -269,7 +269,7 @@ export function TourAdminClient() {
                       </div>
                       <Button
                         type="button"
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
                         onClick={() => addMediaItem(show.id)}
                         className="gap-2"
