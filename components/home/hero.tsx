@@ -35,7 +35,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="space-y-12"
+            className="space-y-12 relative z-10"
           >
             {/* Main Logo with enhanced glow */}
             <motion.div 
@@ -86,7 +86,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center pt-4"
+              className="flex flex-col sm:flex-row gap-4 justify-center pt-4 relative z-20"
             >
               <Button variant="primary" size="lg" asChild>
                 <Link href="/music">Listen</Link>
