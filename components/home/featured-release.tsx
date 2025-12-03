@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { Play } from "lucide-react";
+import { Play, Sparkles } from "lucide-react";
 import { getLatestRelease } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 
@@ -15,6 +15,10 @@ export async function FeaturedRelease() {
   }
 
   const releaseDate = formatDate(release.date);
+  
+  // Get the first track's slug for immersive experience link
+  const firstTrack = release.tracks?.[0];
+  const firstTrackSlug = firstTrack?.slug || firstTrack?.title?.toLowerCase().replace(/\s+/g, "-");
 
   return (
     <Section className="bg-muted/30">
@@ -55,31 +59,21 @@ export async function FeaturedRelease() {
               )}
             </div>
 
-            {/* Streaming Links */}
+            {/* Action Links */}
             <div className="flex flex-wrap gap-3">
-              {release.links.bandcamp && (
+              {firstTrackSlug && (
                 <Button variant="primary" asChild>
-                  <a href={release.links.bandcamp} target="_blank" rel="noopener noreferrer">
-                    Bandcamp
-                  </a>
-                </Button>
-              )}
-              {release.links.youtube && (
-                <Button variant="ghost" asChild>
-                  <a href={release.links.youtube} target="_blank" rel="noopener noreferrer">
-                    YouTube
-                  </a>
-                </Button>
-              )}
-              {release.links.spotify && (
-                <Button variant="ghost" asChild>
-                  <a href={release.links.spotify} target="_blank" rel="noopener noreferrer">
-                    Spotify
-                  </a>
+                  <Link href={`/music/experience/${firstTrackSlug}`} className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" />
+                    Immersive Experience
+                  </Link>
                 </Button>
               )}
               <Button variant="ghost" asChild>
-                <Link href="/music">View All Music</Link>
+                <Link href="/music" className="flex items-center gap-2">
+                  <Play className="w-4 h-4" />
+                  Listen Now
+                </Link>
               </Button>
             </div>
 
