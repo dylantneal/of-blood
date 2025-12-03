@@ -112,19 +112,30 @@ export function ImmersiveContainer({ track, release }: ImmersiveContainerProps) 
     }
   }, [track.lyricsUrl]);
 
-  // Auto-play track if not already playing
+  // Auto-play track when entering immersive view
   useEffect(() => {
     const trackIndex = release.tracks?.findIndex((t) => t.slug === track.slug || t.title === track.title) ?? 0;
     
-    // Only auto-play if this track isn't already playing
-    if (!nowPlaying || nowPlaying.track.title !== track.title || nowPlaying.release.id !== release.id) {
+    // Check if this exact track is already the current track
+    const isCurrentTrack = nowPlaying?.track.title === track.title && 
+                           nowPlaying?.release.id === release.id;
+    
+    if (isCurrentTrack) {
+      // Same track - just ensure it's playing (don't reload)
+      if (!isPlaying) {
+        playPause(); // Resume if paused
+      }
+    } else {
+      // Different track or no track - load and play this one
       if (track.audioUrl) {
         playTrack(track, release, release.id, trackIndex);
       }
     }
     
     setIsLoaded(true);
-  }, [track, release, nowPlaying, playTrack]);
+    // Only run on mount, not on every state change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [track.title, release.id]);
 
   // Handle seek from lyrics click
   const handleLyricsSeek = useCallback((time: number) => {
