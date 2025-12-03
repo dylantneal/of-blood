@@ -6,6 +6,7 @@ import { Section } from "@/components/ui/section";
 import { Play, Sparkles } from "lucide-react";
 import { getLatestRelease } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
+import { PlayReleaseButton } from "./play-release-button";
 
 export async function FeaturedRelease() {
   const release = await getLatestRelease();
@@ -61,6 +62,13 @@ export async function FeaturedRelease() {
 
             {/* Action Links */}
             <div className="flex flex-wrap gap-3">
+              {firstTrack && (
+                <PlayReleaseButton 
+                  release={release} 
+                  track={firstTrack} 
+                  trackIndex={0} 
+                />
+              )}
               {firstTrackSlug && (
                 <Button variant="primary" asChild>
                   <Link href={`/music/experience/${firstTrackSlug}`} className="flex items-center gap-2">
@@ -71,8 +79,7 @@ export async function FeaturedRelease() {
               )}
               <Button variant="ghost" asChild>
                 <Link href="/music" className="flex items-center gap-2">
-                  <Play className="w-4 h-4" />
-                  Listen Now
+                  View All Music
                 </Link>
               </Button>
             </div>
