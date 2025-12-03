@@ -377,6 +377,66 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     setError(null);
   };
 
+  // Global keyboard shortcuts for audio control
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't capture if user is typing in an input
+      const target = e.target as HTMLElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
+        return;
+      }
+
+      // Only handle shortcuts if there's something playing or loaded
+      if (!nowPlaying) return;
+
+      switch (e.key) {
+        case " ": // Space bar - play/pause
+          e.preventDefault();
+          playPause();
+          break;
+        case "ArrowLeft":
+          // Skip back 10 seconds (only with Shift to avoid conflicts with page navigation)
+          if (e.shiftKey) {
+            e.preventDefault();
+            seek(Math.max(0, currentTime - 10));
+          }
+          break;
+        case "ArrowRight":
+          // Skip forward 10 seconds (only with Shift)
+          if (e.shiftKey) {
+            e.preventDefault();
+            seek(Math.min(duration, currentTime + 10));
+          }
+          break;
+        case "ArrowUp":
+          // Volume up (only with Shift)
+          if (e.shiftKey) {
+            e.preventDefault();
+            setVolume(Math.min(1, volume + 0.1));
+          }
+          break;
+        case "ArrowDown":
+          // Volume down (only with Shift)
+          if (e.shiftKey) {
+            e.preventDefault();
+            setVolume(Math.max(0, volume - 0.1));
+          }
+          break;
+        case "m":
+        case "M":
+          // Mute/unmute (only with Shift to avoid typing conflicts)
+          if (e.shiftKey) {
+            e.preventDefault();
+            setVolume(volume > 0 ? 0 : 1);
+          }
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [nowPlaying, currentTime, duration, volume, playPause, seek, setVolume]);
+
   return (
     <AudioContext.Provider
       value={{

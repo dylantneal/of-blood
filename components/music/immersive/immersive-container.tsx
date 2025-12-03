@@ -147,17 +147,70 @@ export function ImmersiveContainer({ track, release }: ImmersiveContainerProps) 
     router.push("/music");
   }, [router]);
 
-  // Keyboard support - Escape to close
+  // Comprehensive keyboard controls
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleClose();
+      // Don't capture if user is typing in an input
+      const target = e.target as HTMLElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
+        return;
+      }
+
+      switch (e.key) {
+        case "Escape":
+          e.preventDefault();
+          handleClose();
+          break;
+        case " ": // Space bar - play/pause
+          e.preventDefault();
+          playPause();
+          break;
+        case "ArrowLeft":
+          e.preventDefault();
+          // Skip back 10 seconds, or go to previous track if at start
+          if (currentTime > 5) {
+            seek(Math.max(0, currentTime - 10));
+          } else if (hasPrevious) {
+            playPrevious();
+          }
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          // Skip forward 10 seconds
+          seek(Math.min(duration, currentTime + 10));
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          // Volume up
+          setVolume(Math.min(1, volume + 0.1));
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          // Volume down
+          setVolume(Math.max(0, volume - 0.1));
+          break;
+        case "m":
+        case "M":
+          e.preventDefault();
+          // Mute/unmute
+          setVolume(volume > 0 ? 0 : 1);
+          break;
+        case "f":
+        case "F":
+          e.preventDefault();
+          // Toggle fullscreen
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          } else {
+            document.documentElement.requestFullscreen();
+          }
+          break;
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleClose]);
+  }, [handleClose, playPause, seek, setVolume, currentTime, duration, volume, hasPrevious, playPrevious]);
 
   // Check for next/previous tracks
   const currentTrackIndex = release.tracks?.findIndex((t) => t.slug === track.slug || t.title === track.title) ?? 0;
