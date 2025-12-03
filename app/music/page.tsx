@@ -2,21 +2,143 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { Play, Pause, Sparkles, Headphones, Waves } from "lucide-react";
+import { Play, Pause, Sparkles, Headphones, Waves, Expand, Download } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useAudio } from "@/contexts/audio-context";
-import { Release } from "@/lib/types";
+import { Release, TrackLyrics, LyricLine } from "@/lib/types";
 import { formatTime, cn } from "@/lib/utils";
 import { AnimatedBackground } from "@/components/home/animated-background";
 import { MusicReleaseSchema } from "@/components/seo/structured-data";
+import { useLyricsSync, loadLyrics } from "@/hooks/use-lyrics-sync";
 
 const releasesData = require("@/data/releases.json") as Release[];
 
+// Inline lyrics display component for tracklist
+function InlineLyrics({ 
+  lyrics, 
+  currentTime 
+}: { 
+  lyrics: TrackLyrics; 
+  currentTime: number;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Find current line index
+  const currentLineIndex = lyrics.lines.findIndex((line, index) => {
+    const nextLine = lyrics.lines[index + 1];
+    return line.time <= currentTime && (!nextLine || nextLine.time > currentTime);
+  });
+
+  // Filter to lines with text
+  const linesWithText = lyrics.lines
+    .map((line, index) => ({ ...line, originalIndex: index }))
+    .filter((line) => line.text !== null);
+
+  // Find current display index
+  const currentDisplayIndex = linesWithText.findIndex(
+    (l) => l.originalIndex === currentLineIndex
+  );
+
+  // Auto-scroll to keep current line visible in upper third of container
+  useEffect(() => {
+    if (containerRef.current && currentDisplayIndex >= 0) {
+      const container = containerRef.current;
+      const lineElements = container.querySelectorAll('[data-lyric-line]');
+      const currentElement = lineElements[currentDisplayIndex] as HTMLElement;
+      
+      if (currentElement) {
+        // Calculate where the element is relative to the scroll container
+        const elementRect = currentElement.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        
+        // Current position of element relative to container's visible area
+        const relativeTop = elementRect.top - containerRect.top;
+        
+        // We want the current line to be about 40px from the top of the container
+        const desiredPosition = 40;
+        
+        // Calculate how much to scroll
+        const scrollAdjustment = relativeTop - desiredPosition;
+        const newScrollTop = container.scrollTop + scrollAdjustment;
+        
+        container.scrollTo({
+          top: Math.max(0, newScrollTop),
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [currentDisplayIndex]);
+
+  return (
+    <motion.div
+      initial={{ height: 0, opacity: 0 }}
+      animate={{ height: "auto", opacity: 1 }}
+      exit={{ height: 0, opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="overflow-hidden"
+    >
+      <div 
+        ref={containerRef}
+        className="max-h-96 overflow-y-auto scrollbar-hide px-4 bg-black/40 border-t border-line/30"
+      >
+        <div className="space-y-3 py-6">
+          {linesWithText.map((line, displayIndex) => {
+            const isCurrentLine = displayIndex === currentDisplayIndex;
+            const isPast = displayIndex < currentDisplayIndex;
+            
+            return (
+              <p
+                key={`${line.originalIndex}-${line.text}`}
+                data-lyric-line
+                className={cn(
+                  "font-display text-sm md:text-base transition-all duration-300",
+                  isCurrentLine && "text-primary font-semibold scale-105 origin-left",
+                  isPast && "text-foreground/30",
+                  !isCurrentLine && !isPast && "text-foreground/50"
+                )}
+                style={{
+                  textShadow: isCurrentLine ? "0 0 20px rgba(179, 10, 10, 0.5)" : undefined,
+                }}
+              >
+                {line.text}
+              </p>
+            );
+          })}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function MusicPage() {
-  const { nowPlaying, isPlaying, playTrack, playPause } = useAudio();
+  const router = useRouter();
+  const { nowPlaying, isPlaying, currentTime, playTrack, playPause } = useAudio();
+  const [lyrics, setLyrics] = useState<TrackLyrics | null>(null);
+
+  // Load lyrics when track changes
+  useEffect(() => {
+    if (nowPlaying?.track.lyricsUrl) {
+      loadLyrics(nowPlaying.track.lyricsUrl).then(setLyrics);
+    } else {
+      setLyrics(null);
+    }
+  }, [nowPlaying?.track.lyricsUrl]);
+
+  // Get track slug for experience URL
+  const getTrackSlug = (track: any) => {
+    return track.slug || track.title.toLowerCase().replace(/\s+/g, "-");
+  };
+
+  // Navigate to immersive experience
+  const enterExperience = (track: any) => {
+    const slug = getTrackSlug(track);
+    router.push(`/music/experience/${slug}`);
+  };
 
   const firstPlayableRelease = releasesData.find((release: Release) =>
     release.tracks?.some((track) => track.audioUrl)
@@ -79,11 +201,11 @@ export default function MusicPage() {
               <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight">
                 Music
               </h1>
-              <p className="text-lg md:text-xl text-foreground/70 max-w-2xl">
-                Lightning wrapped in chains. 
-                Hear our songs of ruin directly from the source: no platforms, no distractions.
+              <p className="text-lg md:text-xl text-foreground/70 max-w-2xl italic">
+                Lightning wrapped in chains,<br />
+                We crown ourselves in iron rain.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <div className="pt-2">
                 <Button
                   variant="primary"
                   size="lg"
@@ -93,9 +215,6 @@ export default function MusicPage() {
                 >
                   <Play className="w-4 h-4 mr-2" />
                   Play Latest Ritual
-                </Button>
-                <Button variant="ghost" size="lg" asChild className="uppercase tracking-widest">
-                  <a href="#releases">Explore Catalog</a>
                 </Button>
               </div>
             </motion.div>
@@ -119,32 +238,42 @@ export default function MusicPage() {
                   </span>
                 </div>
                 {nowPlaying ? (
-                  <div className="flex gap-4 items-center">
-                    <div className="relative w-20 h-20 flex-shrink-0 border border-line rounded-sm overflow-hidden">
-                      {nowPlaying.release.cover ? (
-                        <Image
-                          src={nowPlaying.release.cover}
-                          alt={nowPlaying.release.title}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gold/50">
-                          <Play className="w-6 h-6" />
-                        </div>
-                      )}
+                  <div className="space-y-4">
+                    <div className="flex gap-4 items-center">
+                      <div className="relative w-20 h-20 flex-shrink-0 border border-line rounded-sm overflow-hidden">
+                        {nowPlaying.release.cover ? (
+                          <Image
+                            src={nowPlaying.release.cover}
+                            alt={nowPlaying.release.title}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gold/50">
+                            <Play className="w-6 h-6" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs uppercase tracking-[0.3em] text-gold mb-1">
+                          {nowPlaying.release.type}
+                        </p>
+                        <p className="font-display text-xl text-foreground line-clamp-1">
+                          {nowPlaying.track.title}
+                        </p>
+                        <p className="text-sm text-foreground/60 line-clamp-1">
+                          {nowPlaying.release.title}
+                        </p>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-xs uppercase tracking-[0.3em] text-gold mb-1">
-                        {nowPlaying.release.type}
-                      </p>
-                      <p className="font-display text-xl text-foreground line-clamp-1">
-                        {nowPlaying.track.title}
-                      </p>
-                      <p className="text-sm text-foreground/60 line-clamp-1">
-                        {nowPlaying.release.title}
-                      </p>
-                    </div>
+                    {/* Enter Experience Button */}
+                    <button
+                      onClick={() => enterExperience(nowPlaying.track)}
+                      className="w-full py-3 px-4 bg-primary hover:bg-primary/90 rounded-sm text-sm uppercase tracking-[0.2em] text-white font-medium transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(179,10,10,0.4)] hover:shadow-[0_0_30px_rgba(179,10,10,0.6)]"
+                    >
+                      <Expand className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                      Enter Immersive
+                    </button>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center text-center text-foreground/60 py-8 gap-3">
@@ -215,47 +344,25 @@ export default function MusicPage() {
                         </p>
                       )}
                     </div>
-                    <div className="flex flex-wrap gap-3">
-                      {hasAudio && (
-                        <Button variant="ghost" onClick={() => handlePlayRelease(release, playableIndex)} className="uppercase tracking-[0.3em] flex items-center gap-2 border border-primary/50 hover:bg-primary/10">
-                          <Play className="w-4 h-4" />
-                          Play Release
-                        </Button>
-                      )}
-                      {release.links.bandcamp && (
-                        <Button variant="primary" asChild>
-                          <a
-                            href={release.links.bandcamp}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Bandcamp
-                          </a>
-                        </Button>
-                      )}
-                      {release.links.youtube && (
-                        <Button variant="ghost" asChild>
-                          <a
-                            href={release.links.youtube}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            YouTube
-                          </a>
-                        </Button>
-                      )}
-                      {release.links.spotify && (
-                        <Button variant="ghost" asChild>
-                          <a
-                            href={release.links.spotify}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Spotify
-                          </a>
-                        </Button>
-                      )}
-                    </div>
+                    {hasAudio && (
+                      <div className="flex flex-col gap-3">
+                        <div className="flex flex-wrap gap-3">
+                          <Button variant="ghost" onClick={() => handlePlayRelease(release, playableIndex)} className="uppercase tracking-[0.3em] flex items-center gap-2 border border-primary/50 hover:bg-primary/10">
+                            <Play className="w-4 h-4" />
+                            Play Release
+                          </Button>
+                        </div>
+                        <button
+                          onClick={() => {
+                            window.location.href = `/api/download/${release.id}`;
+                          }}
+                          className="inline-flex items-center gap-2 px-4 py-2.5 bg-gold/10 hover:bg-gold/20 border border-gold/30 hover:border-gold/50 rounded-sm text-gold hover:text-gold-light text-xs uppercase tracking-[0.2em] transition-all group w-fit"
+                        >
+                          <Download className="w-4 h-4 group-hover:animate-bounce" />
+                          Download Release (Free)
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div className="relative border border-line/70 bg-black/30">
@@ -267,6 +374,7 @@ export default function MusicPage() {
                       {release.tracks?.map((track, index) => {
                         const active = trackIsActive(track, release);
                         const playable = Boolean(track.audioUrl);
+                        const showLyrics = active && lyrics && track.lyricsUrl;
 
                         const displayIndex =
                           typeof track.n === "number"
@@ -274,49 +382,60 @@ export default function MusicPage() {
                             : index + 1;
 
                         return (
-                          <button
-                            key={`${release.id}-${track.title}`}
-                            onClick={() =>
-                              handleTrackButton(release, index, playable, active)
-                            }
-                            disabled={!playable}
-                            className={cn(
-                              "w-full text-left flex items-center justify-between gap-4 px-4 py-4 transition-all",
-                              playable
-                                ? "hover:bg-primary/5"
-                                : "opacity-50 cursor-not-allowed",
-                              active && "bg-primary/10 border-l-2 border-primary"
-                            )}
-                          >
-                            <div className="flex items-center gap-4 min-w-0">
-                              <span className="text-gold font-mono text-sm min-w-[30px]">
-                                {String(displayIndex).padStart(2, "0")}
-                              </span>
-                              <div className="min-w-0">
-                                <p className="font-medium text-base text-foreground line-clamp-1">
-                                  {track.title}
-                                </p>
-                                {track.duration && (
-                                  <p className="text-xs text-foreground/60">
-                                    {formatTime(track.duration)}
+                          <div key={`${release.id}-${track.title}`}>
+                            <button
+                              onClick={() =>
+                                handleTrackButton(release, index, playable, active)
+                              }
+                              disabled={!playable}
+                              className={cn(
+                                "w-full text-left flex items-center justify-between gap-4 px-4 py-4 transition-all",
+                                playable
+                                  ? "hover:bg-primary/5"
+                                  : "opacity-50 cursor-not-allowed",
+                                active && "bg-primary/10 border-l-2 border-primary"
+                              )}
+                            >
+                              <div className="flex items-center gap-4 min-w-0">
+                                <span className="text-gold font-mono text-sm min-w-[30px]">
+                                  {String(displayIndex).padStart(2, "0")}
+                                </span>
+                                <div className="min-w-0">
+                                  <p className="font-medium text-base text-foreground line-clamp-1">
+                                    {track.title}
                                   </p>
+                                  {track.duration && (
+                                    <p className="text-xs text-foreground/60">
+                                      {formatTime(track.duration)}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2 text-foreground/60">
+                                {playable ? (
+                                  active && isPlaying ? (
+                                    <Pause className="w-5 h-5 text-primary" />
+                                  ) : (
+                                    <Play className="w-5 h-5" />
+                                  )
+                                ) : (
+                                  <span className="text-xs uppercase tracking-[0.3em]">
+                                    Locked
+                                  </span>
                                 )}
                               </div>
-                            </div>
-                            <div className="flex items-center gap-2 text-foreground/60">
-                              {playable ? (
-                                active && isPlaying ? (
-                                  <Pause className="w-5 h-5 text-primary" />
-                                ) : (
-                                  <Play className="w-5 h-5" />
-                                )
-                              ) : (
-                                <span className="text-xs uppercase tracking-[0.3em]">
-                                  Locked
-                                </span>
+                            </button>
+                            
+                            {/* Inline lyrics - appears when track is playing */}
+                            <AnimatePresence>
+                              {showLyrics && (
+                                <InlineLyrics 
+                                  lyrics={lyrics} 
+                                  currentTime={currentTime} 
+                                />
                               )}
-                            </div>
-                          </button>
+                            </AnimatePresence>
+                          </div>
                         );
                       })}
                     </div>

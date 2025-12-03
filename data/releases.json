@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "id": "tendrils-of-descending-divinity",
     "title": "Tendrils of Descending Divinity",
     "type": "Single",
     "date": "2025-11-08",
@@ -14,10 +14,36 @@
       {
         "n": 1,
         "title": "Tendrils of Descending Divinity",
+        "slug": "tendrils-of-descending-divinity",
         "audioUrl": "/audio/TendrilsOfDescendingDivinity(Demo).mp3",
-        "duration": 0
+        "duration": 219,
+        "lyricsUrl": "/data/lyrics/tendrils-of-descending-divinity.json",
+        "theme": {
+          "colors": {
+            "primary": "#B30A0A",
+            "secondary": "#4A1A6B",
+            "background": "#0A0A0A",
+            "text": "#E8E8E8",
+            "highlight": "#FF2020",
+            "glow": "rgba(179, 10, 10, 0.6)"
+          },
+          "background": {
+            "gradient": "radial-gradient(ellipse at top, #1a0a20 0%, #0d0510 40%, #0A0A0A 100%)",
+            "overlay": "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%)"
+          },
+          "particles": {
+            "type": "tendrils",
+            "density": 0.6,
+            "speed": 0.8,
+            "direction": "down",
+            "audioReactivity": 0.7
+          },
+          "albumArt": {
+            "effect": "breathe",
+            "audioReactivity": 0.5
+          }
+        }
       }
     ]
   }
 ]
-

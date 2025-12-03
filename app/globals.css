@@ -251,5 +251,51 @@
     background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.6) 100%);
     pointer-events: none;
   }
+  
+  /* Hide scrollbar but allow scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Safe area utilities for mobile */
+  .h-safe-top {
+    height: env(safe-area-inset-top, 0px);
+  }
+  
+  .h-safe-bottom {
+    height: env(safe-area-inset-bottom, 0px);
+  }
+  
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* Immersive mode specific styles */
+.immersive-mode {
+  /* Hide main site header/footer when in immersive mode */
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* Hide the regular audio player when in immersive mode */
+.immersive-mode ~ * .audio-player {
+  display: none;
+}
+
+/* Immersive lyrics styling */
+.immersive-mode .lyrics-line {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.immersive-mode .lyrics-line.active {
+  transform: scale(1.02);
 }
 

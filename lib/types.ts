@@ -21,12 +21,42 @@ export type Show = {
   media?: ShowMedia[];
 };
 
+// Visual theme configuration for immersive experience
+export type TrackTheme = {
+  colors: {
+    primary: string;      // Main accent (e.g., blood red)
+    secondary: string;    // Secondary color (e.g., cosmic purple)
+    background: string;   // Base background
+    text: string;         // Lyrics text color
+    highlight: string;    // Current lyric highlight
+    glow: string;         // Glow effects
+  };
+  background: {
+    gradient: string;     // CSS gradient
+    overlay?: string;     // Optional overlay gradient
+  };
+  particles: {
+    type: 'tendrils' | 'embers' | 'blood' | 'stars' | 'fog' | 'none';
+    density: number;      // 0-1
+    speed: number;        // Animation speed multiplier
+    direction: 'down' | 'up' | 'radial';
+    audioReactivity: number; // 0-1, response to music
+  };
+  albumArt: {
+    effect: 'breathe' | 'pulse' | 'glitch' | 'none';
+    audioReactivity: number; // 0-1
+  };
+};
+
 export type Track = {
   n: number;
   title: string;
+  slug?: string;          // URL-friendly identifier
   lyricsPath?: string;
-  audioUrl?: string; // Path to audio file in /public/audio/
-  duration?: number; // Duration in seconds
+  lyricsUrl?: string;     // Path to lyrics JSON file
+  audioUrl?: string;      // Path to audio file in /public/audio/
+  duration?: number;      // Duration in seconds
+  theme?: TrackTheme;     // Visual theme for immersive mode
 };
 
 export type Release = {
@@ -183,5 +213,34 @@ export type InstagramPost = {
   date?: string;
   thumbnailUrl?: string; // For videos, optional thumbnail
   permalink?: string; // Instagram post permalink URL
+};
+
+// Lyrics and immersive experience types
+export type LyricLine = {
+  time: number;           // Timestamp in seconds
+  text: string | null;    // Lyric text (null for instrumental)
+  section?: string;       // Section identifier (verse1, chorus, etc.)
+};
+
+export type LyricSection = {
+  time: number;           // Start timestamp
+  name: string;           // Display name (Verse I, Chorus, etc.)
+  type: 'vocal' | 'instrumental';
+  intensity: number;      // 0-1, visual intensity for this section
+};
+
+export type TrackLyrics = {
+  trackId: string;
+  title: string;
+  sections: LyricSection[];
+  lines: LyricLine[];
+};
+
+// Audio analysis data (real-time)
+export type AudioAnalysis = {
+  bass: number;           // 0-1, low frequency intensity
+  mids: number;           // 0-1, mid frequency intensity
+  highs: number;          // 0-1, high frequency intensity
+  overall: number;        // 0-1, overall amplitude
 };
 

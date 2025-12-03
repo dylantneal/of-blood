@@ -16,12 +16,15 @@
     "test:merch": "npx tsx scripts/comprehensive-test-suite.ts"
   },
   "dependencies": {
+    "@types/archiver": "^7.0.0",
+    "archiver": "^7.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cssesc": "^3.0.0",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.344.0",
     "next": "^16.0.3",
+    "node-id3": "^0.2.9",
     "postcss-import": "^16.1.1",
     "postcss-nesting": "^13.0.2",
     "react": "^18.3.1",

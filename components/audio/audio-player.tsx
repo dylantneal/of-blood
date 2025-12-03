@@ -2,12 +2,15 @@
 
 import { useAudio } from "@/contexts/audio-context";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Minimize2, Maximize2, X } from "lucide-react";
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Minimize2, Maximize2, X, Expand } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { formatTime } from "@/lib/utils";
 
 export function AudioPlayer() {
+  const router = useRouter();
+  const pathname = usePathname();
   const {
     nowPlaying,
     isPlaying,
@@ -26,8 +29,23 @@ export function AudioPlayer() {
   const [isMuted, setIsMuted] = useState(false);
   const [previousVolume, setPreviousVolume] = useState(1);
 
-  // Don't render if nothing is playing
-  if (!nowPlaying) return null;
+  // Check if we're already in immersive mode
+  const isInImmersiveMode = pathname?.startsWith("/music/experience");
+
+  // Don't render if nothing is playing or if in immersive mode
+  if (!nowPlaying || isInImmersiveMode) return null;
+
+  // Get track slug for experience URL
+  const getTrackSlug = () => {
+    const track = nowPlaying.track as any;
+    return track.slug || track.title.toLowerCase().replace(/\s+/g, "-");
+  };
+
+  // Navigate to immersive experience
+  const enterExperience = () => {
+    const slug = getTrackSlug();
+    router.push(`/music/experience/${slug}`);
+  };
 
   const handleVolumeClick = () => {
     if (isMuted) {
@@ -60,8 +78,8 @@ export function AudioPlayer() {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-        className={`fixed bottom-0 left-0 right-0 z-50 border-t border-line bg-background/95 backdrop-blur-xl shadow-2xl ${
-          isMinimized ? "h-16" : "h-24 md:h-28"
+        className={`fixed bottom-0 left-0 right-0 z-50 border-t border-line bg-background/95 backdrop-blur-xl shadow-2xl pb-safe ${
+          isMinimized ? "h-16" : "h-28 md:h-32"
         } transition-all duration-300`}
       >
         {/* Minimized View */}
@@ -114,7 +132,17 @@ export function AudioPlayer() {
                 </button>
               </div>
 
-              {/* Expand Button */}
+              {/* Enter Immersive Experience Button */}
+              <button
+                onClick={enterExperience}
+                className="p-2 hover:text-primary hover:bg-primary/10 rounded transition-all"
+                aria-label="Enter immersive experience"
+                title="Enter Immersive Experience"
+              >
+                <Expand className="w-4 h-4" />
+              </button>
+
+              {/* Expand Player Button */}
               <button
                 onClick={toggleMinimize}
                 className="p-2 hover:text-primary transition-colors"
@@ -169,7 +197,7 @@ export function AudioPlayer() {
             </div>
 
             {/* Main Controls */}
-            <div className="flex items-center justify-between h-full px-4 md:px-8 gap-4 md:gap-8">
+            <div className="flex items-center justify-between flex-1 px-4 md:px-8 pb-3 md:pb-4 gap-4 md:gap-8">
               {/* Left: Album Art & Track Info */}
               <div className="flex items-center gap-4 flex-1 min-w-0">
                 <div className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 bg-muted border border-line rounded-sm overflow-hidden">
@@ -224,7 +252,7 @@ export function AudioPlayer() {
                 </button>
               </div>
 
-              {/* Right: Volume & Minimize */}
+              {/* Right: Volume, Immersive & Minimize */}
               <div className="flex items-center gap-2 md:gap-4">
                 {/* Volume Control */}
                 <div className="hidden md:flex items-center gap-2">
@@ -251,6 +279,16 @@ export function AudioPlayer() {
                   />
                 </div>
 
+                {/* Enter Immersive Experience Button */}
+                <button
+                  onClick={enterExperience}
+                  className="p-2 hover:text-primary hover:bg-primary/10 rounded transition-all group"
+                  aria-label="Enter immersive experience"
+                  title="Enter Immersive Experience"
+                >
+                  <Expand className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                </button>
+
                 {/* Minimize Button */}
                 <button
                   onClick={toggleMinimize}
@@ -263,7 +301,7 @@ export function AudioPlayer() {
             </div>
 
             {/* Mobile Volume Control */}
-            <div className="md:hidden px-4 pb-2 flex items-center gap-2">
+            <div className="md:hidden px-4 pb-4 flex items-center gap-2">
               <button
                 onClick={handleVolumeClick}
                 className="p-1 hover:text-primary transition-colors"
