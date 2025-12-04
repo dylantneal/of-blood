@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, X } from "lucide-react";
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, X, Maximize2, Minimize2 } from "lucide-react";
 import { TrackTheme } from "@/lib/types";
 import { formatTime, cn } from "@/lib/utils";
 import { useState } from "react";
@@ -18,8 +18,10 @@ type ImmersiveControlsProps = {
   onNext?: () => void;
   onPrevious?: () => void;
   onClose: () => void;
+  onToggleFullscreen: () => void;
   hasNext?: boolean;
   hasPrevious?: boolean;
+  isFullscreen?: boolean;
 };
 
 export function ImmersiveControls({
@@ -34,8 +36,10 @@ export function ImmersiveControls({
   onNext,
   onPrevious,
   onClose,
+  onToggleFullscreen,
   hasNext = false,
   hasPrevious = false,
+  isFullscreen = false,
 }: ImmersiveControlsProps) {
   const [isMuted, setIsMuted] = useState(false);
   const [previousVolume, setPreviousVolume] = useState(1);
@@ -122,16 +126,8 @@ export function ImmersiveControls({
 
       {/* Main Controls - simplified for immersive (no album art/track info since it's shown above) */}
       <div className="flex items-center justify-between px-4 md:px-8 pb-4 gap-4 md:gap-8">
-        {/* Left: Close button */}
-        <div className="flex-1 flex justify-start">
-          <button
-            onClick={onClose}
-            className="p-2 text-foreground/60 hover:text-foreground hover:bg-white/5 rounded transition-all"
-            aria-label="Exit immersive mode"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        {/* Left: Empty space for balance */}
+        <div className="flex-1" />
 
         {/* Center: Playback Controls */}
         <div className="flex items-center gap-2 md:gap-4">
@@ -173,8 +169,9 @@ export function ImmersiveControls({
           </button>
         </div>
 
-        {/* Right: Volume Control - matching main player style */}
-        <div className="flex-1 flex justify-end items-center gap-2">
+        {/* Right: Volume Control + Fullscreen + Close */}
+        <div className="flex-1 flex justify-end items-center gap-1 md:gap-2">
+          {/* Volume - hidden on mobile */}
           <div className="hidden md:flex items-center gap-2">
             <button
               onClick={handleVolumeClick}
@@ -198,6 +195,30 @@ export function ImmersiveControls({
               aria-label="Volume"
             />
           </div>
+          
+          {/* Fullscreen toggle */}
+          <button
+            onClick={onToggleFullscreen}
+            className="p-2 text-foreground/60 hover:text-foreground hover:bg-white/5 rounded transition-all"
+            aria-label={isFullscreen ? "Exit fullscreen (F)" : "Enter fullscreen (F)"}
+            title={isFullscreen ? "Exit fullscreen (F)" : "Fullscreen (F)"}
+          >
+            {isFullscreen ? (
+              <Minimize2 className="w-5 h-5" />
+            ) : (
+              <Maximize2 className="w-5 h-5" />
+            )}
+          </button>
+          
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="p-2 text-foreground/60 hover:text-foreground hover:bg-white/5 rounded transition-all"
+            aria-label="Exit immersive mode (Esc)"
+            title="Exit (Esc)"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </motion.div>

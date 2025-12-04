@@ -34,6 +34,7 @@ export type TrackTheme = {
   background: {
     gradient: string;     // CSS gradient
     overlay?: string;     // Optional overlay gradient
+    image?: string;       // Optional background image URL
   };
   particles: {
     type: 'tendrils' | 'embers' | 'blood' | 'stars' | 'fog' | 'none';
@@ -45,6 +46,20 @@ export type TrackTheme = {
   albumArt: {
     effect: 'breathe' | 'pulse' | 'glitch' | 'none';
     audioReactivity: number; // 0-1
+  };
+  // Layout configuration for immersive mode
+  layout?: {
+    type: 'default' | 'centered' | 'minimal';  // Layout style
+    albumArt: 'always' | 'never' | 'intro-only' | 'instrumental-only';  // When to show album art
+    centerpiece?: 'album' | 'eye' | 'void' | 'image' | 'none';  // What to show as main visual
+    lyricsPosition?: 'right' | 'center' | 'bottom';  // Where lyrics appear
+    introEndTime?: number;  // When intro ends and lyrics appear (in seconds)
+  };
+  // Custom visual effects
+  visualEffect?: {
+    type: 'eye' | 'tendrils-connected' | 'crushing-ceiling' | 'none';
+    intensity: number;  // 0-1
+    audioReactivity: number;  // 0-1
   };
 };
 

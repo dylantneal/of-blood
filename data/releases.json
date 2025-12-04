@@ -1,13 +1,13 @@
 [
   {
-    "id": "tendrils-of-descending-divinity",
-    "title": "Tendrils of Descending Divinity",
-    "type": "Single",
+    "id": "inhaling-the-essence-of-annihilation",
+    "title": "Inhaling The Essence of Annihilation",
+    "type": "EP",
     "date": "2025-11-08",
-    "cover": "/images/releases/TendrilsSingleCover2.png",
-    "description": "Our debut single. A cosmic horror anthem of divine consumption. As tendrils descend from a bruising sky, life itself is siphoned upward; blood and starlight feeding a mouth unseen. Streets fall silent, windows frost from within, and the world's marrow is harvested into shrinking skies. Where once the world was loud with birth, stillness carves its throne. A meditation on the end of creation, where atmosphere, dread, and awe collapse into something vast and visceral.",
+    "cover": "/images/releases/InhalingTheEssenceOfAnnihilation.png",
+    "description": "Three hymns of cosmic subjugation. An EP that charts humanity's collapse beneath forces too vast for comprehension—descending tendrils that harvest creation, the searing gaze of infinite omniscience, and the insurmountable weight of annihilation pressed against the firmament. From the first breath of dread to the final acknowledgment of our smallness, these songs trace the architecture of extinction where atmosphere, terror, and awe fuse into something inescapable.",
     "links": {
-      "bandcamp": "https://ofblood.bandcamp.com/track/tendrils-of-descending-divinity",
+      "bandcamp": "https://ofblood.bandcamp.com/album/inhaling-the-essence-of-annihilation",
       "youtube": "https://www.youtube.com/@OfBloodBand"
     },
     "tracks": [
@@ -15,21 +15,22 @@
         "n": 1,
         "title": "Tendrils of Descending Divinity",
         "slug": "tendrils-of-descending-divinity",
-        "audioUrl": "/audio/TendrilsOfDescendingDivinity(Demo).mp3",
+        "audioUrl": "/audio/TendrilsOfDescendingDivinity.mp3",
         "duration": 219,
         "lyricsUrl": "/data/lyrics/tendrils-of-descending-divinity.json",
         "theme": {
           "colors": {
-            "primary": "#B30A0A",
+            "primary": "#8B5CF6",
             "secondary": "#4A1A6B",
             "background": "#0A0A0A",
             "text": "#E8E8E8",
-            "highlight": "#FF2020",
-            "glow": "rgba(179, 10, 10, 0.6)"
+            "highlight": "#A78BFA",
+            "glow": "rgba(139, 92, 246, 0.5)"
           },
           "background": {
-            "gradient": "radial-gradient(ellipse at top, #1a0a20 0%, #0d0510 40%, #0A0A0A 100%)",
-            "overlay": "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%)"
+            "gradient": "radial-gradient(ellipse at top, #1a0a25 0%, #0d0515 40%, #0A0A0A 100%)",
+            "overlay": "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%)",
+            "image": "/images/visualizers/space-monster.png"
           },
           "particles": {
             "type": "tendrils",
@@ -41,6 +42,96 @@
           "albumArt": {
             "effect": "breathe",
             "audioReactivity": 0.5
+          },
+          "layout": {
+            "type": "centered",
+            "albumArt": "intro-only",
+            "centerpiece": "image",
+            "lyricsPosition": "center",
+            "introEndTime": 7.5
+          }
+        }
+      },
+      {
+        "n": 2,
+        "title": "In The Stare Of Infinity",
+        "slug": "in-the-stare-of-infinity",
+        "audioUrl": "/audio/InTheStareOfInfinity.mp3",
+        "duration": 167,
+        "lyricsUrl": "/data/lyrics/in-the-stare-of-infinity.json",
+        "theme": {
+          "colors": {
+            "primary": "#3B3B5C",
+            "secondary": "#1a1a2e",
+            "background": "#050508",
+            "text": "#C8C8D0",
+            "highlight": "#6B6B8D",
+            "glow": "rgba(59, 59, 92, 0.6)"
+          },
+          "background": {
+            "gradient": "radial-gradient(ellipse at center, #0a0a15 0%, #050508 50%, #000000 100%)",
+            "overlay": "radial-gradient(circle at center, rgba(30,30,50,0.1) 0%, transparent 60%)"
+          },
+          "particles": {
+            "type": "stars",
+            "density": 0.6,
+            "speed": 0.2,
+            "direction": "radial",
+            "audioReactivity": 0.8
+          },
+          "albumArt": {
+            "effect": "pulse",
+            "audioReactivity": 0.6
+          },
+          "layout": {
+            "type": "centered",
+            "albumArt": "intro-only",
+            "centerpiece": "eye",
+            "lyricsPosition": "center"
+          },
+          "visualEffect": {
+            "type": "eye",
+            "intensity": 0.7,
+            "audioReactivity": 0.8
+          }
+        }
+      },
+      {
+        "n": 3,
+        "title": "This Insurmountable Evil That Hangs Above Us All",
+        "slug": "this-insurmountable-evil-that-hangs-above-us-all",
+        "audioUrl": "/audio/ThisInsurmountableEvilThatHangsAboveUsAll.mp3",
+        "duration": 238,
+        "lyricsUrl": "/data/lyrics/this-insurmountable-evil-that-hangs-above-us-all.json",
+        "theme": {
+          "colors": {
+            "primary": "#DC2626",
+            "secondary": "#7F1D1D",
+            "background": "#0A0505",
+            "text": "#F5E6E6",
+            "highlight": "#EF4444",
+            "glow": "rgba(220, 38, 38, 0.5)"
+          },
+          "background": {
+            "gradient": "linear-gradient(180deg, #1a0808 0%, #0d0505 40%, #0A0505 100%)",
+            "overlay": "linear-gradient(180deg, rgba(100,0,0,0.15) 0%, transparent 40%, rgba(0,0,0,0.6) 100%)"
+          },
+          "particles": {
+            "type": "embers",
+            "density": 0.7,
+            "speed": 0.4,
+            "direction": "down",
+            "audioReactivity": 0.8
+          },
+          "albumArt": {
+            "effect": "breathe",
+            "audioReactivity": 0.6
+          },
+          "layout": {
+            "type": "default",
+            "albumArt": "always",
+            "centerpiece": "album",
+            "lyricsPosition": "right"
           }
         }
       }
