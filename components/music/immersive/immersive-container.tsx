@@ -541,7 +541,7 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
               alt=""
               width={3000}
               height={2000}
-              className="w-[200%] h-auto min-h-[140vh] object-contain"
+              className="w-[400%] sm:w-[300%] md:w-[200%] h-auto min-h-[160vh] sm:min-h-[140vh] object-contain"
               style={{
                 filter: `drop-shadow(0 0 80px ${theme.colors.glow}) drop-shadow(0 0 120px ${theme.colors.glow})`,
                 opacity: 0.75,
