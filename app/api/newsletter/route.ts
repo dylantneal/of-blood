@@ -160,7 +160,9 @@ export async function POST(request: NextRequest) {
     // Send confirmation email to the subscriber
     try {
       const fromEmailDomain = process.env.FROM_EMAIL_DOMAIN || "of-blood.com";
-      await resend.emails.send({
+      console.log(`[Newsletter] Sending confirmation email to ${email} from newsletter@${fromEmailDomain}`);
+      
+      const emailResult = await resend.emails.send({
         from: `Of Blood <newsletter@${fromEmailDomain}>`,
         to: email,
         subject: "Welcome to the Blood Pact",
@@ -193,10 +195,16 @@ export async function POST(request: NextRequest) {
           </div>
         `,
       });
-    } catch (emailError) {
-      // Log email error but don't fail the subscription
+      
+      console.log(`[Newsletter] Confirmation email sent successfully:`, emailResult);
+    } catch (emailError: any) {
+      // Log detailed email error but don't fail the subscription
       // The contact was already added to the audience successfully
-      console.error("Failed to send confirmation email:", emailError);
+      console.error("[Newsletter] Failed to send confirmation email:", {
+        error: emailError?.message || emailError,
+        name: emailError?.name,
+        statusCode: emailError?.statusCode,
+      });
     }
 
     return NextResponse.json(

@@ -10,3 +10,4 @@ declare module 'tailwindcss' {
   export function defineConfig(config: Config): Config;
 }
 
+

@@ -133,7 +133,7 @@ export default function AboutPage() {
       </Section>
 
       {/* Philosophy/Lore */}
-      <Section className="bg-muted/20 border-y border-line/50 relative overflow-hidden">
+      <Section className="relative overflow-hidden">
         {/* Background symbol pattern */}
         <div className="absolute inset-0 opacity-[0.02]">
           <div className="absolute top-20 left-10 w-32 h-32">
@@ -169,7 +169,7 @@ export default function AboutPage() {
               the moment humanity faced oblivion and understood what truly mattered.
             </p>
             
-            <p className="text-lg text-center border-t border-b border-line/30 py-8">
+            <p className="text-lg text-center py-8">
               Our sound traverses collapsing stars, eternal ruin, and human extinction; dragging light through 
               the shades where atmosphere, rage, and awe collapse into something vast and visceral.
             </p>
