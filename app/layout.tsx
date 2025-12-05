@@ -30,8 +30,8 @@ const cinzel = Cinzel({
 export const metadata: Metadata = {
   metadataBase: new URL('https://of-blood.com'),
   title: {
-    default: "Of Blood | Blackened Death Metal Band - Official Website",
-    template: "%s | Of Blood - Blackened Death Metal",
+    default: "Of Blood | Official Website",
+    template: "%s | Of Blood",
   },
   description: "Official website of Of Blood, a blackened death metal band exploring cosmic horror, existential dread, and apocalyptic themes. Listen to music, view tour dates, shop merch.",
   keywords: [
