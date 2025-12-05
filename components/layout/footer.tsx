@@ -4,13 +4,12 @@ import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { Logo } from "./logo";
 import { Container } from "../ui/container";
-import { Instagram, Youtube, Music2, Disc } from "lucide-react";
+import { Instagram, Youtube, Music2 } from "lucide-react";
 
 const footerLinks = {
   music: [
     { name: "Releases", href: "/music" },
-    { name: "Bandcamp", href: "https://ofblood.bandcamp.com", external: true },
-    { name: "YouTube Music", href: "https://www.youtube.com/@OfBloodBand", external: true },
+    { name: "YouTube", href: "https://www.youtube.com/@OfBloodBand", external: true },
   ],
   connect: [
     { name: "Tour Dates", href: "/tour" },
@@ -29,7 +28,6 @@ const socialLinks = [
   { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/ofbloodband/" },
   { name: "YouTube", icon: Youtube, href: "https://www.youtube.com/@OfBloodBand" },
   { name: "TikTok", icon: Music2, href: "https://www.tiktok.com/@ofbloodband" },
-  { name: "Bandcamp", icon: Disc, href: "https://ofblood.bandcamp.com" },
 ];
 
 export function Footer() {

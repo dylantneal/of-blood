@@ -8,13 +8,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Mail, Instagram, Youtube, Music2, Disc } from "lucide-react";
+import { Mail, Instagram, Youtube, Music2 } from "lucide-react";
 
 const socialLinks = [
   { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/ofbloodband/", handle: "@ofbloodband" },
   { name: "YouTube", icon: Youtube, href: "https://www.youtube.com/@OfBloodBand", handle: "@OfBloodBand" },
   { name: "TikTok", icon: Music2, href: "https://www.tiktok.com/@ofbloodband", handle: "@ofbloodband" },
-  { name: "Bandcamp", icon: Disc, href: "https://ofblood.bandcamp.com", handle: "Of Blood" },
 ];
 
 export default function ContactPage() {

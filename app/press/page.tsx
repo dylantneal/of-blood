@@ -10,7 +10,6 @@ import {
   Mail, 
   MapPin, 
   Music2, 
-  Disc, 
   Instagram, 
   Youtube, 
   ExternalLink,
@@ -206,14 +205,14 @@ export default function PressPage() {
 
                     <div className="flex flex-wrap gap-3">
                       <Button variant="primary" size="sm" asChild>
-                        <a href="https://ofblood.bandcamp.com/track/tendrils-of-descending-divinity" target="_blank" rel="noopener noreferrer">
-                          Bandcamp
-                        </a>
-                      </Button>
-                      <Button variant="ghost" size="sm" asChild>
                         <a href="https://www.youtube.com/@OfBloodBand" target="_blank" rel="noopener noreferrer">
                           YouTube
                         </a>
+                      </Button>
+                      <Button variant="ghost" size="sm" asChild>
+                        <Link href="/music">
+                          Listen on Site
+                        </Link>
                       </Button>
                     </div>
                   </div>
@@ -292,17 +291,6 @@ export default function PressPage() {
                   >
                     <Music2 className="w-5 h-5 text-foreground/70 group-hover:text-primary" />
                     <span className="flex-1">@ofbloodband</span>
-                    <ExternalLink className="w-4 h-4 text-foreground/40" />
-                  </a>
-
-                  <a
-                    href="https://ofblood.bandcamp.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 border border-line hover:border-primary/50 hover:bg-primary/5 transition-all rounded-sm group"
-                  >
-                    <Disc className="w-5 h-5 text-foreground/70 group-hover:text-primary" />
-                    <span className="flex-1">Bandcamp</span>
                     <ExternalLink className="w-4 h-4 text-foreground/40" />
                   </a>
                 </div>

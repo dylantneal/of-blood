@@ -25,9 +25,7 @@ export function MusicGroupSchema() {
     "sameAs": [
       "https://www.instagram.com/ofbloodband/",
       "https://www.youtube.com/@OfBloodBand",
-      "https://ofblood.bandcamp.com/",
-      "https://open.spotify.com/artist/your-spotify-id",
-      "https://music.apple.com/artist/your-apple-id"
+      "https://www.tiktok.com/@ofbloodband"
     ],
     "subjectOf": {
       "@type": "CreativeWork",
@@ -255,7 +253,7 @@ export function OrganizationSchema() {
     "sameAs": [
       "https://www.instagram.com/ofbloodband/",
       "https://www.youtube.com/@OfBloodBand",
-      "https://ofblood.bandcamp.com/"
+      "https://www.tiktok.com/@ofbloodband"
     ],
     "contactPoint": {
       "@type": "ContactPoint",

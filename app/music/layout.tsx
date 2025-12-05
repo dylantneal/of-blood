@@ -14,8 +14,8 @@ export const metadata: Metadata = {
     "Of Blood album",
     "death metal music",
     "blackened death metal songs",
-    "Of Blood Bandcamp",
-    "Of Blood Spotify"
+    "Of Blood YouTube",
+    "stream Of Blood"
   ],
   openGraph: {
     title: "Music & Releases | Of Blood",

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Instagram, Youtube, Music2, Disc, Globe, ExternalLink } from "lucide-react";
+import { Instagram, Youtube, Music2, Globe, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 
 const links = [
@@ -16,7 +16,7 @@ const links = [
     name: "YouTube",
     href: "https://www.youtube.com/@OfBloodBand",
     icon: Youtube,
-    variant: "ghost" as const,
+    variant: "gold" as const,
     description: "@OfBloodBand",
   },
   {
@@ -32,13 +32,6 @@ const links = [
     icon: Music2,
     variant: "ghost" as const,
     description: "@ofbloodband",
-  },
-  {
-    name: "Bandcamp",
-    href: "https://ofblood.bandcamp.com",
-    icon: Disc,
-    variant: "gold" as const,
-    description: "Listen & Support",
   },
 ];
 

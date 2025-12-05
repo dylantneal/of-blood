@@ -218,8 +218,8 @@ CONNECT
 ───────────────────────────────────────────────────────────────
 
 Official Website: https://of-blood.com
-Bandcamp: https://ofblood.bandcamp.com
 YouTube: https://www.youtube.com/@OfBloodBand
+Instagram: https://www.instagram.com/ofbloodband/
 
 ───────────────────────────────────────────────────────────────
 LEGAL
