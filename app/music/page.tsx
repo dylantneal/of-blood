@@ -503,41 +503,39 @@ export default function MusicPage() {
                         );
                       })}
                     </div>
-                    
-                    {/* Enter Immersive Experience Button */}
-                    {release.tracks && release.tracks.length > 0 && release.tracks[0].audioUrl && (
-                      <button
-                        onClick={() => enterExperience(release.tracks![0])}
-                        className="group relative w-full mt-4 overflow-hidden"
-                      >
-                        {/* Animated glow background */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary to-primary/80 opacity-90 group-hover:opacity-100 transition-opacity" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                        
-                        {/* Pulsing glow effect */}
-                        <div className="absolute inset-0 shadow-[0_0_30px_rgba(179,10,10,0.6)] group-hover:shadow-[0_0_50px_rgba(179,10,10,0.8)] transition-shadow duration-300" />
-                        
-                        {/* Button content */}
-                        <div className="relative flex items-center justify-center gap-3 py-4 px-6">
-                          <Sparkles className="w-5 h-5 text-white/90 group-hover:animate-pulse" />
-                          <span className="text-white font-display text-base uppercase tracking-[0.25em] font-medium">
-                            Enter Immersive Experience
-                          </span>
-                          <Expand className="w-5 h-5 text-white/90 group-hover:scale-125 transition-transform duration-300" />
-                        </div>
-                        
-                        {/* Corner accents */}
-                        <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-white/30 group-hover:border-white/60 transition-colors" />
-                        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-white/30 group-hover:border-white/60 transition-colors" />
-                        <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-white/30 group-hover:border-white/60 transition-colors" />
-                        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-white/30 group-hover:border-white/60 transition-colors" />
-                      </button>
-                    )}
                   </div>
                 </motion.article>
               );
             })}
           </div>
+
+          {/* Immersive Experience CTA */}
+          {releasesData[0]?.tracks?.[0] && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="mt-24 flex flex-col items-center"
+            >
+              {/* The button - matching site style but larger */}
+              <button
+                onClick={() => enterExperience(releasesData[0].tracks![0])}
+                className="group relative"
+              >
+                {/* Pulsing red glow behind */}
+                <div className="absolute -inset-6 bg-primary/50 rounded-sm blur-2xl animate-pulse" />
+                <div className="absolute -inset-10 bg-primary/30 rounded-sm blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }} />
+                
+                {/* Button - matching the site's primary button style */}
+                <div className="relative px-16 md:px-24 py-5 bg-primary hover:bg-primary/90 rounded-sm text-lg md:text-xl uppercase tracking-[0.2em] text-white font-medium transition-all flex items-center justify-center gap-4 shadow-[0_0_30px_rgba(179,10,10,0.5)] hover:shadow-[0_0_50px_rgba(179,10,10,0.7)] hover:scale-105 active:scale-100 border border-primary/50">
+                  <Expand className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  <span className="font-display whitespace-nowrap">Enter Immersive View</span>
+                  <Expand className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                </div>
+              </button>
+            </motion.div>
+          )}
         </Container>
       </Section>
     </>
