@@ -28,16 +28,16 @@ export default function LegalPage() {
               <h2 className="font-display text-3xl font-bold mb-6">Privacy Policy</h2>
               <div className="prose prose-invert max-w-none space-y-4 text-foreground/80">
                 <p className="text-sm text-foreground/60">
-                  Last updated: November 12, 2025
+                  Last updated: December 5, 2025
                 </p>
                 
                 <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
                   Information We Collect
                 </h3>
                 <p>
-                  When you visit our website, sign up for our newsletter, or make a purchase,
-                  we may collect personal information including your name, email address,
-                  shipping address, and payment information.
+                  When you visit our website, sign up for our newsletter, make a purchase, 
+                  or contact us, we may collect personal information including your name, 
+                  email address, shipping address, and payment information.
                 </p>
 
                 <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
@@ -47,21 +47,24 @@ export default function LegalPage() {
                   We use the information we collect to:
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Process your orders and manage your account</li>
-                  <li>Send you newsletters and promotional materials (with your consent)</li>
-                  <li>Notify you about tour dates and new releases</li>
-                  <li>Improve our website and services</li>
-                  <li>Comply with legal obligations</li>
+                  <li>Process and fulfill your merchandise orders</li>
+                  <li>Send you newsletters and updates about new music and releases (with your consent)</li>
+                  <li>Notify you about upcoming tour dates and shows</li>
+                  <li>Respond to booking inquiries and press requests</li>
+                  <li>Improve our website and your listening experience</li>
                 </ul>
 
                 <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
-                  Data Security
+                  Third-Party Services
                 </h3>
                 <p>
-                  We implement appropriate security measures to protect your personal
-                  information. Payment processing is handled securely through Shopify,
-                  and we do not store payment card information on our servers.
+                  We use the following third-party services to operate our website:
                 </p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li><strong>Shopify:</strong> Processes merchandise orders and payments securely. We do not store your payment card information.</li>
+                  <li><strong>Printful:</strong> Fulfills and ships merchandise orders on our behalf.</li>
+                  <li><strong>Vercel:</strong> Hosts our website.</li>
+                </ul>
 
                 <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
                   Your Rights
@@ -77,8 +80,8 @@ export default function LegalPage() {
                 </h3>
                 <p>
                   For privacy-related questions, contact us at{" "}
-                  <a href="mailto:privacy@ofblood.band" className="text-primary hover:underline">
-                    privacy@ofblood.band
+                  <a href="mailto:ofbloodband@gmail.com" className="text-primary hover:underline">
+                    ofbloodband@gmail.com
                   </a>
                 </p>
               </div>
@@ -89,7 +92,7 @@ export default function LegalPage() {
               <h2 className="font-display text-3xl font-bold mb-6">Terms of Service</h2>
               <div className="prose prose-invert max-w-none space-y-4 text-foreground/80">
                 <p className="text-sm text-foreground/60">
-                  Last updated: November 12, 2025
+                  Last updated: December 5, 2025
                 </p>
 
                 <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
@@ -105,25 +108,40 @@ export default function LegalPage() {
                 </h3>
                 <p>
                   All content on this website, including but not limited to text, images,
-                  logos, music, and videos, is the property of Of Blood or our licensors
-                  and is protected by copyright and other intellectual property laws.
+                  logos, music, lyrics, artwork, and videos, is the property of Of Blood 
+                  and is protected by copyright and other intellectual property laws. 
+                  Unauthorized reproduction, distribution, or use of our content is prohibited.
                 </p>
 
                 <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
-                  Orders and Payments
+                  Music and Downloads
                 </h3>
                 <p>
-                  All orders are subject to availability and confirmation of the order price.
-                  We reserve the right to refuse any order. Payment is processed securely
-                  through our e-commerce partner, Shopify.
+                  Music available for streaming or download on this website is provided for 
+                  personal, non-commercial use only. You may not redistribute, sell, or use 
+                  our music for commercial purposes without written permission.
+                </p>
+
+                <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
+                  Merchandise Orders
+                </h3>
+                <p>
+                  All merchandise orders are subject to availability. Prices are listed in USD 
+                  and are subject to change. Payment is processed securely through Shopify. 
+                  Merchandise is printed and fulfilled by Printful.
                 </p>
 
                 <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
                   Shipping and Returns
                 </h3>
                 <p>
-                  Shipping times vary by location. Returns are accepted within 30 days
-                  of delivery for unworn, undamaged merchandise with original tags attached.
+                  Shipping times vary by location and are estimated at checkout. As our merchandise 
+                  is printed on demand, we can only accept returns for defective or damaged items. 
+                  Please contact us at{" "}
+                  <a href="mailto:ofbloodband@gmail.com" className="text-primary hover:underline">
+                    ofbloodband@gmail.com
+                  </a>
+                  {" "}within 14 days of delivery if you receive a defective item.
                 </p>
 
                 <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
@@ -142,7 +160,7 @@ export default function LegalPage() {
               <h2 className="font-display text-3xl font-bold mb-6">Cookie Policy</h2>
               <div className="prose prose-invert max-w-none space-y-4 text-foreground/80">
                 <p className="text-sm text-foreground/60">
-                  Last updated: November 12, 2025
+                  Last updated: December 5, 2025
                 </p>
 
                 <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
@@ -155,20 +173,16 @@ export default function LegalPage() {
                 </p>
 
                 <h3 className="text-xl font-display font-semibold text-foreground mt-8 mb-4">
-                  Types of Cookies We Use
+                  Cookies We Use
                 </h3>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>
                     <strong>Essential Cookies:</strong> Required for the website to function
-                    properly (e.g., shopping cart, user authentication)
+                    properly, including your shopping cart and audio player preferences.
                   </li>
                   <li>
-                    <strong>Analytics Cookies:</strong> Help us understand how visitors
-                    interact with our website
-                  </li>
-                  <li>
-                    <strong>Marketing Cookies:</strong> Used to track visitors across
-                    websites to display relevant advertisements
+                    <strong>Shopify Cookies:</strong> Used by our e-commerce platform to 
+                    process orders and maintain your cart between visits.
                   </li>
                 </ul>
 
@@ -176,9 +190,24 @@ export default function LegalPage() {
                   Managing Cookies
                 </h3>
                 <p>
-                  You can control and/or delete cookies as you wish through your browser
-                  settings. However, disabling certain cookies may affect the functionality
-                  of our website.
+                  You can control and/or delete cookies through your browser settings. 
+                  However, disabling cookies may affect some website functionality, 
+                  such as the shopping cart.
+                </p>
+              </div>
+            </div>
+
+            {/* Contact */}
+            <div id="contact" className="scroll-mt-24 border-t border-line pt-16">
+              <h2 className="font-display text-3xl font-bold mb-6">Contact</h2>
+              <div className="prose prose-invert max-w-none space-y-4 text-foreground/80">
+                <p>
+                  For any questions regarding these policies or our website, please contact us at:
+                </p>
+                <p>
+                  <a href="mailto:ofbloodband@gmail.com" className="text-primary hover:underline">
+                    ofbloodband@gmail.com
+                  </a>
                 </p>
               </div>
             </div>
