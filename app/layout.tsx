@@ -8,6 +8,7 @@ import { AudioPlayer } from "@/components/audio/audio-player";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { runStartupValidation } from "@/lib/env-validation";
 import { MusicGroupSchema, WebsiteSchema, OrganizationSchema } from "@/components/seo/structured-data";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 // Run environment validation on startup (development only)
@@ -132,6 +133,7 @@ export default function RootLayout({
             </CartProvider>
           </AudioProvider>
         </ErrorBoundary>
+        <Analytics />
       </body>
     </html>
   );
