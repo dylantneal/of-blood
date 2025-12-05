@@ -9,7 +9,7 @@ import { Newsletter } from "@/components/home/newsletter";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Of Blood | Official Blackened Death Metal Band - Music, Tour Dates & Merch",
+  title: "Of Blood | Official Website",
   description: "Of Blood is a blackened death metal band exploring cosmic horror and apocalyptic themes. Listen to Tendrils of Descending Divinity, view upcoming tour dates, and shop official merchandise.",
   keywords: [
     "Of Blood",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "atmospheric death metal"
   ],
   openGraph: {
-    title: "Of Blood | Official Blackened Death Metal Band",
+    title: "Of Blood | Official Website",
     description: "Blackened death metal exploring cosmic horror and apocalyptic themes. Listen to music, view tour dates, and shop merch.",
     url: "https://of-blood.com",
     images: [
