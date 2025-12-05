@@ -18,6 +18,68 @@ import { useLyricsSync, loadLyrics } from "@/hooks/use-lyrics-sync";
 
 const releasesData = require("@/data/releases.json") as Release[];
 
+// Scrolling text component for long titles
+function ScrollingText({ 
+  text, 
+  className = "" 
+}: { 
+  text: string; 
+  className?: string;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [shouldScroll, setShouldScroll] = useState(false);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (containerRef.current && textRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const textWidth = textRef.current.scrollWidth;
+        setShouldScroll(textWidth > containerWidth);
+      }
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [text]);
+
+  if (!shouldScroll) {
+    return (
+      <div className={`overflow-hidden ${className}`}>
+        <span ref={textRef}>{text}</span>
+      </div>
+    );
+  }
+
+  return (
+    <div 
+      ref={containerRef}
+      className={`overflow-hidden relative ${className}`}
+    >
+      <motion.span
+        ref={textRef}
+        className="inline-block whitespace-nowrap"
+        animate={{
+          x: ["0%", "-100%", "-100%", "0%"],
+        }}
+        transition={{
+          x: {
+            duration: 8,
+            ease: "easeInOut",
+            times: [0, 0.4, 0.6, 1],
+            repeat: Infinity,
+            repeatDelay: 2,
+          },
+        }}
+        style={{ paddingRight: "50px" }}
+      >
+        {text}
+      </motion.span>
+    </div>
+  );
+}
+
 // Inline lyrics display component for tracklist
 function InlineLyrics({ 
   lyrics, 
@@ -254,16 +316,18 @@ export default function MusicPage() {
                           </div>
                         )}
                       </div>
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <p className="text-xs uppercase tracking-[0.3em] text-gold mb-1">
                           {nowPlaying.release.type}
                         </p>
-                        <p className="font-display text-xl text-foreground line-clamp-1">
-                          {nowPlaying.track.title}
-                        </p>
-                        <p className="text-sm text-foreground/60 line-clamp-1">
-                          {nowPlaying.release.title}
-                        </p>
+                        <ScrollingText 
+                          text={nowPlaying.track.title}
+                          className="font-display text-xl text-foreground"
+                        />
+                        <ScrollingText 
+                          text={nowPlaying.release.title}
+                          className="text-sm text-foreground/60"
+                        />
                       </div>
                     </div>
                     {/* Enter Experience Button */}
