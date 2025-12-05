@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Contact & Booking | Of Blood - Book Shows & Press Inquiries",
-  description: "Contact Of Blood for booking inquiries, press requests, and general questions. Get in touch with the blackened death metal band for shows, interviews, and collaborations.",
+  description: "Contact Of Blood for booking inquiries, press requests, and general questions. Get in touch with the cosmic death metal band for shows, interviews, and collaborations.",
   keywords: [
     "Of Blood contact",
     "Of Blood booking",

@@ -9,11 +9,11 @@ export function MusicGroupSchema() {
     "@type": "MusicGroup",
     "name": "Of Blood",
     "alternateName": "Of Blood Band",
-    "genre": ["Death Metal", "Black Metal", "Blackened Death Metal", "Extreme Metal"],
+    "genre": ["Death Metal", "Black Metal", "Cosmic Death Metal", "Extreme Metal"],
     "url": "https://of-blood.com",
     "image": "https://of-blood.com/images/OfBloodLogo.png",
     "logo": "https://of-blood.com/images/OfBloodLogo.png",
-    "description": "Of Blood is a blackened death metal band exploring themes of cosmic horror, existential dread, and apocalyptic visions through crushing riffs and atmospheric darkness.",
+    "description": "Of Blood is a cosmic death metal band exploring themes of existential dread and apocalyptic visions through crushing riffs and atmospheric darkness.",
     "foundingDate": "2024",
     "foundingLocation": {
       "@type": "Place",
@@ -29,7 +29,7 @@ export function MusicGroupSchema() {
     ],
     "subjectOf": {
       "@type": "CreativeWork",
-      "name": "Of Blood - Blackened Death Metal Band",
+      "name": "Of Blood - Cosmic Death Metal Band",
       "description": "Official website featuring music, tour dates, merchandise, and media for Of Blood"
     }
   };
@@ -49,7 +49,7 @@ export function WebsiteSchema() {
     "name": "Of Blood Official Website",
     "alternateName": "Of Blood Band",
     "url": "https://of-blood.com",
-    "description": "Official website of Of Blood - Blackened death metal band. Listen to music, view tour dates, shop merch, and stay updated on the latest releases.",
+    "description": "Official website of Of Blood - Cosmic death metal band. Listen to music, view tour dates, shop merch, and stay updated on the latest releases.",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
@@ -119,7 +119,7 @@ export function MusicReleaseSchema({ title, type, date, cover, description, trac
     },
     "datePublished": date,
     "image": `https://of-blood.com${cover}`,
-    "genre": ["Death Metal", "Black Metal", "Blackened Death Metal"],
+    "genre": ["Death Metal", "Black Metal", "Cosmic Death Metal"],
     "description": description || `${type} by Of Blood - ${title}`,
     ...(tracks && tracks.length > 0 && {
       "numTracks": tracks.length,
@@ -248,7 +248,7 @@ export function OrganizationSchema() {
     "name": "Of Blood",
     "url": "https://of-blood.com",
     "logo": "https://of-blood.com/images/OfBloodLogo.png",
-    "description": "Blackened death metal band exploring cosmic horror and existential dread",
+    "description": "Cosmic death metal band exploring existential dread and apocalyptic themes",
     "email": "ofbloodband@gmail.com",
     "sameAs": [
       "https://www.instagram.com/ofbloodband/",

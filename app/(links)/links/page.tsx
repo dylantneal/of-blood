@@ -78,7 +78,7 @@ export default function LinksPage() {
 
           {/* Tagline */}
           <p className="text-gold text-sm sm:text-base font-display tracking-widest text-center">
-            BLACKENED DEATH METAL
+            COSMIC DEATH METAL
           </p>
         </motion.div>
 

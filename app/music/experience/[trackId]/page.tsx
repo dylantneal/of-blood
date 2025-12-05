@@ -52,7 +52,7 @@ export default function ImmersiveExperiencePage() {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center">
         <div className="animate-pulse text-foreground/50">
-          <span className="font-display text-xl">Entering the ritual...</span>
+          <span className="font-display text-xl">Loading...</span>
         </div>
       </div>
     );

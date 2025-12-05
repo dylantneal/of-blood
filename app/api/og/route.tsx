@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     
     // Get parameters for dynamic OG images
     const title = searchParams.get('title') || 'OF BLOOD';
-    const subtitle = searchParams.get('subtitle') || 'BLACKENED DEATH METAL';
+    const subtitle = searchParams.get('subtitle') || 'COSMIC DEATH METAL';
     const type = searchParams.get('type') || 'default';
 
     return new ImageResponse(

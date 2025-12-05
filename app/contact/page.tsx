@@ -63,7 +63,7 @@ export default function ContactPage() {
         <Container size="narrow" className="text-center">
           <h1 className="font-display text-5xl md:text-7xl font-bold mb-6">Contact</h1>
           <p className="text-xl text-foreground/70">
-            Booking inquiries, press requests, or just want to reach out.
+            Booking, press, or general inquiries. We'll get back to you.
           </p>
         </Container>
       </Section>

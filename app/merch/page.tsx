@@ -12,7 +12,7 @@ import type { Product } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Official Merch Store | Of Blood T-Shirts, Hoodies & Metal Apparel",
-  description: "Shop official Of Blood merchandise. Premium death metal t-shirts, hoodies, vinyl, and collectibles. Limited edition blackened death metal apparel and band merch.",
+  description: "Shop official Of Blood merchandise. Premium death metal t-shirts, hoodies, vinyl, and collectibles. Limited edition cosmic death metal apparel and band merch.",
   keywords: [
     "Of Blood merch",
     "Of Blood merchandise",

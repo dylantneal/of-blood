@@ -70,7 +70,7 @@ export function Footer() {
           <div className="hidden md:block space-y-4">
             <Logo />
             <p className="text-sm text-foreground/70 max-w-xs leading-relaxed">
-              Death metal exploring themes of cosmic horror, existential dread, and apocalyptic themes.
+              Cosmic death metal from Chicago.
             </p>
             {/* Social Links */}
             <div className="flex gap-4 pt-4">

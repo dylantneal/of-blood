@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Photos & Videos | Of Blood Media Gallery - Death Metal Band",
-  description: "Of Blood media gallery featuring live photos, music videos, behind-the-scenes content, and press materials. Explore the visual darkness of blackened death metal.",
+  description: "Of Blood media gallery featuring live photos, music videos, behind-the-scenes content, and press materials. Explore the visual darkness of cosmic death metal.",
   keywords: [
     "Of Blood photos",
     "Of Blood videos",

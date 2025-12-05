@@ -5,8 +5,8 @@ import { Section } from "@/components/ui/section";
 import { AnimatedBackground } from "@/components/home/animated-background";
 
 export const metadata: Metadata = {
-  title: "About Of Blood | Blackened Death Metal Band Story & Philosophy",
-  description: "Learn about Of Blood, a blackened death metal band exploring cosmic horror and existential dread. Discover the philosophy, story, and dark vision behind the music.",
+  title: "About Of Blood | Cosmic Death Metal Band Story & Philosophy",
+  description: "Learn about Of Blood, a cosmic death metal band exploring existential dread and the weight of extinction. Discover the philosophy, story, and dark vision behind the music.",
   keywords: [
     "Of Blood band",
     "Of Blood about",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "About | Of Blood",
-    description: "The story and philosophy behind Of Blood - blackened death metal exploring cosmic horror and existential dread.",
+    description: "The story and philosophy behind Of Blood - cosmic death metal exploring existential dread and the weight of extinction.",
     url: "https://of-blood.com/about",
   },
   alternates: {
@@ -165,40 +165,27 @@ export default function AboutPage() {
           <div className="space-y-10 text-foreground/90 leading-relaxed max-w-3xl mx-auto">
             <p className="text-xl text-center">
               <span className="text-gold font-display text-2xl block mb-6">Of Blood</span>
-              is a Chicago metal band that scores the death of creation. We channel the weight of extinction, 
-              the moment humanity faced oblivion and understood what truly mattered.
+              is a Chicago death metal band. We write about cosmic annihilation and 
+              the moment humanity finally understands what we are to each other.
             </p>
             
             <p className="text-lg text-center py-8">
-              Our sound traverses collapsing stars, eternal ruin, and human extinction; dragging light through 
-              the shades where atmosphere, rage, and awe collapse into something vast and visceral.
+              Heavy, atmospheric, unrelenting. Death metal with black metal ferocity and doom weight.
             </p>
           </div>
         </Container>
       </Section>
 
-      {/* Members (optional, can expand later) */}
+      {/* Closing */}
       <Section>
         <Container size="narrow" className="text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-12">
-            The Collective
-          </h2>
-          
-          <div className="max-w-2xl mx-auto space-y-10">
-            <p className="text-foreground/80 text-xl leading-relaxed">
-              We are many voices, one species. 
-              In the face of extinction, we realized the truth: 
-              we are all family.
-            </p>
-            
-            <div className="relative py-12">
-              <blockquote className="text-gold text-2xl md:text-3xl font-display italic leading-relaxed">
-                We are all of blood.
-              </blockquote>
-            </div>
+          <div className="max-w-2xl mx-auto space-y-8">
+            <blockquote className="text-gold text-2xl md:text-3xl font-display italic leading-relaxed">
+              We are all of blood.
+            </blockquote>
             
             {/* Closing symbol */}
-            <div className="flex justify-center pt-8">
+            <div className="flex justify-center pt-4">
               <div className="w-16 h-16 opacity-50">
                 <Image
                   src="/images/logos/OfBloodSymbol.png"

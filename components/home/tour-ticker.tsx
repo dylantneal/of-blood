@@ -22,7 +22,7 @@ export async function TourTicker() {
             <div className="text-center mb-12">
               <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">Tour Dates</h2>
               <p className="text-foreground/70 max-w-2xl mx-auto">
-                Witness the ritual. Blood and smoke under stage lights.
+                Catch us live.
               </p>
             </div>
 

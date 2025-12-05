@@ -10,12 +10,12 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Of Blood | Official Website",
-  description: "Of Blood is a blackened death metal band exploring cosmic horror and apocalyptic themes. Listen to Tendrils of Descending Divinity, view upcoming tour dates, and shop official merchandise.",
+  description: "Of Blood is a cosmic death metal band exploring apocalyptic themes and existential dread. Listen to Tendrils of Descending Divinity, view upcoming tour dates, and shop official merchandise.",
   keywords: [
     "Of Blood",
     "Of Blood band",
     "Of Blood metal band",
-    "blackened death metal",
+    "cosmic death metal",
     "death metal band",
     "Of Blood music",
     "Of Blood tour dates",
@@ -26,14 +26,14 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Of Blood | Official Website",
-    description: "Blackened death metal exploring cosmic horror and apocalyptic themes. Listen to music, view tour dates, and shop merch.",
+    description: "Cosmic death metal exploring apocalyptic themes and existential dread. Listen to music, view tour dates, and shop merch.",
     url: "https://of-blood.com",
     images: [
       {
         url: "/images/OfBloodLogo.png",
         width: 1200,
         height: 630,
-        alt: "Of Blood - Blackened Death Metal Band",
+        alt: "Of Blood - Cosmic Death Metal Band",
       },
     ],
   },

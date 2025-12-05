@@ -83,7 +83,7 @@ export async function FeaturedRelease() {
                 <Button variant="primary" asChild>
                   <Link href={`/music/experience/${firstTrackSlug}`} className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4" />
-                    Immersive Experience
+                    Full Experience
                   </Link>
                 </Button>
               )}

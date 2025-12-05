@@ -54,10 +54,10 @@ export function Newsletter() {
         <div className="text-center space-y-6">
           <div>
             <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">
-              Join the Blood Pact
+              Stay Connected
             </h2>
             <p className="text-foreground/70 text-lg">
-              Get exclusive access to new releases, tour announcements, and limited merch drops.
+              New releases, tour dates, and limited merch drops—delivered to your inbox.
             </p>
           </div>
 

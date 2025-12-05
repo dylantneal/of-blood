@@ -258,14 +258,13 @@ export default function MusicPage() {
             >
               <p className="text-gold uppercase tracking-[0.3em] text-xs flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-gold" />
-                Audio Archive
+                Discography
               </p>
               <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight">
                 Music
               </h1>
-              <p className="text-lg md:text-xl text-foreground/70 max-w-2xl italic">
-                Lightning wrapped in chains,<br />
-                We crown ourselves in iron rain.
+              <p className="text-lg md:text-xl text-foreground/70 max-w-2xl">
+                Stream, download, and enter the immersive experience.
               </p>
               <div className="pt-2">
                 <Button
@@ -276,7 +275,7 @@ export default function MusicPage() {
                   className="uppercase tracking-widest"
                 >
                   <Play className="w-4 h-4 mr-2" />
-                  Play Latest Ritual
+                  Play Latest Release
                 </Button>
               </div>
             </motion.div>
@@ -342,9 +341,9 @@ export default function MusicPage() {
                 ) : (
                   <div className="flex flex-col items-center justify-center text-center text-foreground/60 py-8 gap-3">
                     <Headphones className="w-8 h-8 text-gold/60" />
-                    <p className="font-display text-lg">Silence Before the Storm</p>
+                    <p className="font-display text-lg">Nothing Playing</p>
                     <p className="text-sm">
-                      Select a track below to awaken the blood streamer.
+                      Select a track below to start listening.
                     </p>
                   </div>
                 )}

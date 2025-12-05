@@ -8,8 +8,8 @@ import { AnimatedBackground } from "@/components/home/animated-background";
 import { getShows } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Tour Dates & Live Shows | Of Blood Blackened Death Metal Concerts",
-  description: "Of Blood tour dates and concert information. Get tickets for upcoming blackened death metal shows, view past performances, and experience Of Blood live. Check tour schedule and venue details.",
+  title: "Tour Dates & Live Shows | Of Blood Cosmic Death Metal Concerts",
+  description: "Of Blood tour dates and concert information. Get tickets for upcoming cosmic death metal shows, view past performances, and experience Of Blood live. Check tour schedule and venue details.",
   keywords: [
     "Of Blood tour",
     "Of Blood tour dates",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Tour Dates | Of Blood",
-    description: "Get tickets for upcoming Of Blood blackened death metal shows. Check tour dates and venue information.",
+    description: "Get tickets for upcoming Of Blood cosmic death metal shows. Check tour dates and venue information.",
     url: "https://of-blood.com/tour",
   },
   alternates: {
@@ -109,15 +109,15 @@ export default async function TourPage() {
         <Container size="narrow" className="space-y-10">
           <div className="text-center space-y-3">
             <p className="text-xs uppercase tracking-[0.4em] text-foreground/50">
-              Upcoming Performances
+              Upcoming Shows
             </p>
-            <h2 className="font-display text-4xl font-semibold">Secure Your Date</h2>
+            <h2 className="font-display text-4xl font-semibold">Live Dates</h2>
             <p className="text-foreground/70 max-w-2xl mx-auto">
               {upcomingShows.length > 0
-                ? `Currently booking ${upcomingShows.length} ${
-                    upcomingShows.length === 1 ? "city" : "cities"
-                  }.`
-                : "More dates unlock soon. Join the list to stay in the loop."}
+                ? `${upcomingShows.length} ${
+                    upcomingShows.length === 1 ? "show" : "shows"
+                  } announced.`
+                : "More dates coming soon. Sign up for updates."}
             </p>
           </div>
 
@@ -218,8 +218,8 @@ export default async function TourPage() {
         <Section className="pt-6 pb-32 bg-muted/10 border-t border-b border-line/60">
           <Container size="narrow">
             <div className="text-center mb-12 space-y-3">
-              <p className="text-xs uppercase tracking-[0.4em] text-foreground/50">Show Archive</p>
-              <h2 className="font-display text-4xl font-semibold">Previous Nights</h2>
+<p className="text-xs uppercase tracking-[0.4em] text-foreground/50">Show Archive</p>
+            <h2 className="font-display text-4xl font-semibold">Past Shows</h2>
               <p className="text-foreground/70 max-w-2xl mx-auto">
                 Highlights from completed dates. Tap through for photos and fan-shot footage.
               </p>
@@ -234,8 +234,8 @@ export default async function TourPage() {
                 {pastShows.map((show) => {
                   const mediaItems = show.media ?? [];
                   const hasMedia = mediaItems.length > 0;
-                  const artifactCountLabel = hasMedia
-                    ? `${mediaItems.length} artifact${mediaItems.length === 1 ? "" : "s"}`
+                  const mediaCountLabel = hasMedia
+                    ? `${mediaItems.length} clip${mediaItems.length === 1 ? "" : "s"}`
                     : null;
 
                   return (
@@ -248,9 +248,9 @@ export default async function TourPage() {
                               <Calendar className="w-4 h-4" />
                               {formatShowDate(show.date)}
                             </span>
-                            {artifactCountLabel && (
+                            {mediaCountLabel && (
                               <span className="inline-flex items-center gap-1 text-[10px] text-foreground/50">
-                                {artifactCountLabel}
+                                {mediaCountLabel}
                               </span>
                             )}
                           </div>
