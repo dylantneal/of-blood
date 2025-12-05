@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
+import { AnimatedBackground } from "@/components/home/animated-background";
 
 export const metadata: Metadata = {
   title: "About Of Blood | Blackened Death Metal Band Story & Philosophy",
@@ -28,7 +29,26 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="relative">
+      {/* Full-page animated background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        {/* Base gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0d0508] to-black" />
+        
+        {/* Animated particles */}
+        <div className="absolute inset-0 opacity-50">
+          <AnimatedBackground />
+        </div>
+        
+        {/* Floating glow orbs */}
+        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-1/3 left-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute top-2/3 right-1/3 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: '3s' }} />
+        
+        {/* Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_60%,rgba(0,0,0,0.8)_100%)]" />
+      </div>
+
       {/* Hero */}
       <Section className="!pt-32 !pb-20 relative">
         <Container size="narrow" className="text-center">
@@ -192,7 +212,7 @@ export default function AboutPage() {
           </div>
         </Container>
       </Section>
-    </>
+    </div>
   );
 }
 
