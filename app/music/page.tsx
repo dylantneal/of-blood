@@ -285,24 +285,24 @@ export default function MusicPage() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="relative border border-primary/30 bg-black/40 p-6 rounded-sm backdrop-blur-xl"
+              className="relative border border-primary/30 bg-black/40 p-8 rounded-sm backdrop-blur-xl min-w-[320px] lg:min-w-[400px]"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-gold/10 rounded-sm pointer-events-none" />
-              <div className="relative flex flex-col gap-4">
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-foreground/50">
+              <div className="relative flex flex-col gap-6">
+                <div className="flex items-center justify-between text-sm uppercase tracking-[0.3em] text-foreground/50">
                   <span className="flex items-center gap-2">
-                    <Headphones className="w-4 h-4" />
+                    <Headphones className="w-5 h-5" />
                     Now Playing
                   </span>
                   <span className="flex items-center gap-2">
-                    <Waves className="w-4 h-4" />
+                    <Waves className="w-5 h-5" />
                     Live Feed
                   </span>
                 </div>
                 {nowPlaying ? (
-                  <div className="space-y-4">
-                    <div className="flex gap-4 items-center">
-                      <div className="relative w-20 h-20 flex-shrink-0 border border-line rounded-sm overflow-hidden">
+                  <div className="space-y-6">
+                    <div className="flex gap-5 items-start">
+                      <div className="relative w-28 h-28 flex-shrink-0 border-2 border-gold/30 rounded-sm overflow-hidden shadow-lg">
                         {nowPlaying.release.cover ? (
                           <Image
                             src={nowPlaying.release.cover}
@@ -312,38 +312,38 @@ export default function MusicPage() {
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gold/50">
-                            <Play className="w-6 h-6" />
+                            <Play className="w-8 h-8" />
                           </div>
                         )}
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs uppercase tracking-[0.3em] text-gold mb-1">
+                      <div className="min-w-0 flex-1 pt-1">
+                        <p className="text-sm uppercase tracking-[0.3em] text-gold mb-2">
                           {nowPlaying.release.type}
                         </p>
                         <ScrollingText 
                           text={nowPlaying.track.title}
-                          className="font-display text-xl text-foreground"
+                          className="font-display text-2xl text-foreground leading-tight mb-2"
                         />
                         <ScrollingText 
                           text={nowPlaying.release.title}
-                          className="text-sm text-foreground/60"
+                          className="text-base text-foreground/60"
                         />
                       </div>
                     </div>
                     {/* Enter Experience Button */}
                     <button
                       onClick={() => enterExperience(nowPlaying.track)}
-                      className="w-full py-3 px-4 bg-primary hover:bg-primary/90 rounded-sm text-sm uppercase tracking-[0.2em] text-white font-medium transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(179,10,10,0.4)] hover:shadow-[0_0_30px_rgba(179,10,10,0.6)]"
+                      className="w-full py-4 px-6 bg-primary hover:bg-primary/90 rounded-sm text-base uppercase tracking-[0.2em] text-white font-medium transition-all flex items-center justify-center gap-3 group shadow-[0_0_20px_rgba(179,10,10,0.4)] hover:shadow-[0_0_30px_rgba(179,10,10,0.6)]"
                     >
-                      <Expand className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                      <Expand className="w-5 h-5 group-hover:scale-110 transition-transform" />
                       Enter Immersive
                     </button>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center text-center text-foreground/60 py-8 gap-3">
-                    <Headphones className="w-8 h-8 text-gold/60" />
-                    <p className="font-display text-lg">Silence Before the Storm</p>
-                    <p className="text-sm">
+                  <div className="flex flex-col items-center justify-center text-center text-foreground/60 py-12 gap-4">
+                    <Headphones className="w-12 h-12 text-gold/40" />
+                    <p className="font-display text-2xl">Silence Before the Storm</p>
+                    <p className="text-base">
                       Select a track below to awaken the blood streamer.
                     </p>
                   </div>
