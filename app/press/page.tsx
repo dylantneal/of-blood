@@ -343,12 +343,12 @@ export default function PressPage() {
                   <div className="flex items-center gap-3 text-foreground/80">
                     <span className="text-gold/60 font-display w-6">02</span>
                     <span>In The Stare Of Infinity</span>
-                    <span className="text-foreground/40 text-sm ml-auto">2:47</span>
+                    <span className="text-foreground/40 text-sm ml-auto">2:55</span>
                   </div>
                   <div className="flex items-center gap-3 text-foreground/80">
                     <span className="text-gold/60 font-display w-6">03</span>
                     <span>This Insurmountable Evil That Hangs Above Us All</span>
-                    <span className="text-foreground/40 text-sm ml-auto">3:58</span>
+                    <span className="text-foreground/40 text-sm ml-auto">4:03</span>
                   </div>
                 </div>
               </div>
