@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { Play, Sparkles } from "lucide-react";
+import { Play, Sparkles, Music } from "lucide-react";
 import { getLatestRelease } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 import { PlayReleaseButton } from "./play-release-button";
@@ -22,13 +22,23 @@ export async function FeaturedRelease() {
   const firstTrackSlug = firstTrack?.slug || firstTrack?.title?.toLowerCase().replace(/\s+/g, "-");
 
   return (
-    <Section className="bg-muted/30">
-      <Container>
-        <div className="grid gap-12 lg:grid-cols-2 items-center">
+    <Section className="bg-muted/30 overflow-visible">
+      <Container className="overflow-visible">
+        <div className="grid gap-12 lg:grid-cols-2 items-center overflow-visible">
           {/* Album Art */}
-          <div className="relative aspect-square w-full max-w-lg mx-auto lg:mx-0">
-            <div className="absolute inset-0 bg-primary/20 blur-3xl" />
-            <div className="relative border-2 border-gold/50 p-4">
+          <div className="relative aspect-square w-full max-w-lg mx-auto lg:mx-0 overflow-visible">
+            {/* Pulsing red glow */}
+            <div 
+              className="absolute inset-0 animate-pulse pointer-events-none"
+              style={{
+                background: 'radial-gradient(circle, rgba(179, 10, 10, 0.7) 0%, rgba(179, 10, 10, 0.35) 45%, transparent 75%)',
+                transform: 'scale(1.6)',
+                filter: 'blur(50px)',
+              }}
+            />
+            
+            {/* Album frame */}
+            <div className="relative z-10 border-2 border-gold/50 p-4 bg-black/60">
               <div className="relative aspect-square bg-muted overflow-hidden">
                 {release.cover ? (
                   <Image
@@ -61,7 +71,7 @@ export async function FeaturedRelease() {
             </div>
 
             {/* Action Links */}
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-4">
               {firstTrack && (
                 <PlayReleaseButton 
                   release={release} 
@@ -77,8 +87,9 @@ export async function FeaturedRelease() {
                   </Link>
                 </Button>
               )}
-              <Button variant="ghost" asChild>
+              <Button variant="gold" asChild>
                 <Link href="/music" className="flex items-center gap-2">
+                  <Music className="w-4 h-4" />
                   View All Music
                 </Link>
               </Button>
