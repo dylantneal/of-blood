@@ -10,6 +10,7 @@ import {
   Mail, 
   MapPin, 
   Music2, 
+  Music,
   Instagram, 
   Youtube, 
   ExternalLink,
@@ -187,7 +188,7 @@ export default function PressPage() {
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row gap-6">
                   <div className="relative aspect-square w-full md:w-48 flex-shrink-0 bg-muted border border-gold/30 flex items-center justify-center">
-                    <Disc className="w-16 h-16 text-gold/30" />
+                    <Music className="w-16 h-16 text-gold/30" />
                   </div>
                   
                   <div className="flex-1 space-y-4">
