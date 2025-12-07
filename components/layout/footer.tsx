@@ -62,7 +62,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-line bg-muted/30">
+    <footer className="relative z-10 border-t border-line bg-muted/30">
       <Container>
         {/* Main Footer Content */}
         <div className="py-8 md:py-12 lg:py-16 grid grid-cols-1 gap-6 md:gap-10 lg:gap-12 md:grid-cols-2 lg:grid-cols-4">
