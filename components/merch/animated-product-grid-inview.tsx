@@ -16,8 +16,8 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.2,
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
     },
   },
 };
@@ -25,8 +25,8 @@ const containerVariants = {
 const itemVariants = {
   hidden: { 
     opacity: 0, 
-    y: 60,
-    scale: 0.9,
+    y: 40,
+    scale: 0.95,
   },
   visible: { 
     opacity: 1, 
@@ -34,7 +34,7 @@ const itemVariants = {
     scale: 1,
     transition: {
       type: "spring",
-      stiffness: 80,
+      stiffness: 100,
       damping: 15,
       mass: 0.8,
     },

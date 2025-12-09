@@ -3,6 +3,7 @@ import { Hero } from "@/components/home/hero";
 import { FeaturedRelease } from "@/components/home/featured-release";
 import { FeaturedMerch } from "@/components/home/featured-merch";
 import { TourTicker } from "@/components/home/tour-ticker";
+import { BandPhoto } from "@/components/home/band-photo";
 import { Newsletter } from "@/components/home/newsletter";
 
 // Revalidate homepage every 60 seconds to show new products and content
@@ -49,6 +50,7 @@ export default function Home() {
       <FeaturedRelease />
       <TourTicker />
       <FeaturedMerch />
+      <BandPhoto />
       <Newsletter />
     </>
   );

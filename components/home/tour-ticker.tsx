@@ -15,7 +15,7 @@ export async function TourTicker() {
   const recentImages = hasUpcomingShows ? [] : instagramPosts.slice(0, 3);
 
   return (
-    <Section className="bg-primary/5 border-y border-line">
+    <Section className="bg-primary/5">
       <Container>
         {hasUpcomingShows ? (
           <>

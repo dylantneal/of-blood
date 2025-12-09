@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Container } from "@/components/ui/container";
@@ -74,63 +75,94 @@ export function Newsletter() {
   };
 
   return (
-    <Section className="bg-gradient-to-b from-background to-muted/30">
-      <Container size="narrow">
-        <div className="text-center space-y-6">
+    <Section className="relative overflow-hidden">
+      {/* Subtle glow behind content */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[120px]" />
+      
+      <Container size="narrow" className="relative z-10">
+        <div className="text-center space-y-8">
+          {/* Decorative top accent */}
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="h-px w-12 md:w-16 bg-gradient-to-r from-transparent to-gold/40" />
+            <div className="relative w-10 h-10 opacity-40">
+              <Image
+                src="/images/logos/OfBloodSymbol.png"
+                alt=""
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div className="h-px w-12 md:w-16 bg-gradient-to-l from-transparent to-gold/40" />
+          </div>
+          
           <div>
             <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">
               Stay Connected
             </h2>
-            <p className="text-foreground/70 text-lg">
+            <p className="text-foreground/70 text-lg md:text-xl max-w-lg mx-auto">
               New releases, tour dates, and limited merch drops; delivered to your inbox.
             </p>
           </div>
 
-          {status === "success" ? (
-            <div className="flex items-center justify-center gap-2 text-gold">
-              <Check className="w-5 h-5" />
-              <p>You're in. Check your email to confirm.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <Input
-                type="email"
-                placeholder="Your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={status === "loading"}
-                className="flex-1"
-              />
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={status === "loading"}
-                className="sm:w-auto"
-              >
-                {status === "loading" ? "Subscribing..." : "Subscribe"}
-              </Button>
-            </form>
-          )}
+          {/* Form with decorative frame */}
+          <div className="relative max-w-xl mx-auto">
+            {/* Frame */}
+            <div className="relative p-6 md:p-8 border border-gold/20 bg-black/20">
+              {/* Corner accents */}
+              <div className="absolute top-0 left-0 w-5 h-5 border-t border-l border-gold/60" />
+              <div className="absolute top-0 right-0 w-5 h-5 border-t border-r border-gold/60" />
+              <div className="absolute bottom-0 left-0 w-5 h-5 border-b border-l border-gold/60" />
+              <div className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-gold/60" />
+              
+              {status === "success" ? (
+                <div className="flex items-center justify-center gap-3 text-gold py-4">
+                  <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
+                    <Check className="w-5 h-5" />
+                  </div>
+                  <p className="font-display text-lg">You&apos;re in. Check your email to confirm.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={status === "loading"}
+                    className="flex-1 h-12 bg-black/60 border-line/50 focus:border-primary/50"
+                  />
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    disabled={status === "loading"}
+                    className="h-12 px-8 uppercase tracking-widest font-display"
+                  >
+                    {status === "loading" ? "..." : "Join"}
+                  </Button>
+                </form>
+              )}
 
-          {status === "error" && (
-            <p className="text-primary text-sm">
-              {errorMessage || "Something went wrong. Please try again."}
-            </p>
-          )}
+              {status === "error" && (
+                <p className="text-primary text-sm mt-4 text-center">
+                  {errorMessage || "Something went wrong. Please try again."}
+                </p>
+              )}
+            </div>
+          </div>
 
           {/* Social Links */}
-          <div className="pt-14 md:pt-16">
+          <div className="pt-10 md:pt-14">
             {/* Section divider */}
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <div className="h-px w-16 md:w-24 bg-gradient-to-r from-transparent via-primary/50 to-primary/30" />
-              <p className="text-xs md:text-sm text-foreground/70 uppercase tracking-[0.3em] font-medium">
+            <div className="flex items-center justify-center gap-3 mb-10">
+              <div className="h-px w-10 md:w-16 bg-gradient-to-r from-transparent to-line" />
+              <p className="text-xs text-foreground/50 uppercase tracking-[0.3em]">
                 Follow Us
               </p>
-              <div className="h-px w-16 md:w-24 bg-gradient-to-l from-transparent via-primary/50 to-primary/30" />
+              <div className="h-px w-10 md:w-16 bg-gradient-to-l from-transparent to-line" />
             </div>
             
-            <div className="flex items-center justify-center gap-12 md:gap-16 lg:gap-20">
+            <div className="flex items-center justify-center gap-20 md:gap-28 lg:gap-32">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
@@ -138,20 +170,45 @@ export function Newsletter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Follow us on ${social.name}`}
-                  className="group relative"
+                  className="group relative flex flex-col items-center"
                 >
-                  {/* Always-visible red glow */}
-                  <div className="absolute inset-0 bg-primary/40 blur-2xl scale-[2] animate-pulse" />
-                  <div className="absolute inset-0 bg-primary/20 blur-3xl scale-[3] group-hover:bg-primary/40 transition-all duration-500" />
+                  {/* Blood glow - subtle */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-primary/0 group-hover:bg-primary/40 rounded-full blur-2xl transition-all duration-500 group-hover:scale-150" />
                   
-                  {/* Icon */}
-                  <div className="relative">
-                    <social.icon className="w-10 h-10 md:w-12 md:h-12 text-foreground group-hover:text-white transition-all duration-300 group-hover:scale-110 drop-shadow-[0_0_8px_rgba(179,10,10,0.5)] group-hover:drop-shadow-[0_0_20px_rgba(179,10,10,1)]" />
+                  {/* Gold corner sigils - ritualistic touch */}
+                  <div className="absolute -top-3 -left-3 w-3 h-3 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
+                    <div className="w-full h-px bg-gold/70 absolute top-0" />
+                    <div className="h-full w-px bg-gold/70 absolute left-0" />
+                  </div>
+                  <div className="absolute -top-3 -right-3 w-3 h-3 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-150">
+                    <div className="w-full h-px bg-gold/70 absolute top-0" />
+                    <div className="h-full w-px bg-gold/70 absolute right-0" />
+                  </div>
+                  <div className="absolute -bottom-3 -left-3 w-3 h-3 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
+                    <div className="w-full h-px bg-gold/70 absolute bottom-0" />
+                    <div className="h-full w-px bg-gold/70 absolute left-0" />
+                  </div>
+                  <div className="absolute -bottom-3 -right-3 w-3 h-3 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-[250ms]">
+                    <div className="w-full h-px bg-gold/70 absolute bottom-0" />
+                    <div className="h-full w-px bg-gold/70 absolute right-0" />
+                  </div>
+                  
+                  {/* Icon container with lift effect */}
+                  <div className="relative z-10 transition-transform duration-300 group-hover:-translate-y-1">
+                    <social.icon className="w-14 h-14 md:w-16 md:h-16 text-foreground/70 group-hover:text-white transition-all duration-300 group-hover:drop-shadow-[0_0_20px_rgba(179,10,10,0.7)]" />
+                  </div>
+                  
+                  {/* Platform name - slides up from darkness */}
+                  <div className="h-6 mt-4 overflow-hidden">
+                    <span className="block text-xs md:text-sm uppercase tracking-[0.2em] text-primary font-display font-semibold translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400 ease-out delay-100 drop-shadow-[0_0_10px_rgba(179,10,10,0.5)]">
+                      {social.name}
+                    </span>
                   </div>
                 </a>
               ))}
             </div>
           </div>
+          
         </div>
       </Container>
     </Section>
