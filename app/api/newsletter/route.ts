@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { RateLimiters } from "@/lib/rate-limit";
+import { getWelcomeEmailHtml, getWelcomeEmailText } from "@/lib/email-templates";
 
 /**
  * Newsletter subscription endpoint using Resend Audiences
@@ -90,35 +91,13 @@ export async function POST(request: NextRequest) {
         // Send welcome email even if already subscribed
         try {
           const fromEmailDomain = process.env.FROM_EMAIL_DOMAIN || "of-blood.com";
+          const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://of-blood.com";
           await resend.emails.send({
             from: `Of Blood <newsletter@${fromEmailDomain}>`,
             to: email,
             subject: "Welcome to the Blood Pact",
-            html: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #1a1a1a; color: #ffffff; padding: 40px;">
-                <h1 style="font-family: serif; font-size: 32px; margin-bottom: 20px; text-align: center;">Welcome to the Blood Pact</h1>
-                <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                  You're already part of the Blood Pact! Thanks for staying connected.
-                </p>
-                <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                  You'll continue to receive exclusive access to:
-                </p>
-                <ul style="font-size: 16px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
-                  <li>New releases before anyone else</li>
-                  <li>Tour announcements and presale codes</li>
-                  <li>Limited merch drops</li>
-                  <li>Behind-the-scenes content</li>
-                </ul>
-                <p style="font-size: 16px; line-height: 1.6; margin-top: 30px;">
-                  In blood,<br>
-                  <strong>Of Blood</strong>
-                </p>
-                <hr style="border: none; border-top: 1px solid #333; margin: 30px 0;">
-                <p style="color: #999; font-size: 12px; text-align: center;">
-                  This is an automated confirmation email. You're subscribed to the Of Blood newsletter.
-                </p>
-              </div>
-            `,
+            html: getWelcomeEmailHtml({ isResubscribe: true, siteUrl }),
+            text: getWelcomeEmailText({ isResubscribe: true, siteUrl }),
           });
         } catch (emailError) {
           console.error("Failed to send confirmation email:", emailError);
@@ -160,40 +139,15 @@ export async function POST(request: NextRequest) {
     // Send confirmation email to the subscriber
     try {
       const fromEmailDomain = process.env.FROM_EMAIL_DOMAIN || "of-blood.com";
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://of-blood.com";
       console.log(`[Newsletter] Sending confirmation email to ${email} from newsletter@${fromEmailDomain}`);
       
       const emailResult = await resend.emails.send({
         from: `Of Blood <newsletter@${fromEmailDomain}>`,
         to: email,
         subject: "Welcome to the Blood Pact",
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #1a1a1a; color: #ffffff; padding: 40px;">
-            <h1 style="font-family: serif; font-size: 32px; margin-bottom: 20px; text-align: center;">Welcome to the Blood Pact</h1>
-            <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-              You're in! Thanks for joining our newsletter.
-            </p>
-            <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-              You'll now receive exclusive access to:
-            </p>
-            <ul style="font-size: 16px; line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
-              <li>New releases before anyone else</li>
-              <li>Tour announcements and presale codes</li>
-              <li>Limited merch drops</li>
-              <li>Behind-the-scenes content</li>
-            </ul>
-            <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-              Stay tuned for what's coming next.
-            </p>
-            <p style="font-size: 16px; line-height: 1.6; margin-top: 30px;">
-              In blood,<br>
-              <strong>Of Blood</strong>
-            </p>
-            <hr style="border: none; border-top: 1px solid #333; margin: 30px 0;">
-            <p style="color: #999; font-size: 12px; text-align: center;">
-              This is an automated confirmation email. You're subscribed to the Of Blood newsletter.
-            </p>
-          </div>
-        `,
+        html: getWelcomeEmailHtml({ isResubscribe: false, siteUrl }),
+        text: getWelcomeEmailText({ isResubscribe: false, siteUrl }),
       });
       
       console.log(`[Newsletter] Confirmation email sent successfully:`, emailResult);
