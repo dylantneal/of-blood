@@ -177,12 +177,12 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Bio */}
-      <Section className="relative">
+      {/* Opening Narrative */}
+      <Section className="relative !pb-8">
         <Container size="narrow">
           {/* Decorative symbol divider */}
-          <div className="flex justify-center mb-16">
-            <div className="relative w-24 h-24 opacity-90">
+          <div className="flex justify-center mb-12">
+            <div className="relative w-20 h-20 opacity-80">
               <Image
                 src="/images/logos/OfBloodSymbol.png"
                 alt=""
@@ -192,17 +192,17 @@ export default function AboutPage() {
             </div>
           </div>
           
-          <div className="space-y-10 max-w-3xl mx-auto">
-            <p className="text-foreground/90 leading-relaxed text-xl">
+          <div className="space-y-8 max-w-2xl mx-auto text-center">
+            <p className="text-foreground/80 leading-relaxed text-lg md:text-xl italic">
               From the clouds descended a mass, a force, a being that felt nothing for the lives below it.
             </p>
 
-            <p className="text-foreground/90 leading-relaxed text-xl">
+            <p className="text-foreground/80 leading-relaxed text-lg md:text-xl italic">
               As it tore through mountains and cities, humanity found itself as a species to be completely 
               hopeless for the first time in its existence. Extinction quickly neared.
             </p>
 
-            <p className="text-foreground/90 leading-relaxed text-xl text-center pt-6">
+            <p className="text-foreground/90 leading-relaxed text-lg md:text-xl pt-4">
               It was in one singular instant that we realized we are all family. We are all{" "}
               <strong className="text-primary glow-red whitespace-nowrap">of blood</strong>.
             </p>
@@ -210,66 +210,130 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Philosophy/Lore */}
-      <Section className="relative overflow-hidden">
-        {/* Background symbol pattern */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div className="absolute top-20 left-10 w-32 h-32">
-            <Image src="/images/logos/OfBloodSymbol.png" alt="" fill className="object-contain" />
-          </div>
-          <div className="absolute bottom-20 right-10 w-32 h-32">
-            <Image src="/images/logos/OfBloodSymbol.png" alt="" fill className="object-contain" />
-          </div>
-        </div>
-        
-        <Container size="narrow" className="relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-6">
-              The Philosophy
-            </h2>
-            <div className="flex justify-center mb-8">
-              <div className="w-12 h-12 opacity-40">
-                <Image
-                  src="/images/logos/OfBloodSymbol.png"
-                  alt=""
-                  width={48}
-                  height={48}
-                  className="object-contain"
-                />
-              </div>
-            </div>
-          </div>
+      {/* Section Divider */}
+      <div className="flex items-center justify-center py-12">
+        <div className="h-px w-16 bg-gradient-to-r from-transparent to-gold/40" />
+        <div className="w-1.5 h-1.5 border border-gold/40 rotate-45 mx-3" />
+        <div className="h-px w-16 bg-gradient-to-l from-transparent to-gold/40" />
+      </div>
+
+      {/* History */}
+      <Section className="relative !pt-0">
+        <Container size="narrow">
+          <h2 className="font-display text-2xl md:text-3xl font-bold mb-8 text-center">
+            History
+          </h2>
           
-          <div className="space-y-10 text-foreground/90 leading-relaxed max-w-3xl mx-auto">
-            <p className="text-xl text-center">
-              <span className="text-gold font-display text-2xl block mb-6">Of Blood</span>
-              is a Chicago death metal band. We write about cosmic annihilation and 
-              the moment humanity finally understands what we are to each other.
+          <div className="space-y-5 text-foreground/80 leading-relaxed max-w-2xl mx-auto">
+            <p>
+              <span className="text-gold font-semibold">Of Blood</span> is a cosmic death metal band from Chicago, Illinois. The group officially launched in November 2025, though its formation unfolded gradually over the course of that year.
             </p>
             
-            <p className="text-lg text-center py-8">
-              Heavy, atmospheric, unrelenting. Death metal with black metal ferocity and doom weight.
+            <p>
+              The band began when drummer Artsiom and guitarist Sergi connected and started writing together. Vocalist Dylan discovered them online and joined soon after. Kevin initially came aboard as the bassist, but when Dalton joined to take over bass duties, Kevin transitioned to second guitar, completing the current five-piece lineup.
+            </p>
+
+            <p>
+              The name "Of Blood" stems from the belief that all living beings on this planet share a fundamental connection. As the band puts it: we are all of blood. The name also carries an undeniable brutality that fits the music.
+            </p>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Section Divider */}
+      <div className="flex items-center justify-center py-12">
+        <div className="h-px w-16 bg-gradient-to-r from-transparent to-gold/40" />
+        <div className="w-1.5 h-1.5 border border-gold/40 rotate-45 mx-3" />
+        <div className="h-px w-16 bg-gradient-to-l from-transparent to-gold/40" />
+      </div>
+
+      {/* Musical Style */}
+      <Section className="relative !pt-0">
+        <Container size="narrow">
+          <h2 className="font-display text-2xl md:text-3xl font-bold mb-8 text-center">
+            Musical Style
+          </h2>
+          
+          <div className="space-y-5 text-foreground/80 leading-relaxed max-w-2xl mx-auto">
+            <p>
+              Of Blood describes their sound as <span className="text-gold">"cosmic death metal,"</span> a term that captures both the genre foundation and the thematic scope. The music operates on a scale larger than life, conjuring visions of annihilation by entities that hold no regard for life on Earth.
+            </p>
+            
+            <p>
+              The band is deliberately resistant to easy comparison. Rather than modeling themselves after existing acts, they aim to bring a fresh perspective to extreme metal. From concept to execution, Of Blood prioritizes originality, actively avoiding the tired tropes that have calcified in the genre over decades.
+            </p>
+
+            <p>
+              There is also a conscious effort to write music that feels current. While rooted in the traditions of death metal, black metal, and doom, the band strives to create something that speaks to the present moment rather than rehashing the past.
+            </p>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Section Divider */}
+      <div className="flex items-center justify-center py-12">
+        <div className="h-px w-16 bg-gradient-to-r from-transparent to-gold/40" />
+        <div className="w-1.5 h-1.5 border border-gold/40 rotate-45 mx-3" />
+        <div className="h-px w-16 bg-gradient-to-l from-transparent to-gold/40" />
+      </div>
+
+      {/* Themes */}
+      <Section className="relative !pt-0">
+        <Container size="narrow">
+          <h2 className="font-display text-2xl md:text-3xl font-bold mb-8 text-center">
+            Themes
+          </h2>
+          
+          <div className="space-y-5 text-foreground/80 leading-relaxed max-w-2xl mx-auto">
+            <p>
+              On the surface, Of Blood's lyrics concern themselves with cosmic horror: giant space monsters, black holes, and entities beyond human comprehension descending upon a helpless Earth. But beneath this apocalyptic imagery lies something more pointed.
+            </p>
+            
+            <p>
+              The band views their music as a response to the horrors of contemporary life. Corporate greed has corrupted governments. Wars rage across continents. Genocides unfold in real time. Innocent people are kidnapped from their communities. In a world where such evils have overtaken the zeitgeist, Of Blood channels these feelings into monsters of cosmic scale.
+            </p>
+
+            {/* Pull Quote */}
+            <blockquote className="border-l-2 border-primary/50 pl-6 py-2 my-8">
+              <p className="text-foreground/90 text-lg italic">
+                The music is not meant to inspire despair. Instead, Of Blood aims to convey courage, strength, and power in the face of tyranny.
+              </p>
+            </blockquote>
+
+            <p>
+              By confronting annihilation in its grandest possible form, the songs become a kind of catharsis, a way of processing the weight of living under systems that seem designed to crush the individual.
+            </p>
+
+            <p>
+              Each song maintains its own identity while contributing to a cohesive whole. Recurring themes and motifs tie the material together, creating a body of work that rewards both individual listens and deeper engagement with the full catalog.
             </p>
           </div>
         </Container>
       </Section>
 
       {/* Closing */}
-      <Section>
+      <Section className="!pt-8">
         <Container size="narrow" className="text-center">
-          <div className="max-w-2xl mx-auto space-y-8">
-            <blockquote className="text-gold text-2xl md:text-3xl font-display italic leading-relaxed">
+          <div className="max-w-2xl mx-auto">
+            {/* Closing divider */}
+            <div className="flex items-center justify-center mb-10">
+              <div className="h-px w-12 bg-gradient-to-r from-transparent to-gold/30" />
+              <div className="w-1 h-1 bg-gold/30 rotate-45 mx-2" />
+              <div className="h-px w-12 bg-gradient-to-l from-transparent to-gold/30" />
+            </div>
+            
+            <p className="text-gold text-xl md:text-2xl font-display italic">
               We are all of blood.
-            </blockquote>
+            </p>
             
             {/* Closing symbol */}
-            <div className="flex justify-center pt-4">
-              <div className="w-16 h-16 opacity-50">
+            <div className="flex justify-center pt-8">
+              <div className="w-12 h-12 opacity-40">
                 <Image
                   src="/images/logos/OfBloodSymbol.png"
                   alt=""
-                  width={64}
-                  height={64}
+                  width={48}
+                  height={48}
                   className="object-contain"
                 />
               </div>

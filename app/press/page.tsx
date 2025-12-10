@@ -156,14 +156,18 @@ export default function PressPage() {
             
             {/* Outer decorative frame */}
             <div className="relative p-1 bg-gradient-to-br from-gold/30 via-transparent to-gold/30">
-              <div className="relative aspect-[3/2] w-full border border-gold/30 overflow-hidden shadow-2xl shadow-black/80">
+              <div className="relative aspect-[21/9] w-full border border-gold/30 overflow-hidden shadow-2xl shadow-black/80">
                 <Image
-                  src="/images/photos/OfBloodBandPhoto.png"
-                  alt="Of Blood - Band Photo"
+                  src="/images/photos/FullBandPhoto.png"
+                  alt="Of Blood - Full Band Photo"
                   fill
-                  className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                   priority
                 />
+                
+                {/* Gradient overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/40" />
+                <div className="absolute inset-0 bg-gradient-to-r from-background/30 via-transparent to-background/30" />
                 
                 {/* Animated corner accents */}
                 <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-gold transition-all duration-300 group-hover:w-20 group-hover:h-20" />
@@ -518,7 +522,7 @@ export default function PressPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
             {/* Band Photo */}
             <PressAssetCard
-              imageSrc="/images/photos/OfBloodBandPhoto.png"
+              imageSrc="/images/photos/FullBandPhoto.png"
               alt="Band Photo"
               title="Band Photo"
               description="High-resolution promotional photo"
