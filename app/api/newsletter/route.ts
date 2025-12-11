@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
           const fromEmailDomain = process.env.FROM_EMAIL_DOMAIN || "of-blood.com";
           const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://of-blood.com";
           await resend.emails.send({
-            from: `Of Blood <newsletter@${fromEmailDomain}>`,
+            from: `Of Blood <hello@${fromEmailDomain}>`,
             to: email,
             subject: "Welcome to the Blood Pact",
             html: getWelcomeEmailHtml({ isResubscribe: true, siteUrl }),
@@ -140,10 +140,10 @@ export async function POST(request: NextRequest) {
     try {
       const fromEmailDomain = process.env.FROM_EMAIL_DOMAIN || "of-blood.com";
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://of-blood.com";
-      console.log(`[Newsletter] Sending confirmation email to ${email} from newsletter@${fromEmailDomain}`);
+      console.log(`[Newsletter] Sending confirmation email to ${email} from hello@${fromEmailDomain}`);
       
       const emailResult = await resend.emails.send({
-        from: `Of Blood <newsletter@${fromEmailDomain}>`,
+        from: `Of Blood <hello@${fromEmailDomain}>`,
         to: email,
         subject: "Welcome to the Blood Pact",
         html: getWelcomeEmailHtml({ isResubscribe: false, siteUrl }),

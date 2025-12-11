@@ -61,7 +61,7 @@ export function getWelcomeEmailHtml({ isResubscribe = false, siteUrl = 'https://
           <tr>
             <td style="padding: 16px 24px 0; text-align: center;">
               <p style="margin: 0; font-size: 10px; color: ${COLORS.textMuted}; letter-spacing: 0.3px;">
-                Move to Primary · Add <span style="color: ${COLORS.textSecondary};">newsletter@of-blood.com</span> to contacts
+                Move to Primary · Add <span style="color: ${COLORS.textSecondary};">hello@of-blood.com</span> to contacts
               </p>
             </td>
           </tr>
@@ -438,7 +438,7 @@ Unsubscribe: ${siteUrl}
 
 © ${new Date().getFullYear()} Of Blood
 
-Tip: Move this to Primary and add newsletter@of-blood.com 
+Tip: Move this to Primary and add hello@of-blood.com 
 to your contacts so you don't miss updates.
   `.trim();
 }
