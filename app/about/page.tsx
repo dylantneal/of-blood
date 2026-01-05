@@ -95,7 +95,7 @@ export default function AboutPage() {
                 {/* The image container */}
                 <div className="relative aspect-[3/2] w-full overflow-hidden">
                   <Image
-                    src="/images/photos/OfBloodBandPhoto.png"
+                    src="/images/photos/OfBloodBandPhoto2025.png"
                     alt="Of Blood band members"
                     fill
                     className="object-cover"
@@ -155,9 +155,8 @@ export default function AboutPage() {
             </div>
             
             {/* Band Member Names */}
-            <div className="grid grid-cols-5 gap-2 md:gap-4 mt-8 md:mt-10 px-8 md:px-16 lg:px-24">
+            <div className="grid grid-cols-4 gap-2 md:gap-4 mt-8 md:mt-10 px-8 md:px-16 lg:px-24">
               {[
-                { name: "Dalton", instrument: "Bass" },
                 { name: "Sergi", instrument: "Guitar" },
                 { name: "Artsiom", instrument: "Drums" },
                 { name: "Kevin", instrument: "Guitar" },
@@ -230,7 +229,7 @@ export default function AboutPage() {
             </p>
             
             <p>
-              The band began when drummer Artsiom and guitarist Sergi connected and started writing together. Vocalist Dylan discovered them online and joined soon after. Kevin initially came aboard as the bassist, but when Dalton joined to take over bass duties, Kevin transitioned to second guitar, completing the current five-piece lineup.
+              The band began when drummer Artsiom and guitarist Sergi connected and started writing together. Vocalist Dylan discovered them online and joined soon after. Kevin came aboard to complete the current four-piece lineup on second guitar.
             </p>
 
             <p>

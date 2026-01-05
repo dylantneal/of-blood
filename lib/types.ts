@@ -9,12 +9,23 @@ export type ShowMedia = {
   thumbnail?: string;
 };
 
+export type LineupAct = {
+  name: string;
+  url?: string;
+};
+
 export type Show = {
   id: string;
   date: string;
   city: string;
   state?: string;
   venue: string;
+  address?: string;
+  doorsTime?: string;
+  startTime?: string;
+  endTime?: string;
+  lineup?: LineupAct[];
+  flierUrl?: string;
   ticketUrl?: string;
   onSale?: boolean;
   isSoldOut?: boolean;

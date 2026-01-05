@@ -18,7 +18,9 @@ import {
   ExternalLink,
   Calendar,
   Users,
-  Play
+  Play,
+  FileText,
+  Download
 } from "lucide-react";
 
 // Videos for the press kit
@@ -156,12 +158,12 @@ export default function PressPage() {
             
             {/* Outer decorative frame */}
             <div className="relative p-1 bg-gradient-to-br from-gold/30 via-transparent to-gold/30">
-              <div className="relative aspect-[21/9] w-full border border-gold/30 overflow-hidden shadow-2xl shadow-black/80">
+              <div className="relative aspect-[16/9] w-full border border-gold/30 overflow-hidden shadow-2xl shadow-black/80">
                 <Image
-                  src="/images/photos/FullBandPhoto.png"
+                  src="/images/photos/OfBloodBandPhoto2025.png"
                   alt="Of Blood - Full Band Photo"
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   priority
                 />
                 
@@ -522,7 +524,7 @@ export default function PressPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
             {/* Band Photo */}
             <PressAssetCard
-              imageSrc="/images/photos/FullBandPhoto.png"
+              imageSrc="/images/photos/OfBloodBandPhoto2025.png"
               alt="Band Photo"
               title="Band Photo"
               description="High-resolution promotional photo"
@@ -596,6 +598,20 @@ export default function PressPage() {
                 <p>• Apocalyptic themes</p>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Stage Plot Download */}
+          <div className="mt-10 text-center">
+            <a
+              href="/api/download?file=/images/photos/OfBloodStagePlot.png&name=OfBlood-StagePlot.png"
+              className="inline-flex items-center gap-3 px-6 py-3 bg-muted/50 border border-line hover:border-gold/60 hover:bg-muted transition-all duration-300 group"
+            >
+              <FileText className="w-5 h-5 text-gold" />
+              <span className="text-foreground/90 group-hover:text-white transition-colors">
+                Download Stage Plot & Input List
+              </span>
+              <Download className="w-4 h-4 text-foreground/50 group-hover:text-gold transition-colors" />
+            </a>
           </div>
         </Container>
       </Section>

@@ -8,7 +8,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: "bg-primary text-fg hover:bg-primary/90 hover:shadow-[0_0_25px_rgba(179,10,10,0.8),0_0_50px_rgba(179,10,10,0.5),inset_0_0_20px_rgba(179,10,10,0.1)] hover:scale-105 active:scale-100 border border-primary/50 transition-all duration-300",
-        ghost: "border-2 border-fg/50 text-fg hover:border-fg hover:bg-fg hover:text-background hover:scale-105 active:scale-100 backdrop-blur-sm transition-all duration-300",
+        ghost: "border-2 border-fg/50 text-fg hover:border-primary hover:bg-primary hover:text-white hover:scale-105 active:scale-100 backdrop-blur-sm transition-all duration-300",
         gold: "bg-gold text-background hover:bg-gold/90 hover:shadow-[0_0_25px_rgba(201,162,39,0.7),0_0_50px_rgba(201,162,39,0.4)] hover:scale-105 active:scale-100 border border-gold/50 transition-all duration-300",
         link: "text-fg underline-offset-4 hover:underline hover:text-primary transition-all duration-200",
       },

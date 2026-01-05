@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { MapPin, Calendar, Camera, PlayCircle, ArrowUpRight } from "lucide-react";
+import { MapPin, Calendar, Camera, PlayCircle, ArrowUpRight, Clock, Users, ExternalLink } from "lucide-react";
 import { AnimatedBackground } from "@/components/home/animated-background";
 import { getShows } from "@/lib/data";
 
@@ -112,89 +112,197 @@ export default async function TourPage() {
               Upcoming Shows
             </p>
             <h2 className="font-display text-4xl font-semibold">Live Dates</h2>
-            <p className="text-foreground/70 max-w-2xl mx-auto">
-              {upcomingShows.length > 0
-                ? `${upcomingShows.length} ${
-                    upcomingShows.length === 1 ? "show" : "shows"
-                  } announced.`
-                : "More dates coming soon. Sign up for updates."}
-            </p>
           </div>
 
           {upcomingShows.length > 0 ? (
-            <div className="space-y-6">
-              {upcomingShows.map((show) => {
-                const ticketButton = (() => {
-                  if (show.isSoldOut) {
-                    return (
-                      <div className="px-4 py-2 bg-muted border border-line text-foreground/60 text-xs font-semibold tracking-[0.35em] uppercase">
-                        Sold Out
+            <div className="space-y-8">
+              {upcomingShows.map((show) => (
+                <article
+                  key={show.id}
+                  className="group relative overflow-hidden"
+                >
+                  {/* Dramatic background gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  
+                  {/* Animated border glow on hover */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-gold/20 to-primary/20 blur-xl" />
                       </div>
-                    );
-                  }
-
-                  if (show.onSale && show.ticketUrl) {
-                    return (
-                      <Button variant="primary" size="lg" asChild>
-                        <a href={show.ticketUrl} target="_blank" rel="noopener noreferrer">
-                          Get Tickets
-                        </a>
-                      </Button>
-                    );
-                  }
-
-                  if (show.ticketUrl) {
-                    return (
-                      <div className="px-4 py-2 border border-gold text-gold text-xs font-semibold tracking-[0.35em] uppercase">
-                        On Sale Soon
+                  
+                  {/* Main card content */}
+                  <div className="relative border border-line/60 bg-gradient-to-br from-muted/50 via-background to-muted/30 backdrop-blur-sm group-hover:border-primary/40 transition-all duration-500">
+                    
+                    {/* Top accent line */}
+                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-60" />
+                    
+                    {/* Flier Image (if available) */}
+                    {show.flierUrl && (
+                      <div className="relative aspect-[16/9] w-full border-b border-line/40 overflow-hidden">
+                        <Image
+                          src={show.flierUrl}
+                          alt={`${show.venue} show flier`}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
                       </div>
-                    );
-                  }
+                    )}
 
-                  return (
-                    <Button variant="ghost" size="lg" asChild>
-                      <a href="/contact">Booking Inquiry</a>
-                    </Button>
-                  );
-                })();
-
-                return (
-                  <article
-                    key={show.id}
-                    className="flex flex-col gap-6 border border-line bg-muted/30 p-6 sm:p-8 hover:border-primary/60 transition-colors"
-                  >
-                    <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between">
-                      <div className="flex flex-col sm:flex-row gap-4 sm:items-center flex-1">
-                        <div className="flex items-center gap-2 font-mono text-gold text-sm">
-                          <Calendar className="w-4 h-4" />
+                    <div className="p-8 md:p-10 space-y-8">
+                      {/* Header section with date badge */}
+                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                        <div className="space-y-4">
+                          {/* Date badge - dramatic styling */}
+                          <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-primary/20 to-primary/5 border border-primary/30 backdrop-blur-sm">
+                            <Calendar className="w-5 h-5 text-primary" />
+                            <span className="font-mono text-lg text-primary font-bold tracking-wide">
                           {formatShowDate(show.date)}
+                            </span>
                         </div>
+                          
+                          {/* City heading - large and dramatic */}
                         <div>
-                          <h3 className="font-display text-3xl font-semibold">
+                            <h3 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-white">
                             {show.city}
-                            {show.state ? `, ${show.state}` : ""}
+                              {show.state && (
+                                <span className="text-foreground/50">, {show.state}</span>
+                              )}
                           </h3>
-                          <p className="flex items-center gap-2 text-foreground/60">
-                            <MapPin className="w-4 h-4" />
-                            {show.venue}
-                          </p>
+                          </div>
                         </div>
+
+                        {/* Ticket button - prominent placement */}
+                        {show.ticketUrl && (
+                          <div className="flex-shrink-0">
+                            {show.isSoldOut ? (
+                              <div className="px-8 py-4 bg-muted/80 border border-line text-foreground/50 text-sm font-bold tracking-[0.3em] uppercase text-center">
+                                Sold Out
+                              </div>
+                            ) : show.onSale ? (
+                              <a
+                                href={show.ticketUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group/btn relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary to-primary/80 text-white font-bold text-sm tracking-[0.2em] uppercase overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(185,0,0,0.4)] hover:scale-[1.02]"
+                              >
+                                <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
+                                <span className="relative">Get Tickets</span>
+                                <ArrowUpRight className="w-5 h-5 relative transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                              </a>
+                            ) : (
+                              <div className="px-8 py-4 border-2 border-gold/60 text-gold text-sm font-bold tracking-[0.3em] uppercase text-center bg-gold/5">
+                                On Sale Soon
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
 
-                      <div className="flex flex-col gap-2 md:items-end min-w-[200px]">
-                        {ticketButton}
-                        <p className="text-xs uppercase tracking-[0.3em] text-foreground/50">
-                          {show.isSoldOut
-                            ? "Join the list for future dates"
-                            : show.onSale
-                            ? "Limited availability"
-                            : "Details coming soon"}
-                        </p>
+                      {/* Venue and details grid */}
+                      <div className="grid md:grid-cols-2 gap-8">
+                        {/* Left column - Venue info */}
+                        <div className="space-y-6">
+                          {/* Venue */}
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-gold/80">
+                              <MapPin className="w-4 h-4" />
+                              Venue
+                            </div>
+                            <div className="pl-6 space-y-1">
+                              <p className="text-xl font-semibold text-foreground">
+                                {show.venue}
+                              </p>
+                              {show.address && (
+                                <a
+                                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(show.address)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 text-foreground/60 hover:text-gold transition-colors group/link"
+                                >
+                                  <span>{show.address}</span>
+                                  <ExternalLink className="w-3 h-3 opacity-0 group-hover/link:opacity-100 transition-opacity" />
+                                </a>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Times */}
+                          {(show.doorsTime || show.startTime) && (
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-gold/80">
+                                <Clock className="w-4 h-4" />
+                                Schedule
+                              </div>
+                              <div className="pl-6 flex flex-wrap gap-x-8 gap-y-2">
+                                {show.doorsTime && (
+                                  <div>
+                                    <span className="text-foreground/50 text-sm">Doors</span>
+                                    <p className="text-lg font-semibold text-foreground">{show.doorsTime}</p>
+                                  </div>
+                                )}
+                                {show.startTime && (
+                                  <div>
+                                    <span className="text-foreground/50 text-sm">Show</span>
+                                    <p className="text-lg font-semibold text-foreground">
+                                      {show.startTime}
+                                      {show.endTime && <span className="text-foreground/60"> – {show.endTime}</span>}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Right column - Lineup */}
+                        {show.lineup && show.lineup.length > 0 && (
+                          <div className="space-y-4">
+                            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-gold/80">
+                              <Users className="w-4 h-4" />
+                              Lineup
+                            </div>
+                            <div className="flex flex-wrap gap-3">
+                              {show.lineup.map((act, index) => (
+                                act.url ? (
+                                  <a
+                                    key={index}
+                                    href={act.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`inline-flex items-center gap-2 px-4 py-2.5 text-sm transition-all duration-300 ${
+                                      act.name === "Of Blood"
+                                        ? "bg-gradient-to-r from-primary/20 to-primary/10 border border-primary/50 text-primary font-bold hover:border-primary hover:shadow-[0_0_20px_rgba(185,0,0,0.3)]"
+                                        : "border border-line/60 text-foreground/80 hover:border-gold/50 hover:text-gold hover:bg-gold/5"
+                                    }`}
+                                  >
+                                    {act.name}
+                                    {act.name !== "Of Blood" && <ExternalLink className="w-3.5 h-3.5 opacity-60" />}
+                                  </a>
+                                ) : (
+                                  <span
+                                    key={index}
+                                    className={`inline-flex items-center px-4 py-2.5 text-sm ${
+                                      act.name === "Of Blood"
+                                        ? "bg-gradient-to-r from-primary/20 to-primary/10 border border-primary/50 text-primary font-bold"
+                                        : "border border-line/60 text-foreground/80"
+                                    }`}
+                                  >
+                                    {act.name}
+                                  </span>
+                                )
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
+                    
+                    {/* Bottom accent line */}
+                    <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+                    </div>
                   </article>
-                );
-              })}
+              ))}
             </div>
           ) : (
             <div className="p-10 border border-dashed border-line/70 text-center space-y-4">
@@ -215,53 +323,54 @@ export default async function TourPage() {
       </Section>
 
       {pastShows.length > 0 && (
-        <Section className="pt-6 pb-32 bg-muted/10 border-t border-b border-line/60">
+        <Section className="pt-16 pb-32">
           <Container size="narrow">
             <div className="text-center mb-12 space-y-3">
 <p className="text-xs uppercase tracking-[0.4em] text-foreground/50">Show Archive</p>
             <h2 className="font-display text-4xl font-semibold">Past Shows</h2>
-              <p className="text-foreground/70 max-w-2xl mx-auto">
-                Highlights from completed dates. Tap through for photos and fan-shot footage.
-              </p>
             </div>
 
-            <div className="relative">
-              <div
-                className="hidden md:block absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/40 to-transparent"
-                aria-hidden="true"
-              />
-              <div className="space-y-10 md:pl-10">
+            <div className="space-y-8">
                 {pastShows.map((show) => {
                   const mediaItems = show.media ?? [];
                   const hasMedia = mediaItems.length > 0;
-                  const mediaCountLabel = hasMedia
-                    ? `${mediaItems.length} clip${mediaItems.length === 1 ? "" : "s"}`
-                    : null;
 
                   return (
-                    <article key={show.id} className="relative md:pl-8">
-                      <div className="hidden md:block absolute left-0 top-8 w-4 h-4 rounded-full border border-primary/40 bg-background shadow-[0_0_20px_rgba(185,0,0,0.45)]" />
-                      <div className="group border border-line/70 bg-background/70 p-6 sm:p-8 space-y-6 transition-all duration-300 hover:border-primary/60 hover:shadow-[0_25px_60px_rgba(0,0,0,0.45)]">
-                        <div className="space-y-5">
-                          <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.35em] text-foreground/60">
-                            <span className="flex items-center gap-2 font-mono text-gold tracking-normal text-sm">
-                              <Calendar className="w-4 h-4" />
+                  <article
+                    key={show.id}
+                    className="group relative overflow-hidden"
+                  >
+                    {/* Subtle background gradient for past shows */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-foreground/5 via-transparent to-foreground/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    
+                    {/* Main card content */}
+                    <div className="relative border border-line/40 bg-gradient-to-br from-muted/30 via-background to-muted/20 backdrop-blur-sm group-hover:border-line/60 transition-all duration-500">
+                      
+                      {/* Top accent line - muted for past shows */}
+                      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
+
+                      <div className="p-8 md:p-10 space-y-8">
+                        {/* Header section */}
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                          <div className="space-y-4">
+                            {/* Date badge - muted styling for past shows */}
+                            <div className="inline-flex items-center gap-3 px-4 py-2 bg-foreground/5 border border-line/40">
+                              <Calendar className="w-5 h-5 text-foreground/50" />
+                              <span className="font-mono text-lg text-foreground/70 font-medium tracking-wide">
                               {formatShowDate(show.date)}
-                            </span>
-                            {mediaCountLabel && (
-                              <span className="inline-flex items-center gap-1 text-[10px] text-foreground/50">
-                                {mediaCountLabel}
                               </span>
-                            )}
                           </div>
 
-                          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                            <div className="space-y-2">
+                            {/* City heading with strikethrough */}
+                            <div>
                               <div className="relative inline-block">
-                                <h3 className="font-display text-3xl md:text-4xl font-semibold text-foreground relative">
+                                <h3 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground/70">
                                   {show.city}
-                                  {show.state ? `, ${show.state}` : ""}
+                                  {show.state && (
+                                    <span className="text-foreground/40">, {show.state}</span>
+                                  )}
                                 </h3>
+                                {/* Red strikethrough line */}
                                 <span
                                   aria-hidden="true"
                                   className="pointer-events-none absolute inset-x-0 top-1/2 z-10"
@@ -269,64 +378,70 @@ export default async function TourPage() {
                                     height: "3px",
                                     transform: "translateY(-50%) skewY(-4deg)",
                                     backgroundImage:
-                                      "linear-gradient(90deg, rgba(255,0,72,0) 0%, rgba(255,0,72,0.5) 15%, rgba(255,0,72,0.9) 50%, rgba(255,0,72,0.5) 85%, rgba(255,0,72,0) 100%)",
-                                    boxShadow: "0 0 14px rgba(255,0,72,0.45)",
-                                  }}
-                                />
-                                <span
-                                  aria-hidden="true"
-                                  className="pointer-events-none absolute inset-x-10 top-1/2 blur opacity-50 z-10"
-                                  style={{
-                                    height: "6px",
-                                    transform: "translateY(-50%) skewY(6deg)",
-                                    backgroundImage:
-                                      "linear-gradient(100deg, rgba(255,0,72,0.3), rgba(255,120,0,0.2) 70%, rgba(255,0,72,0.25))",
+                                      "linear-gradient(90deg, rgba(185,0,0,0) 0%, rgba(185,0,0,0.5) 15%, rgba(185,0,0,0.9) 50%, rgba(185,0,0,0.5) 85%, rgba(185,0,0,0) 100%)",
+                                    boxShadow: "0 0 14px rgba(185,0,0,0.45)",
                                   }}
                                 />
                               </div>
-                              <p className="flex items-center gap-2 text-foreground/65">
-                                <MapPin className="w-4 h-4 text-foreground/50" />
-                                <span>{show.venue}</span>
-                              </p>
                             </div>
-                            <div className="text-[11px] uppercase tracking-[0.35em] text-primary/60">
-                              Recap highlights
+                          </div>
+
+                          {/* Completed badge */}
+                          <div className="flex-shrink-0">
+                            <div className="inline-flex items-center gap-2 px-6 py-3 border border-line/40 text-foreground/40 text-xs font-bold tracking-[0.3em] uppercase">
+                              <span className="w-2 h-2 rounded-full bg-foreground/30" />
+                              Completed
                             </div>
                           </div>
                         </div>
 
+                        {/* Venue info */}
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-foreground/40">
+                            <MapPin className="w-4 h-4" />
+                            Venue
+                          </div>
+                          <div className="pl-6">
+                            <p className="text-xl font-semibold text-foreground/70">
+                              {show.venue}
+                            </p>
+                            {show.address && (
+                              <p className="text-foreground/50 mt-1">{show.address}</p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Media section */}
                         {hasMedia && (
-                          <div className="pt-6 border-t border-line/40 space-y-4">
-                            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.35em] text-foreground/60">
-                              <Camera className="w-4 h-4 text-gold" />
-                              Recap Highlights
+                          <div className="pt-8 border-t border-line/30 space-y-6">
+                            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-gold/70">
+                              <Camera className="w-4 h-4" />
+                              Recap
                             </div>
-                            <div className="grid gap-4 md:grid-cols-2">
+                            <div className="grid gap-6 md:grid-cols-2">
                               {mediaItems.map((item, index) => {
                                 if (item.type === "image") {
                                   return (
                                     <figure
                                       key={`${show.id}-media-${index}`}
-                                      className="space-y-2"
+                                      className="space-y-3"
                                     >
-                                      <div className="relative aspect-video border border-line bg-black/60 overflow-hidden">
+                                      <div className="relative aspect-video border border-line/30 bg-black/60 overflow-hidden group/media">
                                         <Image
                                           src={item.url}
                                           alt={item.caption || `${show.city} performance photo`}
                                           fill
                                           sizes="(min-width: 768px) 50vw, 100vw"
-                                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                          className="object-cover transition-transform duration-700 group-hover/media:scale-105"
                                         />
                                       </div>
                                       {(item.title || item.caption) && (
-                                        <figcaption className="text-sm text-foreground/70">
-                                          <span className="font-semibold text-foreground">
+                                        <figcaption className="text-sm text-foreground/60">
+                                          <span className="font-semibold text-foreground/80">
                                             {item.title}
                                           </span>
                                           {item.caption && (
-                                            <span className="ml-1 text-foreground/60">
-                                              {item.caption}
-                                            </span>
+                                            <span className="ml-1">{item.caption}</span>
                                           )}
                                         </figcaption>
                                       )}
@@ -338,61 +453,12 @@ export default async function TourPage() {
                                   const embedUrl = getYouTubeEmbedUrl(item.url);
                                   const watchUrl = getYouTubeWatchUrl(item.url);
 
-                                  if (item.thumbnail) {
-                                    return (
-                                      <div
-                                        key={`${show.id}-media-${index}`}
-                                        className="space-y-2"
-                                      >
-                                        <a
-                                          href={watchUrl || item.url}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="group relative block aspect-video border border-line overflow-hidden bg-black"
-                                        >
-                                          <Image
-                                            src={item.thumbnail}
-                                            alt={item.title || `${show.city} live footage`}
-                                            fill
-                                            sizes="(min-width: 768px) 50vw, 100vw"
-                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                          />
-                                          <div className="absolute inset-0 bg-black/40 transition-opacity duration-300 group-hover:bg-black/20" />
-                                          <div className="absolute inset-0 flex items-center justify-center text-gold">
-                                            <PlayCircle className="w-12 h-12 drop-shadow-[0_0_10px_rgba(0,0,0,0.6)]" />
-                                          </div>
-                                        </a>
-                                        <div className="flex items-center justify-between text-sm text-foreground/70">
-                                          <div>
-                                            <p className="font-semibold text-foreground">
-                                              {item.title || "Live Footage"}
-                                            </p>
-                                            {item.caption && (
-                                              <p className="text-foreground/60">{item.caption}</p>
-                                            )}
-                                          </div>
-                                          {watchUrl && (
-                                            <a
-                                              href={watchUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.3em] text-foreground/60 hover:text-primary transition-colors"
-                                            >
-                                              Watch
-                                              <ArrowUpRight className="w-4 h-4" />
-                                            </a>
-                                          )}
-                                        </div>
-                                      </div>
-                                    );
-                                  }
-
                                   return (
                                     <div
                                       key={`${show.id}-media-${index}`}
-                                      className="space-y-2"
+                                      className="space-y-3"
                                     >
-                                      <div className="relative aspect-video border border-line overflow-hidden bg-black">
+                                      <div className="relative aspect-video border border-line/30 overflow-hidden bg-black">
                                         {embedUrl ? (
                                           <iframe
                                             src={embedUrl}
@@ -407,15 +473,14 @@ export default async function TourPage() {
                                             Unable to load video
                                           </div>
                                         )}
-                                        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-background/60 via-transparent to-transparent" />
                                       </div>
-                                      <div className="flex items-center justify-between text-sm text-foreground/70">
+                                      <div className="flex items-center justify-between text-sm">
                                         <div>
-                                          <p className="font-semibold text-foreground">
+                                          <p className="font-semibold text-foreground/80">
                                             {item.title || "Live Footage"}
                                           </p>
                                           {item.caption && (
-                                            <p className="text-foreground/60">{item.caption}</p>
+                                            <p className="text-foreground/50">{item.caption}</p>
                                           )}
                                         </div>
                                         {watchUrl && (
@@ -423,10 +488,10 @@ export default async function TourPage() {
                                             href={watchUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.3em] text-foreground/60 hover:text-primary transition-colors"
+                                            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-foreground/50 hover:text-gold transition-colors"
                                           >
                                             Watch
-                                            <PlayCircle className="w-4 h-4" />
+                                            <ArrowUpRight className="w-4 h-4" />
                                           </a>
                                         )}
                                       </div>
@@ -440,10 +505,13 @@ export default async function TourPage() {
                           </div>
                         )}
                       </div>
+                      
+                      {/* Bottom accent line */}
+                      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
+                      </div>
                     </article>
                   );
                 })}
-              </div>
             </div>
           </Container>
         </Section>

@@ -1,5 +1,33 @@
 [
   {
+    "id": "the-book-club-2026-01-18",
+    "date": "2026-01-18",
+    "city": "Chicago",
+    "state": "IL",
+    "venue": "The Book Club",
+    "address": "2871 N Lincoln Ave, Chicago, IL 60657",
+    "doorsTime": "1:00 PM",
+    "startTime": "2:00 PM",
+    "endTime": "4:30 PM",
+    "lineup": [
+      {
+        "name": "Of Blood",
+        "url": "https://www.instagram.com/ofbloodband/"
+      },
+      {
+        "name": "Blunt Force Karma",
+        "url": "https://www.instagram.com/bluntforcekarmaband/"
+      },
+      {
+        "name": "Gutteral",
+        "url": "https://www.instagram.com/guttural_band?igsh=MWJqbWJ3c3VvcHhjdw%3D%3D"
+      }
+    ],
+    "ticketUrl": "https://www.etix.com/ticket/p/40674527/blunt-force-karma-of-blood-chicago-bookclub",
+    "onSale": true,
+    "isSoldOut": false
+  },
+  {
     "id": "label808-2025-11-08",
     "date": "2025-11-08",
     "city": "Roselle",

@@ -24,7 +24,7 @@ export function BandPhoto() {
               {/* The image container */}
               <div className="relative aspect-[3/2] w-full overflow-hidden">
                 <Image
-                  src="/images/photos/OfBloodFullBandPhoto5.png"
+                  src="/images/photos/OfBloodBandPhoto2025.png"
                   alt="Of Blood band members"
                   fill
                   className="object-cover"
