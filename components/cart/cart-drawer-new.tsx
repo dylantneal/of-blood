@@ -1,9 +1,12 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 import { useCart } from "@/contexts/cart-context";
 import { formatPrice } from "@/lib/utils";
 import { ShoppingBag, Plus, Minus, X } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "@/components/ui/toast";
 
 interface TestProps {
   isOpen: boolean;
@@ -12,24 +15,53 @@ interface TestProps {
 
 export function CartDrawer({ isOpen, onClose }: TestProps) {
   const { cart, isLoading, updateItem, removeItem, refreshCart } = useCart();
+  const toast = useToast();
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Keyboard navigation - Escape to close
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    
+    document.addEventListener("keydown", handleKeyDown);
+    
+    // Focus the close button when drawer opens
+    setTimeout(() => closeButtonRef.current?.focus(), 100);
+    
+    // Prevent body scroll
+    document.body.style.overflow = "hidden";
+    
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, onClose]);
   
   const handleUpdateQuantity = async (lineId: string, newQuantity: number) => {
     try {
       await updateItem(lineId, newQuantity);
+      toast.success("Cart updated");
       await refreshCart();
     } catch (error) {
       console.error('Failed to update quantity:', error);
-      alert('Failed to update quantity. Please try again.');
+      toast.error('Failed to update quantity. Please try again.');
     }
   };
 
   const handleRemove = async (lineId: string) => {
     try {
       await removeItem(lineId);
+      toast.success("Item removed from cart");
       await refreshCart();
     } catch (error) {
       console.error('Failed to remove item:', error);
-      alert('Failed to remove item. Please try again.');
+      toast.error('Failed to remove item. Please try again.');
     }
   };
   

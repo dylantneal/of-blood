@@ -46,6 +46,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const nowPlayingRef = useRef<NowPlaying>(null);
   const queueRef = useRef<Array<{ track: Track; release: Release; releaseId: string; trackIndex: number }>>([]);
   const currentQueueIndexRef = useRef(-1);
+  const lastTimeUpdateRef = useRef(0);  // For throttling time updates
   
   // Keep refs in sync with state
   useEffect(() => {
@@ -78,6 +79,10 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     };
 
     const handleTimeUpdate = () => {
+      // Throttle time updates to every 100ms for better performance
+      const now = performance.now();
+      if (now - lastTimeUpdateRef.current < 100) return;
+      lastTimeUpdateRef.current = now;
       setCurrentTime(audio.currentTime);
     };
 

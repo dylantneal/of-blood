@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -89,52 +89,124 @@ function InlineLyrics({
   currentTime: number;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const targetScrollRef = useRef<number>(0);
+  const currentScrollRef = useRef<number>(0);
+  const rafRef = useRef<number | null>(null);
+  const hasInitialScrolled = useRef(false);
   
-  // Find current line index
-  const currentLineIndex = lyrics.lines.findIndex((line, index) => {
-    const nextLine = lyrics.lines[index + 1];
-    return line.time <= currentTime && (!nextLine || nextLine.time > currentTime);
+  // Use the lyrics sync hook for consistent timing logic and focus values
+  const { currentLineIndex, lineFocusValues, currentLineProgress } = useLyricsSync({
+    currentTime,
+    lyrics,
+    offset: 0,
+    anticipationWindow: 0.6,
+    lingerWindow: 0.4,
   });
 
   // Filter to lines with text
-  const linesWithText = lyrics.lines
-    .map((line, index) => ({ ...line, originalIndex: index }))
-    .filter((line) => line.text !== null);
-
-  // Find current display index
-  const currentDisplayIndex = linesWithText.findIndex(
-    (l) => l.originalIndex === currentLineIndex
+  const linesWithText = useMemo(() => 
+    lyrics.lines
+      .map((line, index) => ({ ...line, originalIndex: index }))
+      .filter((line) => line.text !== null),
+    [lyrics.lines]
   );
 
-  // Auto-scroll to keep current line visible in upper third of container
-  useEffect(() => {
-    if (containerRef.current && currentDisplayIndex >= 0) {
-      const container = containerRef.current;
-      const lineElements = container.querySelectorAll('[data-lyric-line]');
-      const currentElement = lineElements[currentDisplayIndex] as HTMLElement;
+  // Find current display index
+  const currentDisplayIndex = useMemo(() => 
+    linesWithText.findIndex((l) => l.originalIndex === currentLineIndex),
+    [linesWithText, currentLineIndex]
+  );
+
+  // Scroll to current line - helper function
+  const scrollToCurrentLine = useCallback((immediate = false) => {
+    if (!containerRef.current || currentDisplayIndex < 0) return;
+    
+    const container = containerRef.current;
+    const lineElements = container.querySelectorAll('[data-lyric-line]');
+    const currentElement = lineElements[currentDisplayIndex] as HTMLElement;
+    
+    if (!currentElement) return;
+
+    const elementRect = currentElement.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const relativeTop = elementRect.top - containerRect.top;
+    const desiredPosition = 40;
+    const scrollAdjustment = relativeTop - desiredPosition;
+    
+    const newScrollTop = Math.max(0, container.scrollTop + scrollAdjustment);
+    
+    if (immediate) {
+      // Immediate scroll (for initial mount)
+      container.scrollTop = newScrollTop;
+      currentScrollRef.current = newScrollTop;
+      targetScrollRef.current = newScrollTop;
+      return;
+    }
+    
+    targetScrollRef.current = newScrollTop;
+
+    // Start animation if not running
+    if (rafRef.current === null) {
+      currentScrollRef.current = container.scrollTop;
       
-      if (currentElement) {
-        // Calculate where the element is relative to the scroll container
-        const elementRect = currentElement.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
-        
-        // Current position of element relative to container's visible area
-        const relativeTop = elementRect.top - containerRect.top;
-        
-        // We want the current line to be about 40px from the top of the container
-        const desiredPosition = 40;
-        
-        // Calculate how much to scroll
-        const scrollAdjustment = relativeTop - desiredPosition;
-        const newScrollTop = container.scrollTop + scrollAdjustment;
-        
-        container.scrollTo({
-          top: Math.max(0, newScrollTop),
-          behavior: "smooth",
-        });
-      }
+      const animate = () => {
+        const container = containerRef.current;
+        if (!container) {
+          rafRef.current = null;
+          return;
+        }
+
+        const current = currentScrollRef.current;
+        const target = targetScrollRef.current;
+        const diff = target - current;
+
+        // Spring-like smoothing
+        const smoothing = 0.1;
+        const newScroll = current + diff * smoothing;
+
+        if (Math.abs(diff) < 0.5) {
+          container.scrollTop = target;
+          rafRef.current = null;
+          currentScrollRef.current = target;
+          return;
+        }
+
+        container.scrollTop = newScroll;
+        currentScrollRef.current = newScroll;
+        rafRef.current = requestAnimationFrame(animate);
+      };
+
+      rafRef.current = requestAnimationFrame(animate);
     }
   }, [currentDisplayIndex]);
+
+  // Initial scroll on mount - immediate scroll to current position
+  useEffect(() => {
+    if (!hasInitialScrolled.current && currentDisplayIndex >= 0) {
+      // Small delay to ensure DOM is ready
+      const timer = setTimeout(() => {
+        scrollToCurrentLine(true);
+        hasInitialScrolled.current = true;
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [currentDisplayIndex, scrollToCurrentLine]);
+
+  // Smooth scroll when line changes (after initial)
+  useEffect(() => {
+    if (hasInitialScrolled.current) {
+      scrollToCurrentLine(false);
+    }
+  }, [currentDisplayIndex, scrollToCurrentLine]);
+
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
 
   return (
     <motion.div
@@ -150,21 +222,41 @@ function InlineLyrics({
       >
         <div className="space-y-3 py-6">
           {linesWithText.map((line, displayIndex) => {
-            const isCurrentLine = displayIndex === currentDisplayIndex;
+            const focus = lineFocusValues[line.originalIndex] ?? 0;
             const isPast = displayIndex < currentDisplayIndex;
+            
+            // Smoother opacity calculation
+            let opacity: number;
+            if (focus > 0.8) {
+              opacity = 1;
+            } else if (focus > 0.3) {
+              opacity = 0.5 + focus * 0.5;
+            } else if (isPast) {
+              opacity = 0.3;
+            } else {
+              opacity = 0.5;
+            }
+            
+            const scale = focus > 0.5 ? 1 + focus * 0.05 : 1;
             
             return (
               <p
                 key={`${line.originalIndex}-${line.text}`}
                 data-lyric-line
                 className={cn(
-                  "font-display text-sm md:text-base transition-all duration-300",
-                  isCurrentLine && "text-primary font-semibold scale-105 origin-left",
-                  isPast && "text-foreground/30",
-                  !isCurrentLine && !isPast && "text-foreground/50"
+                  "font-display text-sm md:text-base origin-left will-change-transform",
+                  focus > 0.8 && "text-primary font-semibold",
+                  focus > 0.3 && focus <= 0.8 && "text-primary/80 font-medium",
+                  focus <= 0.3 && isPast && "text-foreground/30",
+                  focus <= 0.3 && !isPast && "text-foreground/50"
                 )}
                 style={{
-                  textShadow: isCurrentLine ? "0 0 20px rgba(179, 10, 10, 0.5)" : undefined,
+                  opacity,
+                  transform: `scale(${scale})`,
+                  textShadow: focus > 0.5 
+                    ? `0 0 ${10 + focus * 15}px rgba(179, 10, 10, ${focus * 0.5})` 
+                    : undefined,
+                  transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1), text-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
                 {line.text}
@@ -176,7 +268,6 @@ function InlineLyrics({
     </motion.div>
   );
 }
-
 export default function MusicPage() {
   const router = useRouter();
   const { nowPlaying, isPlaying, currentTime, playTrack, playPause } = useAudio();

@@ -118,6 +118,7 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
     return () => clearTimeout(timer);
   }, []);
 
+
   // Audio analyzer hook
   const analysis = useAudioAnalyzer(audioElement, {
     enabled: isPlaying,
@@ -131,6 +132,8 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
     currentLineIndex,
     currentSection,
     intensity,
+    lineFocusValues,
+    currentLineProgress,
   } = useLyricsSync({
     currentTime,
     lyrics,
@@ -175,31 +178,30 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
     }
   }, [currentTrack.lyricsUrl, currentTrack.title]);
 
+
   // Auto-play track when entering immersive view (only on initial mount)
   useEffect(() => {
     if (isLoaded) return;
     
+    // If something is already playing, just let it continue
+    // Don't toggle playback state - this can cause audio glitches
+    if (nowPlaying) {
+      setIsLoaded(true);
+      return;
+    }
+    
+    // Nothing is playing - start playing the track from the URL
     const trackIndex = initialRelease.tracks?.findIndex(
       (t) => t.slug === initialTrack.slug || t.title === initialTrack.title
     ) ?? 0;
     
-    const isCurrentTrack = nowPlaying?.track.title === initialTrack.title && 
-                           nowPlaying?.release.id === initialRelease.id;
-    
-    if (isCurrentTrack) {
-      if (!isPlaying) {
-        playPause();
-      }
-    } else {
-      if (initialTrack.audioUrl) {
-        playTrack(initialTrack, initialRelease, initialRelease.id, trackIndex);
-      }
+    if (initialTrack.audioUrl) {
+      playTrack(initialTrack, initialRelease, initialRelease.id, trackIndex);
     }
     
     setIsLoaded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   // Auto-enter fullscreen on mount
   useEffect(() => {
     const enterFullscreen = async () => {
@@ -229,6 +231,7 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, []);
+
 
   // Auto-hide controls and cursor - show when mouse moves, hide after delay
   useEffect(() => {
@@ -303,6 +306,7 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
     };
   }, []);
 
+
   // Handle seek from lyrics click
   const handleLyricsSeek = useCallback((time: number) => {
     seek(time);
@@ -329,6 +333,7 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
       document.documentElement.requestFullscreen?.();
     }
   }, []);
+
 
   // Check for next/previous tracks based on CURRENT release and track
   const currentTrackIndex = useMemo(() => {
@@ -635,6 +640,8 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
                       currentLine={currentLine}
                       theme={theme}
                       intensity={intensity}
+                      lineFocusValues={lineFocusValues}
+                      currentLineProgress={currentLineProgress}
                       onSeek={handleLyricsSeek}
                       className="h-full"
                       centered={true}
@@ -772,6 +779,8 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
                       currentLine={currentLine}
                       theme={theme}
                       intensity={intensity}
+                      lineFocusValues={lineFocusValues}
+                      currentLineProgress={currentLineProgress}
                       onSeek={handleLyricsSeek}
                       className="h-full"
                       centered={true}
@@ -902,6 +911,8 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
                   currentLine={currentLine}
                   theme={theme}
                   intensity={intensity}
+                  lineFocusValues={lineFocusValues}
+                  currentLineProgress={currentLineProgress}
                   onSeek={handleLyricsSeek}
                   className="h-full"
                 />

@@ -6,6 +6,7 @@ import { AudioProvider } from "@/contexts/audio-context";
 import { CartProvider } from "@/contexts/cart-context";
 import { AudioPlayer } from "@/components/audio/audio-player";
 import { ErrorBoundary } from "@/components/error-boundary";
+import { ToastProvider } from "@/components/ui/toast";
 import { runStartupValidation } from "@/lib/env-validation";
 import { MusicGroupSchema, WebsiteSchema, OrganizationSchema } from "@/components/seo/structured-data";
 import { Analytics } from "@vercel/analytics/react";
@@ -122,6 +123,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <AudioProvider>
             <CartProvider>
+            <ToastProvider>
               <Header />
               <main id="main-content" className="min-h-screen pt-20 pb-32 md:pb-36">
                 <ErrorBoundary>
@@ -130,6 +132,7 @@ export default function RootLayout({
               </main>
               <Footer />
               <AudioPlayer />
+            </ToastProvider>
             </CartProvider>
           </AudioProvider>
         </ErrorBoundary>

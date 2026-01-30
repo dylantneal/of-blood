@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useMemo, useCallback } from "react";
+import { useRef, useEffect, useMemo, useCallback, useState, memo } from "react";
 import { motion } from "framer-motion";
 import { LyricLine, TrackTheme, TrackLyrics } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -11,10 +11,120 @@ type LyricsDisplayProps = {
   currentLine: LyricLine | null;
   theme: TrackTheme;
   intensity: number;
+  lineFocusValues?: number[];
+  currentLineProgress?: number;
   onSeek?: (time: number) => void;
   className?: string;
-  centered?: boolean; // New prop for centered layout
+  centered?: boolean;
 };
+
+// Memoized line component using CSS custom properties for efficient updates
+const LyricLineItem = memo(function LyricLineItem({
+  line,
+  displayIndex,
+  focus,
+  theme,
+  intensity,
+  centered,
+  onSeek,
+  setLineRef,
+}: {
+  line: { originalIndex: number; text: string | null; time: number };
+  displayIndex: number;
+  focus: number;
+  theme: TrackTheme;
+  intensity: number;
+  centered: boolean;
+  onSeek?: (time: number) => void;
+  setLineRef: (index: number, el: HTMLDivElement | null) => void;
+}) {
+  // Calculate derived values from focus
+  const glowOpacity = Math.max(0, focus - 0.3) * 0.7;
+  const glowSize = 15 + focus * 45;
+  
+  // Use CSS custom properties for values that change frequently
+  // This lets the browser handle updates more efficiently
+  const cssVars = {
+    '--focus': focus,
+    '--opacity': 0.3 + (focus * 0.7),
+    '--scale': 0.95 + (focus * 0.07),
+    '--glow-opacity': (0.15 + intensity * 0.15) * glowOpacity,
+    '--glow-size': `${glowSize}px`,
+    '--text-glow-opacity': glowOpacity * 0.5,
+  } as React.CSSProperties;
+
+  return (
+    <div
+      ref={(el) => setLineRef(displayIndex, el)}
+      onClick={() => onSeek?.(line.time)}
+      className="lyric-line cursor-pointer select-none relative will-change-transform"
+      style={cssVars}
+      data-focus={focus > 0.8 ? 'high' : focus > 0.3 ? 'medium' : 'low'}
+      data-centered={centered}
+    >
+      {focus > 0.3 && (
+        <div
+          className="lyric-glow absolute -inset-6 rounded-2xl pointer-events-none"
+          style={{
+            background: centered 
+              ? `radial-gradient(ellipse at center, rgba(255,255,255,0.3) 0%, transparent 60%)`
+              : `radial-gradient(ellipse at left center, rgba(255,255,255,0.2) 0%, transparent 60%)`,
+          }}
+        />
+      )}
+      
+      <p
+        className="lyric-text font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed relative"
+        data-theme-primary={theme.colors.primary}
+        data-theme-glow={theme.colors.glow}
+      >
+        {line.text}
+      </p>
+      
+      {/* Inject scoped styles using CSS custom properties */}
+      <style jsx>{`
+        .lyric-line {
+          opacity: var(--opacity);
+          transform: scale(var(--scale));
+          transform-origin: ${centered ? 'center center' : 'left center'};
+          transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1), 
+                      transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .lyric-glow {
+          opacity: var(--glow-opacity);
+          transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .lyric-text {
+          transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1), 
+                      text-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* High focus - white text with glow */
+        .lyric-line[data-focus="high"] .lyric-text {
+          color: #FFFFFF;
+          font-weight: 700;
+          text-shadow: 0 0 var(--glow-size) rgba(255,255,255,var(--text-glow-opacity)), 
+                       0 0 calc(var(--glow-size) * 2) ${theme.colors.glow};
+        }
+        
+        /* Medium focus - theme color */
+        .lyric-line[data-focus="medium"] .lyric-text {
+          color: ${theme.colors.primary};
+          font-weight: 500;
+          text-shadow: 0 0 15px ${theme.colors.glow};
+        }
+        
+        /* Low focus - muted */
+        .lyric-line[data-focus="low"] .lyric-text {
+          color: ${theme.colors.primary}66;
+          font-weight: 400;
+        }
+      `}</style>
+    </div>
+  );
+});
 
 export function LyricsDisplay({
   lyrics,
@@ -22,12 +132,17 @@ export function LyricsDisplay({
   currentLine,
   theme,
   intensity,
+  lineFocusValues = [],
+  currentLineProgress = 0,
   onSeek,
   className,
   centered = false,
 }: LyricsDisplayProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const targetScrollRef = useRef<number>(0);
+  const currentScrollRef = useRef<number>(0);
+  const rafRef = useRef<number | null>(null);
 
   // Filter to only lines with text
   const linesWithText = useMemo(() => {
@@ -51,7 +166,7 @@ export function LyricsDisplay({
     }
   }, []);
 
-  // Auto-scroll to current line - fast, snappy animation
+  // Smooth scroll using spring-like interpolation
   useEffect(() => {
     const container = containerRef.current;
     if (!container || currentDisplayIndex < 0) return;
@@ -59,37 +174,76 @@ export function LyricsDisplay({
     const currentElement = lineRefs.current.get(currentDisplayIndex);
     if (!currentElement) return;
 
-    // Calculate scroll position to center the current line
+    // Calculate target scroll position
     const containerHeight = container.clientHeight;
     const elementTop = currentElement.offsetTop;
     const elementHeight = currentElement.offsetHeight;
+    const baseTarget = Math.max(0, elementTop - (containerHeight / 2) + (elementHeight / 2));
+
+    // Interpolate toward next line based on progress
+    const nextElement = lineRefs.current.get(currentDisplayIndex + 1);
+    let targetScroll = baseTarget;
     
-    // Center the element in the container
-    const scrollTarget = elementTop - (containerHeight / 2) + (elementHeight / 2);
-    const finalTarget = Math.max(0, scrollTarget);
-    
-    // Use fast custom scroll animation instead of native smooth scroll
-    const startScroll = container.scrollTop;
-    const distance = finalTarget - startScroll;
-    const duration = 150; // 150ms - much faster than native smooth
-    const startTime = performance.now();
-    
-    const animateScroll = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+    if (nextElement && currentLineProgress > 0.3) {
+      const nextTop = nextElement.offsetTop;
+      const nextTarget = Math.max(0, nextTop - (containerHeight / 2) + (nextElement.offsetHeight / 2));
+      const easedProgress = (currentLineProgress - 0.3) / 0.7;
+      targetScroll = baseTarget + (nextTarget - baseTarget) * easedProgress * 0.5;
+    }
+
+    targetScrollRef.current = targetScroll;
+
+    // Only start animation if not already running
+    if (rafRef.current === null) {
+      currentScrollRef.current = container.scrollTop;
       
-      // Ease out cubic for snappy feel
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      
-      container.scrollTop = startScroll + (distance * easeOut);
-      
-      if (progress < 1) {
-        requestAnimationFrame(animateScroll);
+      const animate = () => {
+        const container = containerRef.current;
+        if (!container) {
+          rafRef.current = null;
+          return;
+        }
+
+        const current = currentScrollRef.current;
+        const target = targetScrollRef.current;
+        const diff = target - current;
+
+        // Spring-like interpolation with damping
+        const smoothing = 0.08;
+        const newScroll = current + diff * smoothing;
+
+        // Stop when close enough
+        if (Math.abs(diff) < 0.5) {
+          container.scrollTop = target;
+          rafRef.current = null;
+          currentScrollRef.current = target;
+          return;
+        }
+
+        container.scrollTop = newScroll;
+        currentScrollRef.current = newScroll;
+        rafRef.current = requestAnimationFrame(animate);
+      };
+
+      rafRef.current = requestAnimationFrame(animate);
+    }
+
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
       }
     };
-    
-    requestAnimationFrame(animateScroll);
-  }, [currentDisplayIndex]);
+  }, [currentDisplayIndex, currentLineProgress]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
 
   if (!lyrics) {
     return (
@@ -111,87 +265,29 @@ export function LyricsDisplay({
         WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
       }}
     >
-      {/* Spacer for initial scroll position - smaller on mobile */}
+      {/* Spacer for initial scroll position */}
       <div className="h-[35vh] md:h-[40vh]" />
       
       <div className={cn(
         "space-y-6 md:space-y-8 px-4 md:px-8",
         centered && "text-center"
       )}>
-        {linesWithText.map((line, displayIndex) => {
-          const isCurrentLine = displayIndex === currentDisplayIndex;
-          const isPastLine = displayIndex < currentDisplayIndex;
-          const isFutureLine = displayIndex > currentDisplayIndex;
-          const isAdjacentLine = Math.abs(displayIndex - currentDisplayIndex) === 1;
-          
-          // Calculate distance from current line for opacity
-          // Adjacent lines (prev/next) are more visible to account for timing variations
-          const distance = Math.abs(displayIndex - currentDisplayIndex);
-          const opacityFactor = isAdjacentLine 
-            ? 0.85 // Adjacent lines very visible
-            : Math.max(0.3, 1 - distance * 0.15); // Slower falloff for others
-
-          return (
-            <div
-              key={`${line.originalIndex}-${line.text}`}
-              ref={(el) => setLineRef(displayIndex, el)}
-              onClick={() => onSeek?.(line.time)}
-              className={cn(
-                "transition-all duration-200 cursor-pointer select-none relative",
-                "hover:opacity-100",
-              )}
-              style={{
-                opacity: isCurrentLine ? 1 : opacityFactor,
-                transform: isCurrentLine ? "scale(1.02)" : "scale(0.95)",
-                transformOrigin: centered ? "center center" : "left center",
-              }}
-            >
-              {/* Current line glow effect - subtle white glow */}
-              {isCurrentLine && (
-                <motion.div
-                  className="absolute -inset-6 rounded-2xl pointer-events-none"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.15 + intensity * 0.15 }}
-                  transition={{ duration: 0.3 }}
-                  style={{
-                    background: centered 
-                      ? `radial-gradient(ellipse at center, rgba(255,255,255,0.3) 0%, transparent 60%)`
-                      : `radial-gradient(ellipse at left center, rgba(255,255,255,0.2) 0%, transparent 60%)`,
-                  }}
-                />
-              )}
-              
-              <p
-                className={cn(
-                  "font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed relative",
-                  "transition-all duration-200",
-                )}
-                style={{
-                  // REVERSED: Current line is WHITE, others are theme-colored
-                  // Adjacent lines are brighter to account for timing variations
-                  color: isCurrentLine 
-                    ? "#FFFFFF" 
-                    : isAdjacentLine
-                      ? `${theme.colors.primary}CC` // 80% opacity for adjacent
-                      : isPastLine 
-                        ? `${theme.colors.primary}66` // 40% opacity
-                        : `${theme.colors.primary}88`, // 53% opacity
-                  textShadow: isCurrentLine 
-                    ? `0 0 30px rgba(255,255,255,0.5), 0 0 60px ${theme.colors.glow}` 
-                    : isAdjacentLine
-                      ? `0 0 15px ${theme.colors.glow}` // Subtle glow for adjacent
-                      : undefined,
-                  fontWeight: isCurrentLine ? 700 : isAdjacentLine ? 500 : 400,
-                }}
-              >
-                {line.text}
-              </p>
-            </div>
-          );
-        })}
+        {linesWithText.map((line, displayIndex) => (
+          <LyricLineItem
+            key={`${line.originalIndex}-${line.text}`}
+            line={line}
+            displayIndex={displayIndex}
+            focus={lineFocusValues[line.originalIndex] ?? 0}
+            theme={theme}
+            intensity={intensity}
+            centered={centered}
+            onSeek={onSeek}
+            setLineRef={setLineRef}
+          />
+        ))}
       </div>
       
-      {/* Spacer for final scroll position - smaller on mobile */}
+      {/* Spacer for final scroll position */}
       <div className="h-[40vh] md:h-[50vh]" />
     </div>
   );
