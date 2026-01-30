@@ -122,4 +122,3 @@ export async function getInstagramPosts(): Promise<InstagramPost[]> {
   const posts = instagramPostsData as InstagramPost[];
   return [...posts].reverse();
 }
-
