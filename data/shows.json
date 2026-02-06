@@ -43,5 +43,22 @@
         "caption": "Live footage from November 8, 2025"
       }
     ]
+  },
+  {
+    "id": "live-wire-2026-02-04",
+    "date": "2026-02-04",
+    "city": "Chicago",
+    "state": "IL",
+    "venue": "Live Wire",
+    "onSale": false,
+    "isSoldOut": false,
+    "media": [
+      {
+        "type": "youtube",
+        "url": "https://www.youtube.com/watch?v=0tNxUVu_VOk",
+        "title": "Live at Live Wire",
+        "caption": "Full set from February 4, 2026"
+      }
+    ]
   }
 ]

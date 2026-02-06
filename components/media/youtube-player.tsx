@@ -116,24 +116,36 @@ export function YouTubePlayer({ video, onClose }: YouTubePlayerProps) {
     if (!playerRef.current) return;
 
     if (!isFullscreen) {
-      if (playerRef.current.requestFullscreen) {
-        playerRef.current.requestFullscreen();
-      } else if ((playerRef.current as any).webkitRequestFullscreen) {
-        (playerRef.current as any).webkitRequestFullscreen();
-      } else if ((playerRef.current as any).mozRequestFullScreen) {
-        (playerRef.current as any).mozRequestFullScreen();
-      } else if ((playerRef.current as any).msRequestFullscreen) {
-        (playerRef.current as any).msRequestFullscreen();
+      // Ensure element is still in the DOM before requesting fullscreen
+      if (!playerRef.current.isConnected) return;
+      try {
+        if (playerRef.current.requestFullscreen) {
+          playerRef.current.requestFullscreen().catch(() => {
+            /* Element disconnected or user denied - ignore */
+          });
+        } else if ((playerRef.current as any).webkitRequestFullscreen) {
+          (playerRef.current as any).webkitRequestFullscreen();
+        } else if ((playerRef.current as any).mozRequestFullScreen) {
+          (playerRef.current as any).mozRequestFullScreen();
+        } else if ((playerRef.current as any).msRequestFullscreen) {
+          (playerRef.current as any).msRequestFullscreen();
+        }
+      } catch (err) {
+        /* Element may have been unmounted (e.g. modal closed) - ignore */
       }
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if ((document as any).webkitExitFullscreen) {
-        (document as any).webkitExitFullscreen();
-      } else if ((document as any).mozCancelFullScreen) {
-        (document as any).mozCancelFullScreen();
-      } else if ((document as any).msExitFullscreen) {
-        (document as any).msExitFullscreen();
+      try {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if ((document as any).webkitExitFullscreen) {
+          (document as any).webkitExitFullscreen();
+        } else if ((document as any).mozCancelFullScreen) {
+          (document as any).mozCancelFullScreen();
+        } else if ((document as any).msExitFullscreen) {
+          (document as any).msExitFullscreen();
+        }
+      } catch (err) {
+        // Ignore exit fullscreen errors
       }
     }
   };

@@ -1,11 +1,5 @@
 [
   {
-    "id": "1",
-    "type": "image",
-    "mediaUrl": "/images/instagram/Priest.png",
-    "date": "2025-01-01"
-  },
-  {
     "id": "2",
     "type": "image",
     "mediaUrl": "/images/instagram/OfBloodPoster.png"
@@ -50,6 +44,13 @@
     "type": "image",
     "mediaUrl": "/images/instagram/warden.png",
     "caption": "Molten wanderers pacing the slag thoroughfare."
+  },
+  {
+    "id": "11",
+    "type": "image",
+    "mediaUrl": "/images/instagram/LiveWire2026.jpg",
+    "caption": "Live at Live Wire, Chicago, IL — February 4, 2026.",
+    "date": "2026-02-04"
   }
 ]
 
