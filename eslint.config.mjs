@@ -42,5 +42,13 @@ export default tseslint.config(
         version: "detect",
       },
     },
+  },
+  {
+    // Standalone test/utility scripts run via tsx use require() inside
+    // try/catch on purpose (to test module loading failures).
+    files: ["tests/**/*.ts", "scripts/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
   }
 );
