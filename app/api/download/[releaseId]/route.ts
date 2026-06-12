@@ -4,13 +4,13 @@ import * as path from "path";
 import archiver from "archiver";
 import NodeID3 from "node-id3";
 import { Release } from "@/lib/types";
+import releasesDataJson from "@/data/releases.json";
+
+const releasesData = releasesDataJson as Release[];
 
 // Force Node.js runtime (not Edge) - required for fs operations
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-// Load releases data
-const releasesData = require("@/data/releases.json") as Release[];
 
 // Band information for metadata
 const BAND_INFO = {

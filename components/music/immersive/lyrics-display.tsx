@@ -82,7 +82,7 @@ const LyricLineItem = memo(function LyricLineItem({
       </p>
       
       {/* Inject scoped styles using CSS custom properties */}
-      <style jsx>{`
+      <style>{`
         .lyric-line {
           opacity: var(--opacity);
           transform: scale(var(--scale));

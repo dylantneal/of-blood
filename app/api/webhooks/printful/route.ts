@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
 import { createHmac, timingSafeEqual } from "crypto";
+import { getResendClient } from "@/lib/resend-client";
 
 /**
  * Printful Webhook Handler
@@ -19,7 +19,6 @@ import { createHmac, timingSafeEqual } from "crypto";
  * - package.returned → Log return (optional)
  */
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const PRINTFUL_SIGNATURE_HEADER = "x-printful-signature";
 
 function safeCompareSignature(expected: string, received: string): boolean {
@@ -122,6 +121,7 @@ export async function POST(request: NextRequest) {
         try {
           console.log(`[Printful Webhook] Sending tracking email to: ${order.recipient.email}`);
           
+          const resend = getResendClient();
           const emailResult = await resend.emails.send({
             from: "Of Blood <orders@of-blood.com>",
             to: order.recipient.email,

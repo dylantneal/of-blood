@@ -105,7 +105,7 @@ NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_token`}
                 No Products Available
               </p>
               <p className="text-foreground/70">
-                Products will appear here once they're added to your Shopify store.
+                Products will appear here once they&apos;re added to your Shopify store.
               </p>
             </div>
           )}

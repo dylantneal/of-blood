@@ -63,7 +63,7 @@ export default function ContactPage() {
         <Container size="narrow" className="text-center">
           <h1 className="font-display text-5xl md:text-7xl font-bold mb-6">Contact</h1>
           <p className="text-xl text-foreground/70">
-            Booking, press, or general inquiries. We'll get back to you.
+            Booking, press, or general inquiries. We&apos;ll get back to you.
           </p>
         </Container>
       </Section>
@@ -76,7 +76,7 @@ export default function ContactPage() {
               <CardHeader>
                 <CardTitle>Send us a message</CardTitle>
                 <CardDescription>
-                  Fill out the form below and we'll get back to you as soon as possible.
+                  Fill out the form below and we&apos;ll get back to you as soon as possible.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -87,7 +87,7 @@ export default function ContactPage() {
                     </div>
                     <h3 className="font-display text-2xl font-semibold">Message Sent!</h3>
                     <p className="text-foreground/70">
-                      We've received your message and will respond within 48 hours.
+                      We&apos;ve received your message and will respond within 48 hours.
                     </p>
                     <Button variant="ghost" onClick={() => setStatus("idle")}>
                       Send Another

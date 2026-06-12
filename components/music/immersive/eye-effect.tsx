@@ -38,6 +38,7 @@ export function EyeEffect({
   const eyesRef = useRef<EyeEntity[]>([]);
   const starsRef = useRef<{x: number; y: number; size: number; twinkle: number}[]>([]);
   const initializedRef = useRef(false);
+  const renderFrameRef = useRef<() => void>(() => {});
 
   // Initialize eyes and stars
   const initializeEntities = useCallback((canvas: HTMLCanvasElement) => {
@@ -219,13 +220,13 @@ export function EyeEffect({
   const render = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      rafRef.current = requestAnimationFrame(render);
+      rafRef.current = requestAnimationFrame(() => renderFrameRef.current());
       return;
     }
 
     const ctx = canvas.getContext("2d");
     if (!ctx) {
-      rafRef.current = requestAnimationFrame(render);
+      rafRef.current = requestAnimationFrame(() => renderFrameRef.current());
       return;
     }
 
@@ -356,8 +357,12 @@ export function EyeEffect({
       }
     }
 
-    rafRef.current = requestAnimationFrame(render);
+    rafRef.current = requestAnimationFrame(() => renderFrameRef.current());
   }, [analysis, intensity, isPlaying, initializeEntities, drawEye]);
+
+  useEffect(() => {
+    renderFrameRef.current = render;
+  }, [render]);
 
   // Handle canvas resize - reinitialize entities
   useEffect(() => {

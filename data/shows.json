@@ -25,7 +25,15 @@
     ],
     "ticketUrl": "https://www.etix.com/ticket/p/40674527/blunt-force-karma-of-blood-chicago-bookclub",
     "onSale": true,
-    "isSoldOut": false
+    "isSoldOut": false,
+    "media": [
+      {
+        "type": "youtube",
+        "url": "https://www.youtube.com/watch?v=m-rtMiKQ5FA&t=121s",
+        "title": "Live at The Book Club",
+        "caption": "Live footage from January 18, 2026"
+      }
+    ]
   },
   {
     "id": "label808-2025-11-08",
@@ -60,5 +68,51 @@
         "caption": "Full set from February 4, 2026"
       }
     ]
+  },
+  {
+    "id": "live-wire-2026-04-19",
+    "date": "2026-04-19",
+    "city": "Chicago",
+    "state": "IL",
+    "venue": "Live Wire",
+    "lineup": [
+      {
+        "name": "Of Blood",
+        "url": "https://www.instagram.com/ofbloodband/"
+      },
+      {
+        "name": "Plague of Carcosa",
+        "url": "https://www.instagram.com/plagueofcarcosa/"
+      },
+      {
+        "name": "Imipolex",
+        "url": "https://www.instagram.com/imipolexband/"
+      }
+    ],
+    "onSale": false,
+    "isSoldOut": false
+  },
+  {
+    "id": "goat-village-2026-05-29",
+    "date": "2026-05-29",
+    "city": "Norridge",
+    "state": "IL",
+    "venue": "Goat Village",
+    "lineup": [
+      {
+        "name": "Of Blood",
+        "url": "https://www.instagram.com/ofbloodband/"
+      },
+      {
+        "name": "EphinEpic",
+        "url": "https://www.instagram.com/ephinepic/"
+      },
+      {
+        "name": "Blunt Force Karma",
+        "url": "https://www.instagram.com/bluntforcekarmaband/"
+      }
+    ],
+    "onSale": false,
+    "isSoldOut": false
   }
 ]

@@ -281,6 +281,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
     {/* Image Lightbox */}
     <ImageLightbox
+      key={isLightboxOpen ? `lightbox-${selectedImageIndex}` : "lightbox-closed"}
       images={availableImages}
       initialIndex={selectedImageIndex}
       isOpen={isLightboxOpen}

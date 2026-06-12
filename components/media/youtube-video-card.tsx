@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play } from "lucide-react";
+import { Play, X } from "lucide-react";
 import { YouTubeVideo } from "@/lib/types";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { YouTubePlayer } from "./youtube-player";
 
 interface YouTubeVideoCardProps {
   video: YouTubeVideo;
@@ -16,6 +15,49 @@ export function YouTubeVideoCard({ video }: YouTubeVideoCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const thumbnailUrl = video.thumbnail || `https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`;
+
+  // Guards against closeModal firing more than once per open (e.g. a click
+  // that hits both the X button and the backdrop): popping two history
+  // entries would navigate away from the page entirely.
+  const isClosingRef = useRef(false);
+
+  // Close via X button, backdrop click, or Escape: pop the history entry we
+  // pushed on open, which triggers the popstate handler below.
+  const closeModal = () => {
+    if (isClosingRef.current) return;
+    isClosingRef.current = true;
+    if (window.history.state?.videoModal) {
+      window.history.back();
+    } else {
+      setIsModalOpen(false);
+    }
+  };
+
+  // While open: pushed history entry makes the browser back button close the
+  // player instead of leaving the page. Also handles Escape + scroll lock.
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    isClosingRef.current = false;
+    window.history.pushState({ videoModal: true }, "");
+
+    const handlePopState = () => {
+      isClosingRef.current = true;
+      setIsModalOpen(false);
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeModal();
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isModalOpen]);
 
   return (
     <>
@@ -62,40 +104,45 @@ export function YouTubeVideoCard({ video }: YouTubeVideoCardProps) {
         </Card>
       </motion.div>
 
-      {/* Modal with YouTube Player */}
+      {/* Fullscreen autoplay player */}
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
-            onClick={() => setIsModalOpen(false)}
+            className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
+            onClick={closeModal}
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-6xl bg-background border border-line rounded-lg overflow-hidden"
+            {/* Close Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                closeModal();
+              }}
+              className="absolute top-4 right-4 z-10 p-3 bg-black/60 hover:bg-black/80 rounded-full backdrop-blur-sm transition-colors"
+              aria-label="Close video"
+            >
+              <X className="w-6 h-6 text-white" />
+            </button>
+
+            <div
+              className="w-full h-full flex items-center justify-center p-4 md:p-10"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-6">
-                <h2 className="font-display text-2xl md:text-3xl font-bold mb-4">
-                  {video.title}
-                </h2>
-                <YouTubePlayer
-                  video={video}
-                  onClose={() => setIsModalOpen(false)}
+              <div className="relative w-full max-w-7xl aspect-video max-h-full">
+                <iframe
+                  src={`https://www.youtube.com/embed/${video.videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&fs=1`}
+                  title={video.title}
+                  className="absolute inset-0 w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                  allowFullScreen
                 />
-                {video.description && (
-                  <p className="text-foreground/70 mt-4">{video.description}</p>
-                )}
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
     </>
   );
 }
-

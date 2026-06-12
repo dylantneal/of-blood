@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { MusicReleaseSchema } from "@/components/seo/structured-data";
-
-const releasesData = require("@/data/releases.json");
+import releasesData from "@/data/releases.json";
+import type { Release } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Music & Releases | Of Blood - Cosmic Death Metal Discography",
@@ -35,7 +35,7 @@ export default function MusicLayout({
   return (
     <>
       {/* Add structured data for each release */}
-      {releasesData.map((release: any) => (
+      {(releasesData as Release[]).map((release) => (
         <MusicReleaseSchema
           key={release.id}
           title={release.title}

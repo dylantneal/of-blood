@@ -15,7 +15,7 @@ export async function TourTicker() {
   const recentImages = hasUpcomingShows ? [] : instagramPosts.slice(0, 3);
 
   return (
-    <Section className="bg-primary/5">
+    <Section className="bg-primary/5 pb-8 md:pb-12 lg:pb-14">
       <Container>
         {hasUpcomingShows ? (
           <>
@@ -75,7 +75,7 @@ export async function TourTicker() {
                 {recentImages.map((post) => (
                   <Link
                     key={post.id}
-                    href="/media"
+                    href="/photos"
                     className="group relative aspect-[3/4] overflow-hidden border border-line/60 bg-muted/10 hover:border-primary/60 transition-colors"
                   >
                     <Image
@@ -105,7 +105,7 @@ export async function TourTicker() {
 
             <div className="text-center mt-10">
               <Button variant="primary" size="lg" asChild>
-                <Link href="/media">View Media Page</Link>
+                <Link href="/photos">View All Photos</Link>
               </Button>
             </div>
           </>

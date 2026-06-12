@@ -16,7 +16,9 @@ import { AnimatedBackground } from "@/components/home/animated-background";
 import { MusicReleaseSchema } from "@/components/seo/structured-data";
 import { useLyricsSync, loadLyrics } from "@/hooks/use-lyrics-sync";
 
-const releasesData = require("@/data/releases.json") as Release[];
+import releasesDataJson from "@/data/releases.json";
+
+const releasesData = releasesDataJson as Release[];
 
 // Scrolling text component for long titles
 function ScrollingText({ 
@@ -31,17 +33,18 @@ function ScrollingText({
   const [shouldScroll, setShouldScroll] = useState(false);
 
   useEffect(() => {
-    const checkOverflow = () => {
-      if (containerRef.current && textRef.current) {
-        const containerWidth = containerRef.current.offsetWidth;
-        const textWidth = textRef.current.scrollWidth;
-        setShouldScroll(textWidth > containerWidth);
-      }
+    const container = containerRef.current;
+    const textEl = textRef.current;
+    if (!container || !textEl) return;
+
+    const updateScrollState = () => {
+      setShouldScroll(textEl.scrollWidth > container.offsetWidth);
     };
 
-    checkOverflow();
-    window.addEventListener('resize', checkOverflow);
-    return () => window.removeEventListener('resize', checkOverflow);
+    const observer = new ResizeObserver(updateScrollState);
+    observer.observe(container);
+    observer.observe(textEl);
+    return () => observer.disconnect();
   }, [text]);
 
   if (!shouldScroll) {
@@ -275,11 +278,25 @@ export default function MusicPage() {
 
   // Load lyrics when track changes
   useEffect(() => {
-    if (nowPlaying?.track.lyricsUrl) {
-      loadLyrics(nowPlaying.track.lyricsUrl).then(setLyrics);
-    } else {
-      setLyrics(null);
+    let cancelled = false;
+    const lyricsUrl = nowPlaying?.track.lyricsUrl;
+
+    if (!lyricsUrl) {
+      void Promise.resolve().then(() => {
+        if (!cancelled) setLyrics(null);
+      });
+      return () => {
+        cancelled = true;
+      };
     }
+
+    loadLyrics(lyricsUrl).then((loadedLyrics) => {
+      if (!cancelled) setLyrics(loadedLyrics);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [nowPlaying?.track.lyricsUrl]);
 
   // Get track slug for experience URL

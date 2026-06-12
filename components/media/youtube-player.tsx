@@ -19,6 +19,39 @@ export function YouTubePlayer({ video, onClose }: YouTubePlayerProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const playerInstanceRef = useRef<any>(null);
 
+  function initializePlayer() {
+    if (typeof window === "undefined" || !playerRef.current || !video.videoId) return;
+
+    try {
+      playerInstanceRef.current = new window.YT.Player(playerRef.current, {
+        videoId: video.videoId,
+        playerVars: {
+          autoplay: 0,
+          controls: 1,
+          rel: 0, // Don't show related videos
+          modestbranding: 1,
+          playsinline: 1,
+          enablejsapi: 1,
+          origin: typeof window !== "undefined" ? window.location.origin : "",
+        },
+        events: {
+          onReady: () => {
+            setPlayerReady(true);
+          },
+          onStateChange: (event: { data: number }) => {
+            if (event.data === window.YT.PlayerState.PLAYING) {
+              setIsPlaying(true);
+            } else {
+              setIsPlaying(false);
+            }
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Error initializing YouTube player:", error);
+    }
+  }
+
   // Load YouTube IFrame API
   useEffect(() => {
     // Check if script is already loaded
@@ -63,47 +96,6 @@ export function YouTubePlayer({ video, onClose }: YouTubePlayerProps) {
       }
     };
   }, [video.videoId]);
-
-  const initializePlayer = () => {
-    if (typeof window === "undefined" || !playerRef.current || !video.videoId) return;
-
-    try {
-      playerInstanceRef.current = new window.YT.Player(playerRef.current, {
-        videoId: video.videoId,
-        playerVars: {
-          autoplay: 0,
-          controls: 1,
-          rel: 0, // Don't show related videos
-          modestbranding: 1,
-          playsinline: 1,
-          enablejsapi: 1,
-          origin: typeof window !== "undefined" ? window.location.origin : "",
-        },
-        events: {
-          onReady: (event: any) => {
-            setPlayerReady(true);
-            // Get thumbnail if not provided
-            if (!video.thumbnail) {
-              const thumbnailUrl = `https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`;
-              // We could update the video object here if needed
-            }
-          },
-          onStateChange: (event: any) => {
-            // YT.PlayerState.PLAYING = 1
-            // YT.PlayerState.PAUSED = 2
-            // YT.PlayerState.ENDED = 0
-            if (event.data === window.YT.PlayerState.PLAYING) {
-              setIsPlaying(true);
-            } else {
-              setIsPlaying(false);
-            }
-          },
-        },
-      });
-    } catch (error) {
-      console.error("Error initializing YouTube player:", error);
-    }
-  };
 
   const handlePlay = () => {
     if (playerInstanceRef.current) {

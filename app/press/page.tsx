@@ -264,7 +264,7 @@ export default function PressPage() {
 
             <div className="border-t border-b border-line/30 py-6 my-6">
               <p className="text-center text-lg italic text-gold font-display">
-                "From the clouds descended a mass, a force, a being that felt nothing for the lives below it. It was in one singular instant that we realized we are all family. We are all of blood."
+                &ldquo;From the clouds descended a mass, a force, a being that felt nothing for the lives below it. It was in one singular instant that we realized we are all family. We are all of blood.&rdquo;
               </p>
             </div>
 
@@ -422,9 +422,9 @@ export default function PressPage() {
             <div className="inline-flex flex-col items-center">
               <div className="h-12 w-px bg-gradient-to-b from-transparent to-gold/50 mb-4" />
               <Button variant="gold" asChild>
-                <Link href="/media" className="flex items-center gap-2">
+                <Link href="/videos" className="flex items-center gap-2">
                   <Play className="w-4 h-4" />
-                  View All Media
+                  View All Videos
                 </Link>
               </Button>
             </div>
@@ -580,7 +580,7 @@ export default function PressPage() {
               </CardHeader>
               <CardContent className="space-y-2 text-foreground/80">
                 <p>• 1 Vocal Mic</p>
-                <p>• 3 DI's</p>
+                <p>• 3 DI&apos;s</p>
                 <p>• 1 Stage Mic</p>
                 <p>• Monitor Mix Preferred</p>
                 <p>• 30 Minutes of Set Time</p>
@@ -603,7 +603,8 @@ export default function PressPage() {
           {/* Stage Plot Download */}
           <div className="mt-10 text-center">
             <a
-              href="/api/download?file=/images/photos/OfBloodStagePlot.png&name=OfBlood-StagePlot.png"
+              href="/images/photos/OfBloodStagePlot.png"
+              download="OfBlood-StagePlot.png"
               className="inline-flex items-center gap-3 px-6 py-3 bg-muted/50 border border-line hover:border-gold/60 hover:bg-muted transition-all duration-300 group"
             >
               <FileText className="w-5 h-5 text-gold" />

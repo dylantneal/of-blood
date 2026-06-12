@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -59,9 +60,29 @@ function extractYouTubeId(videoUrl: string): string | null {
   return looksLikeId ? videoUrl : null;
 }
 
+function extractYouTubeStartSeconds(videoUrl: string): number | null {
+  // Supports t=121s, t=121, t=2m1s, and start=121 URL params
+  const match = videoUrl.match(/[?&](?:t|start)=([0-9hms]+)/);
+  if (!match) return null;
+
+  const value = match[1];
+  if (/^\d+$/.test(value)) return parseInt(value, 10);
+
+  const parts = value.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/);
+  if (!parts) return null;
+  const seconds =
+    (parseInt(parts[1] || "0", 10) * 3600) +
+    (parseInt(parts[2] || "0", 10) * 60) +
+    parseInt(parts[3] || "0", 10);
+  return seconds > 0 ? seconds : null;
+}
+
 function getYouTubeEmbedUrl(videoUrl: string): string | null {
   const videoId = extractYouTubeId(videoUrl);
-  return videoId ? `https://www.youtube.com/embed/${videoId}?rel=0` : null;
+  if (!videoId) return null;
+
+  const start = extractYouTubeStartSeconds(videoUrl);
+  return `https://www.youtube.com/embed/${videoId}?rel=0${start ? `&start=${start}` : ""}`;
 }
 
 function getYouTubeWatchUrl(videoUrl: string): string | null {
@@ -308,7 +329,7 @@ export default async function TourPage() {
             <div className="p-10 border border-dashed border-line/70 text-center space-y-4">
               <p className="font-display text-2xl text-foreground/90">No shows announced yet</p>
               <Button variant="primary" asChild>
-                <a href="/#newsletter">Join Newsletter</a>
+                <Link href="/#newsletter">Join Newsletter</Link>
               </Button>
               <p className="text-sm text-foreground/60">
                 Need to route a date?{" "}
@@ -410,6 +431,47 @@ export default async function TourPage() {
                             )}
                           </div>
                         </div>
+
+                        {/* Lineup */}
+                        {show.lineup && show.lineup.length > 0 && (
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-foreground/40">
+                              <Users className="w-4 h-4" />
+                              Lineup
+                            </div>
+                            <div className="pl-6 flex flex-wrap gap-3">
+                              {show.lineup.map((act, index) => (
+                                act.url ? (
+                                  <a
+                                    key={index}
+                                    href={act.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`inline-flex items-center gap-2 px-4 py-2 text-sm transition-colors ${
+                                      act.name === "Of Blood"
+                                        ? "border border-primary/30 text-primary/80 font-semibold hover:border-primary/60 hover:text-primary"
+                                        : "border border-line/40 text-foreground/60 hover:border-gold/40 hover:text-gold"
+                                    }`}
+                                  >
+                                    {act.name}
+                                    {act.name !== "Of Blood" && <ExternalLink className="w-3.5 h-3.5 opacity-50" />}
+                                  </a>
+                                ) : (
+                                  <span
+                                    key={index}
+                                    className={`inline-flex items-center px-4 py-2 text-sm ${
+                                      act.name === "Of Blood"
+                                        ? "border border-primary/30 text-primary/80 font-semibold"
+                                        : "border border-line/40 text-foreground/60"
+                                    }`}
+                                  >
+                                    {act.name}
+                                  </span>
+                                )
+                              ))}
+                            </div>
+                          </div>
+                        )}
 
                         {/* Media section */}
                         {hasMedia && (

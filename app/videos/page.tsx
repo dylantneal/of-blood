@@ -1,19 +1,11 @@
-import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { YouTubeVideoCard } from "@/components/media/youtube-video-card";
-import { InstagramFeed } from "@/components/media/instagram-feed";
-import { getYouTubeVideos, getInstagramPosts } from "@/lib/data";
+import { getYouTubeVideos } from "@/lib/data";
 import { AnimatedBackground } from "@/components/home/animated-background";
 
-export const metadata: Metadata = {
-  title: "Media",
-  description: "Photos, videos, and press materials from Of Blood.",
-};
-
-export default async function MediaPage() {
+export default async function VideosPage() {
   const videos = await getYouTubeVideos();
-  const instagramPosts = await getInstagramPosts();
 
   // Filter out placeholder videos (videos without a videoId)
   const validVideos = videos.filter((video) => video.videoId && video.videoId.trim() !== "");
@@ -36,7 +28,7 @@ export default async function MediaPage() {
 
             {/* Title with enhanced glow effect */}
             <h1 className="font-display text-5xl md:text-7xl font-bold mb-4 relative inline-block mt-8">
-              <span className="relative z-10">Media</span>
+              <span className="relative z-10">Videos</span>
               {/* Multiple glow layers for depth */}
               <span
                 className="absolute inset-0 blur-3xl opacity-50 text-primary -z-10"
@@ -45,7 +37,7 @@ export default async function MediaPage() {
                   textShadow: "0 0 80px rgba(179, 10, 10, 0.8), 0 0 120px rgba(179, 10, 10, 0.5)",
                 }}
               >
-                Media
+                Videos
               </span>
               <span
                 className="absolute inset-0 blur-2xl opacity-30 text-primary -z-20"
@@ -53,7 +45,7 @@ export default async function MediaPage() {
                   filter: "blur(30px)",
                 }}
               >
-                Media
+                Videos
               </span>
             </h1>
 
@@ -61,25 +53,18 @@ export default async function MediaPage() {
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
           </div>
           <p className="text-base text-foreground/60 max-w-xl mx-auto uppercase tracking-wider mt-3">
-            Videos and Photos
+            Music Videos and Live Performances
           </p>
         </Container>
       </Section>
 
       {/* Videos */}
-      <Section className="relative pt-4 pb-16">
+      <Section className="relative pt-4 pb-24">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
         <Container>
-          <div className="mb-12 relative">
-            <div className="flex items-center gap-6 mb-3">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-primary/40 to-primary/60" />
-              <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">Videos</h2>
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-primary/40 to-primary/60" />
-            </div>
-            <p className="sr-only">
-              Official music videos, live performances, and behind-the-scenes content
-            </p>
-          </div>
+          <p className="sr-only">
+            Official music videos, live performances, and behind-the-scenes content
+          </p>
           {validVideos.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {validVideos.map((video) => (
@@ -99,24 +84,6 @@ export default async function MediaPage() {
               </div>
             </div>
           )}
-        </Container>
-      </Section>
-
-      {/* Images */}
-      <Section className="relative pt-20 pb-16">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gold/5 to-transparent pointer-events-none" />
-        <Container>
-          <div className="mb-12 relative">
-            <div className="flex items-center gap-6 mb-3">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-gold/60" />
-              <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">Images</h2>
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-gold/40 to-gold/60" />
-            </div>
-            <p className="sr-only">
-              Behind-the-scenes moments, live shots, and visual content
-            </p>
-          </div>
-          <InstagramFeed posts={instagramPosts} />
         </Container>
       </Section>
     </>

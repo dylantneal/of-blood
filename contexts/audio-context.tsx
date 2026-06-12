@@ -47,6 +47,8 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const queueRef = useRef<Array<{ track: Track; release: Release; releaseId: string; trackIndex: number }>>([]);
   const currentQueueIndexRef = useRef(-1);
   const lastTimeUpdateRef = useRef(0);  // For throttling time updates
+  const playNextRef = useRef<() => void>(() => {});
+  const playTrackRef = useRef<(track: Track, release: Release, releaseId: string, trackIndex: number) => void>(() => {});
   
   // Keep refs in sync with state
   useEffect(() => {
@@ -60,6 +62,33 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     currentQueueIndexRef.current = currentQueueIndex;
   }, [currentQueueIndex]);
+
+  const handleTrackEnd = () => {
+    const currentQueue = queueRef.current;
+    const currentQueueIdx = currentQueueIndexRef.current;
+    const currentNowPlaying = nowPlayingRef.current;
+
+    if (currentQueue.length > 0 && currentQueueIdx < currentQueue.length - 1) {
+      playNextRef.current();
+    } else if (currentNowPlaying && currentNowPlaying.release.tracks) {
+      const nextTrackIndex = currentNowPlaying.trackIndex + 1;
+      if (nextTrackIndex < currentNowPlaying.release.tracks.length) {
+        const nextTrack = currentNowPlaying.release.tracks[nextTrackIndex];
+        if (nextTrack.audioUrl) {
+          playTrackRef.current(
+            nextTrack,
+            currentNowPlaying.release,
+            currentNowPlaying.releaseId,
+            nextTrackIndex
+          );
+          return;
+        }
+      }
+    }
+
+    setIsPlaying(false);
+    setCurrentTime(0);
+  };
 
   // Initialize audio element
   useEffect(() => {
@@ -139,33 +168,6 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
   // Note: Audio source is set in playTrack function, not here
   // This prevents conflicts and AbortError issues
-
-  const handleTrackEnd = () => {
-    // Use refs to get latest state
-    const currentQueue = queueRef.current;
-    const currentQueueIdx = currentQueueIndexRef.current;
-    const currentNowPlaying = nowPlayingRef.current;
-    
-    if (currentQueue.length > 0 && currentQueueIdx < currentQueue.length - 1) {
-      // Play next in queue
-      playNext();
-    } else if (currentNowPlaying && currentNowPlaying.release.tracks) {
-      // Try to play next track in the same release
-      const nextTrackIndex = currentNowPlaying.trackIndex + 1;
-      if (nextTrackIndex < currentNowPlaying.release.tracks.length) {
-        const nextTrack = currentNowPlaying.release.tracks[nextTrackIndex];
-        if (nextTrack.audioUrl) {
-          // Auto-play next track in release
-          playTrack(nextTrack, currentNowPlaying.release, currentNowPlaying.releaseId, nextTrackIndex);
-          return;
-        }
-      }
-    }
-    
-    // No more tracks, stop
-    setIsPlaying(false);
-    setCurrentTime(0);
-  };
 
   const playTrack = async (
     track: Track,
@@ -342,6 +344,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       }
     }
   };
+
+  useEffect(() => {
+    playNextRef.current = playNext;
+    playTrackRef.current = playTrack;
+  });
 
   const playPrevious = () => {
     if (queue.length > 0 && currentQueueIndex > 0) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useMemo } from "react";
 import { TrackLyrics, LyricLine, LyricSection } from "@/lib/types";
 
 type UseLyricsSyncOptions = {
@@ -32,14 +32,6 @@ function easeInCubic(x: number): number {
   return x * x * x;
 }
 
-// Smooth interpolation helper
-function lerp(a: number, b: number, t: number): number {
-  return a + (b - a) * t;
-}
-
-// Throttle interval for focus updates (~15fps = 66ms)
-const FOCUS_UPDATE_INTERVAL = 66;
-
 export function useLyricsSync({
   currentTime,
   lyrics,
@@ -49,11 +41,6 @@ export function useLyricsSync({
 }: UseLyricsSyncOptions): LyricsSyncResult {
   const adjustedTime = currentTime + offset;
   
-  // Refs for throttling focus value updates
-  const lastFocusUpdateRef = useRef<number>(0);
-  const cachedFocusValuesRef = useRef<number[]>([]);
-  const prevFocusValuesRef = useRef<number[]>([]);
-
   // Get current line index (this can update frequently - it's cheap)
   const currentLineIndex = useMemo(() => {
     if (!lyrics?.lines.length) return -1;
@@ -102,20 +89,8 @@ export function useLyricsSync({
     return Math.min(1, Math.max(0, elapsed / lineDuration));
   }, [lyrics, currentLineIndex, adjustedTime]);
 
-  // Calculate focus values with throttling (~15fps)
-  // This is the expensive calculation that doesn't need to run every frame
   const lineFocusValues = useMemo(() => {
     if (!lyrics?.lines.length) return [];
-
-    const now = performance.now();
-    const timeSinceLastUpdate = now - lastFocusUpdateRef.current;
-    
-    // Return cached values if not enough time has passed
-    if (timeSinceLastUpdate < FOCUS_UPDATE_INTERVAL && cachedFocusValuesRef.current.length > 0) {
-      return cachedFocusValuesRef.current;
-    }
-    
-    lastFocusUpdateRef.current = now;
 
     const newValues = lyrics.lines.map((line, index) => {
       const nextLine = lyrics.lines[index + 1];
@@ -148,22 +123,7 @@ export function useLyricsSync({
       return 0;
     });
 
-    // Smooth interpolation between previous and new values
-    const prevValues = prevFocusValuesRef.current;
-    const smoothingFactor = 0.3;
-    
-    const smoothedValues = newValues.map((newVal, i) => {
-      const prevVal = prevValues[i] ?? newVal;
-      const diff = Math.abs(newVal - prevVal);
-      if (diff > 0.5) {
-        return newVal;
-      }
-      return lerp(prevVal, newVal, 1 - smoothingFactor);
-    });
-
-    prevFocusValuesRef.current = smoothedValues;
-    cachedFocusValuesRef.current = smoothedValues;
-    return smoothedValues;
+    return newValues;
   }, [lyrics, adjustedTime, anticipationWindow, lingerWindow]);
 
   // Current line progress for smooth scroll interpolation

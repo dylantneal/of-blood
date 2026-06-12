@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/home/hero";
 import { FeaturedRelease } from "@/components/home/featured-release";
 import { FeaturedMerch } from "@/components/home/featured-merch";
+import { FeaturedVideo } from "@/components/home/featured-video";
 import { TourTicker } from "@/components/home/tour-ticker";
+import { MERCH_ENABLED } from "@/lib/site-config";
 import { BandPhoto } from "@/components/home/band-photo";
 import { Newsletter } from "@/components/home/newsletter";
 
@@ -49,7 +51,8 @@ export default function Home() {
       <Hero />
       <FeaturedRelease />
       <TourTicker />
-      <FeaturedMerch />
+      <FeaturedVideo />
+      {MERCH_ENABLED && <FeaturedMerch />}
       <BandPhoto />
       <Newsletter />
     </>

@@ -16,12 +16,6 @@ export function ImageLightbox({ images, initialIndex, isOpen, onClose }: ImageLi
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
   useEffect(() => {
-    if (initialIndex >= 0 && initialIndex < images.length) {
-      setCurrentIndex(initialIndex);
-    }
-  }, [initialIndex, images.length]);
-
-  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = '0px'; // Prevent layout shift

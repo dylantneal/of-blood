@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Logo } from "./logo";
 import { Container } from "../ui/container";
 import { Instagram, Youtube, Music2 } from "lucide-react";
+import { MERCH_ENABLED } from "@/lib/site-config";
 
 const footerLinks = {
   music: [
@@ -13,8 +14,8 @@ const footerLinks = {
   ],
   connect: [
     { name: "Tour Dates", href: "/tour" },
-    { name: "Merch", href: "/merch" },
-    { name: "Press Kit", href: "/media" },
+    ...(MERCH_ENABLED ? [{ name: "Merch", href: "/merch" }] : []),
+    { name: "Press Kit", href: "/press" },
     { name: "Booking", href: "/contact" },
   ],
   legal: [

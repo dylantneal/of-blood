@@ -233,7 +233,7 @@ export default function AboutPage() {
             </p>
 
             <p>
-              The name "Of Blood" stems from the belief that all living beings on this planet share a fundamental connection. As the band puts it: we are all of blood. The name also carries an undeniable brutality that fits the music.
+              The name &ldquo;Of Blood&rdquo; stems from the belief that all living beings on this planet share a fundamental connection. As the band puts it: we are all of blood. The name also carries an undeniable brutality that fits the music.
             </p>
           </div>
         </Container>
@@ -255,7 +255,7 @@ export default function AboutPage() {
           
           <div className="space-y-5 text-foreground/80 leading-relaxed max-w-2xl mx-auto">
             <p>
-              Of Blood describes their sound as <span className="text-gold">"cosmic death metal,"</span> a term that captures both the genre foundation and the thematic scope. The music operates on a scale larger than life, conjuring visions of annihilation by entities that hold no regard for life on Earth.
+              Of Blood describes their sound as <span className="text-gold">&ldquo;cosmic death metal,&rdquo;</span> a term that captures both the genre foundation and the thematic scope. The music operates on a scale larger than life, conjuring visions of annihilation by entities that hold no regard for life on Earth.
             </p>
             
             <p>
@@ -285,7 +285,7 @@ export default function AboutPage() {
           
           <div className="space-y-5 text-foreground/80 leading-relaxed max-w-2xl mx-auto">
             <p>
-              On the surface, Of Blood's lyrics concern themselves with cosmic horror: giant space monsters, black holes, and entities beyond human comprehension descending upon a helpless Earth. But beneath this apocalyptic imagery lies something more pointed.
+              On the surface, Of Blood&apos;s lyrics concern themselves with cosmic horror: giant space monsters, black holes, and entities beyond human comprehension descending upon a helpless Earth. But beneath this apocalyptic imagery lies something more pointed.
             </p>
             
             <p>

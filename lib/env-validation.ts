@@ -3,41 +3,68 @@
  * Validates required environment variables at startup
  */
 
+import { MERCH_ENABLED } from "@/lib/site-config";
+
 export interface EnvValidationResult {
   isValid: boolean;
   missing: string[];
   warnings: string[];
 }
 
-/**
- * Required environment variables for the application to function
- */
-const REQUIRED_ENV_VARS = {
-  // Shopify (required for merch functionality)
-  shopify: [
-    'NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN',
-    'NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN',
-  ],
-  // Email (required for contact form and newsletter)
-  email: [
-    'RESEND_API_KEY',
-  ],
-  // Admin (required for admin panel)
-  admin: [
-    'ADMIN_PASSWORD',
-    'ADMIN_SESSION_SECRET',
-  ],
-};
+const SHOPIFY_ENV_VARS = [
+  "NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN",
+  "NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN",
+] as const;
+
+const EMAIL_ENV_VARS = ["RESEND_API_KEY"] as const;
+
+const ADMIN_ENV_VARS = ["ADMIN_PASSWORD", "ADMIN_SESSION_SECRET"] as const;
 
 /**
  * Optional but recommended environment variables
  */
 const RECOMMENDED_ENV_VARS = [
-  'RESEND_AUDIENCE_ID',
-  'CONTACT_EMAIL',
-  'FROM_EMAIL_DOMAIN',
-  'NEXT_PUBLIC_SITE_URL',
+  "RESEND_AUDIENCE_ID",
+  "CONTACT_EMAIL",
+  "FROM_EMAIL_DOMAIN",
+  "NEXT_PUBLIC_SITE_URL",
 ];
+
+function getRequiredEnvVars(): Record<string, readonly string[]> {
+  const required: Record<string, readonly string[]> = {};
+
+  if (MERCH_ENABLED) {
+    required.shopify = SHOPIFY_ENV_VARS;
+  }
+
+  // Contact, newsletter, and admin can be configured later in local dev.
+  if (process.env.NODE_ENV === "production") {
+    required.email = EMAIL_ENV_VARS;
+    required.admin = ADMIN_ENV_VARS;
+  }
+
+  return required;
+}
+
+function getDevelopmentWarnings(): string[] {
+  const warnings: string[] = [];
+
+  if (process.env.NODE_ENV === "development") {
+    for (const varName of EMAIL_ENV_VARS) {
+      if (!process.env[varName]) {
+        warnings.push(`${varName} (contact form and newsletter)`);
+      }
+    }
+
+    for (const varName of ADMIN_ENV_VARS) {
+      if (!process.env[varName]) {
+        warnings.push(`${varName} (admin panel)`);
+      }
+    }
+  }
+
+  return warnings;
+}
 
 /**
  * Validate environment variables
@@ -45,11 +72,11 @@ const RECOMMENDED_ENV_VARS = [
  */
 export function validateEnv(strict = false): EnvValidationResult {
   const missing: string[] = [];
-  const warnings: string[] = [];
+  const warnings: string[] = getDevelopmentWarnings();
 
   // Check required variables
-  Object.entries(REQUIRED_ENV_VARS).forEach(([category, vars]) => {
-    vars.forEach(varName => {
+  Object.entries(getRequiredEnvVars()).forEach(([category, vars]) => {
+    vars.forEach((varName) => {
       if (!process.env[varName]) {
         missing.push(varName);
         console.error(`❌ Missing required env var: ${varName} (${category})`);
@@ -58,10 +85,9 @@ export function validateEnv(strict = false): EnvValidationResult {
   });
 
   // Check recommended variables
-  RECOMMENDED_ENV_VARS.forEach(varName => {
+  RECOMMENDED_ENV_VARS.forEach((varName) => {
     if (!process.env[varName]) {
       warnings.push(varName);
-      console.warn(`⚠️  Recommended env var not set: ${varName}`);
     }
   });
 
@@ -69,37 +95,35 @@ export function validateEnv(strict = false): EnvValidationResult {
 
   if (!isValid) {
     const errorMessage = [
-      '',
-      '═══════════════════════════════════════════════════════',
-      '❌ ENVIRONMENT CONFIGURATION ERROR',
-      '═══════════════════════════════════════════════════════',
-      '',
-      'Missing required environment variables:',
-      ...missing.map(v => `  - ${v}`),
-      '',
-      'Please check your .env.local file and ensure all required',
-      'variables are set. See env.example for reference.',
-      '',
-      'To fix:',
-      '  1. Copy env.example to .env.local',
-      '  2. Fill in the required values',
-      '  3. Restart the development server',
-      '',
-      '═══════════════════════════════════════════════════════',
-      ''
-    ].join('\n');
+      "",
+      "═══════════════════════════════════════════════════════",
+      "❌ ENVIRONMENT CONFIGURATION ERROR",
+      "═══════════════════════════════════════════════════════",
+      "",
+      "Missing required environment variables:",
+      ...missing.map((v) => `  - ${v}`),
+      "",
+      "Please check your .env.local file and ensure all required",
+      "variables are set. See env.example for reference.",
+      "",
+      "To fix:",
+      "  1. Copy env.example to .env.local",
+      "  2. Fill in the required values",
+      "  3. Restart the development server",
+      "",
+      "═══════════════════════════════════════════════════════",
+      "",
+    ].join("\n");
 
     if (strict) {
       throw new Error(errorMessage);
-    } else {
-      console.error(errorMessage);
     }
   }
 
-  if (warnings.length > 0 && process.env.NODE_ENV === 'development') {
-    console.log('\n📋 Optional environment variables not set:');
-    warnings.forEach(v => console.log(`  - ${v}`));
-    console.log('');
+  if (warnings.length > 0 && process.env.NODE_ENV === "development") {
+    console.warn("\n📋 Optional environment variables not set:");
+    warnings.forEach((v) => console.warn(`  - ${v}`));
+    console.warn("");
   }
 
   return {
@@ -228,21 +252,24 @@ export function validateAdminConfig(): { isValid: boolean; error?: string } {
  * Run all validations on startup (development mode)
  */
 export function runStartupValidation() {
-  if (process.env.NODE_ENV === 'development') {
-    console.log('\n🔍 Validating environment configuration...\n');
-    
+  if (process.env.NODE_ENV === "development") {
+    console.log("\n🔍 Validating environment configuration...\n");
+
     const result = validateEnv(false); // Don't throw in development
-    
+
     if (result.isValid) {
-      console.log('✅ All required environment variables are set\n');
+      console.log("✅ All required environment variables are set\n");
     } else {
-      console.log(`⚠️  Some features may not work without required environment variables\n`);
+      console.warn(
+        "⚠️  Some required environment variables are missing. Related features may not work.\n"
+      );
     }
 
-    // Run specific validations
-    const shopifyResult = validateShopifyConfig();
-    if (!shopifyResult.isValid) {
-      console.warn(`⚠️  Shopify: ${shopifyResult.error}`);
+    if (MERCH_ENABLED) {
+      const shopifyResult = validateShopifyConfig();
+      if (!shopifyResult.isValid) {
+        console.warn(`⚠️  Shopify: ${shopifyResult.error}`);
+      }
     }
 
     const resendResult = validateResendConfig();

@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useParams, notFound } from "next/navigation";
 import { ImmersiveContainer } from "@/components/music/immersive";
 import { Track, Release } from "@/lib/types";
+import releasesData from "@/data/releases.json";
 
-// Load releases data
-const releasesData = require("@/data/releases.json") as Release[];
+const releases = releasesData as Release[];
+const emptySubscribe = () => () => {};
 
 // Find track by slug across all releases
 function findTrackAndRelease(trackId: string): { track: Track; release: Release } | null {
-  for (const release of releasesData) {
+  for (const release of releases) {
     const track = release.tracks?.find(
       (t) => t.slug === trackId || t.title.toLowerCase().replace(/\s+/g, "-") === trackId
     );
@@ -25,12 +26,8 @@ export default function ImmersiveExperiencePage() {
   const params = useParams();
   const trackId = params.trackId as string;
   
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const result = findTrackAndRelease(trackId);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Handle not found
   if (!result) {

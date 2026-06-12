@@ -34,6 +34,7 @@ export function ReactiveBackground({
   const particlesRef = useRef<Particle[]>([]);
   const rafRef = useRef<number | null>(null);
   const lastTimeRef = useRef(0);
+  const renderFrameRef = useRef<(timestamp: number) => void>(() => {});
 
   // Calculate combined intensity (section + audio reactivity)
   const getEffectiveIntensity = useCallback(() => {
@@ -419,20 +420,20 @@ export function ReactiveBackground({
   const render = useCallback((timestamp: number) => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      rafRef.current = requestAnimationFrame(render);
+      rafRef.current = requestAnimationFrame((ts) => renderFrameRef.current(ts));
       return;
     }
 
     const ctx = canvas.getContext("2d");
     if (!ctx) {
-      rafRef.current = requestAnimationFrame(render);
+      rafRef.current = requestAnimationFrame((ts) => renderFrameRef.current(ts));
       return;
     }
 
     // Throttle to ~30fps for efficiency
     const elapsed = timestamp - lastTimeRef.current;
     if (elapsed < 33) {
-      rafRef.current = requestAnimationFrame(render);
+      rafRef.current = requestAnimationFrame((ts) => renderFrameRef.current(ts));
       return;
     }
     lastTimeRef.current = timestamp;
@@ -476,7 +477,7 @@ export function ReactiveBackground({
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    rafRef.current = requestAnimationFrame(render);
+    rafRef.current = requestAnimationFrame((ts) => renderFrameRef.current(ts));
   }, [theme, getEffectiveIntensity, renderTendrils, renderStars, renderEmbers]);
 
   // Clear particles when particle type or theme changes
@@ -509,9 +510,13 @@ export function ReactiveBackground({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    renderFrameRef.current = render;
+  }, [render]);
+
   // Start/stop render loop
   useEffect(() => {
-    rafRef.current = requestAnimationFrame(render);
+    rafRef.current = requestAnimationFrame((ts) => renderFrameRef.current(ts));
     return () => {
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);

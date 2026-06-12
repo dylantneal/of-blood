@@ -165,7 +165,7 @@ export function TourAdminClient() {
               </Button>
             </div>
             <p className="text-foreground/70 mb-6">
-              Edit your tour dates below. When you're done, copy the JSON output and paste it into{" "}
+              Edit your tour dates below. When you&apos;re done, copy the JSON output and paste it into{" "}
               <code className="bg-muted px-2 py-1 rounded text-sm">data/shows.json</code>
             </p>
           </div>
@@ -394,7 +394,7 @@ export function TourAdminClient() {
             {shows.length === 0 && (
               <Card>
                 <CardContent className="py-12 text-center text-foreground/50">
-                  No shows yet. Click "Add Show" to get started.
+                  No shows yet. Click &ldquo;Add Show&rdquo; to get started.
                 </CardContent>
               </Card>
             )}
@@ -444,7 +444,7 @@ export function TourAdminClient() {
             <CardContent className="space-y-2 text-sm">
               <ol className="list-decimal list-inside space-y-2 text-foreground/70">
                 <li>Edit the shows above using the form</li>
-                <li>Click "Copy JSON" to copy the formatted JSON</li>
+                <li>Click &ldquo;Copy JSON&rdquo; to copy the formatted JSON</li>
                 <li>Open <code className="bg-muted px-1 rounded">data/shows.json</code> in your code editor</li>
                 <li>Replace the entire contents with the copied JSON</li>
                 <li>Save the file</li>

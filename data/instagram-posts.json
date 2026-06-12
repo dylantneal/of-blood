@@ -8,7 +8,7 @@
     "id": "4",
     "type": "image",
     "mediaUrl": "/images/instagram/Eye.png",
-    "caption":  "Collage of nightmares."
+    "caption": "Collage of nightmares."
   },
   {
     "id": "5",
@@ -51,6 +51,61 @@
     "mediaUrl": "/images/instagram/LiveWire2026.jpg",
     "caption": "Live at Live Wire, Chicago, IL — February 4, 2026.",
     "date": "2026-02-04"
+  },
+  {
+    "id": "12",
+    "type": "image",
+    "mediaUrl": "/images/instagram/live-wire-2026/Rawr.png",
+    "caption": "Rawr on vocals — Live Wire, Chicago, IL.",
+    "date": "2026-02-04"
+  },
+  {
+    "id": "13",
+    "type": "image",
+    "mediaUrl": "/images/instagram/live-wire-2026/BigRawr.png",
+    "caption": "Rawr — Live Wire, Chicago, IL.",
+    "date": "2026-02-04"
+  },
+  {
+    "id": "14",
+    "type": "image",
+    "mediaUrl": "/images/instagram/live-wire-2026/SergiBlood.png",
+    "caption": "Sergi and Artsiom — Live Wire, Chicago, IL.",
+    "date": "2026-02-04"
+  },
+  {
+    "id": "15",
+    "type": "image",
+    "mediaUrl": "/images/instagram/live-wire-2026/IvanPrimordial.png",
+    "caption": "Ivan on bass — Live Wire, Chicago, IL.",
+    "date": "2026-02-04"
+  },
+  {
+    "id": "16",
+    "type": "image",
+    "mediaUrl": "/images/instagram/live-wire-2026/KevinPrimordial.png",
+    "caption": "Kevin on guitar — Live Wire, Chicago, IL.",
+    "date": "2026-02-04"
+  },
+  {
+    "id": "17",
+    "type": "image",
+    "mediaUrl": "/images/instagram/live-wire-2026/ArtsiomPrimordial.png",
+    "caption": "Artsiom on drums — Live Wire, Chicago, IL.",
+    "date": "2026-02-04"
+  },
+  {
+    "id": "18",
+    "type": "image",
+    "mediaUrl": "/images/instagram/live-wire-2026/SergiSpooky.png",
+    "caption": "Sergi on guitar — Live Wire, Chicago, IL.",
+    "date": "2026-02-04"
+  },
+  {
+    "id": "19",
+    "type": "image",
+    "mediaUrl": "/images/instagram/live-wire-2026/DylanSpooky.png",
+    "caption": "Of Blood live at Live Wire, Chicago, IL — February 4, 2026.",
+    "date": "2026-02-04"
   }
 ]
-

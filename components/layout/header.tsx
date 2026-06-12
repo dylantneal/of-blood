@@ -10,12 +10,14 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/contexts/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { MERCH_ENABLED } from "@/lib/site-config";
 
 const navigation = [
   { name: "Music", href: "/music" },
-  { name: "Media", href: "/media" },
+  { name: "Videos", href: "/videos" },
+  { name: "Photos", href: "/photos" },
   { name: "Tour", href: "/tour" },
-  { name: "Merch", href: "/merch" },
+  ...(MERCH_ENABLED ? [{ name: "Merch", href: "/merch" }] : []),
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
 ];
@@ -92,18 +94,20 @@ export default function Header() {
           {/* Cart & Mobile Menu */}
           <div className="flex items-center gap-4">
             {/* Cart Button */}
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="relative p-2 text-foreground hover:text-primary transition-all duration-300 hover:scale-110"
-              aria-label="Open collection"
-            >
-              <Package className="h-6 w-6" />
-              {cart && cart.totalQuantity > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-                  {cart.totalQuantity}
-                </span>
-              )}
-            </button>
+            {MERCH_ENABLED && (
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 text-foreground hover:text-primary transition-all duration-300 hover:scale-110"
+                aria-label="Open collection"
+              >
+                <Package className="h-6 w-6" />
+                {cart && cart.totalQuantity > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                    {cart.totalQuantity}
+                  </span>
+                )}
+              </button>
+            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -157,7 +161,9 @@ export default function Header() {
       </AnimatePresence>
 
       {/* Cart Drawer */}
-      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      {MERCH_ENABLED && (
+        <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      )}
     </header>
   );
 }

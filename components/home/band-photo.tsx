@@ -4,7 +4,7 @@ import { Section } from "@/components/ui/section";
 
 export function BandPhoto() {
   return (
-    <Section className="py-16 md:py-24">
+    <Section className="pt-8 md:pt-12 pb-16 md:pb-24">
       <Container>
         <div className="relative">
           {/* Pulsing red glow behind frame */}
