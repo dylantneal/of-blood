@@ -6,6 +6,7 @@ import { Play, X } from "lucide-react";
 import { YouTubeVideo } from "@/lib/types";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAudio } from "@/contexts/audio-context";
 
 interface YouTubeVideoCardProps {
   video: YouTubeVideo;
@@ -13,6 +14,7 @@ interface YouTubeVideoCardProps {
 
 export function YouTubeVideoCard({ video }: YouTubeVideoCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { pause: pauseMusic } = useAudio();
 
   const thumbnailUrl = video.thumbnail || `https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`;
 
@@ -69,7 +71,10 @@ export function YouTubeVideoCard({ video }: YouTubeVideoCardProps) {
       >
         <Card
           className="group overflow-hidden hover:border-primary/50 transition-all duration-300 cursor-pointer hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            pauseMusic();
+            setIsModalOpen(true);
+          }}
         >
           <CardContent className="p-0">
             <div className="relative aspect-video bg-muted overflow-hidden">

@@ -18,6 +18,7 @@ type AudioContextType = {
   // Actions
   playTrack: (track: Track, release: Release, releaseId: string, trackIndex: number) => void;
   playPause: () => void;
+  pause: () => void;
   seek: (time: number) => void;
   setVolume: (volume: number) => void;
   toggleMinimize: () => void;
@@ -166,6 +167,23 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     }
   }, [volume]);
 
+  // Pause music when the user starts an embedded video (e.g. a YouTube
+  // iframe on the tour page). Clicks inside an iframe are invisible to us,
+  // but they blur the window and move focus onto the iframe element.
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    const handleWindowBlur = () => {
+      if (document.activeElement?.tagName === "IFRAME" && audioRef.current && !audioRef.current.paused) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      }
+    };
+
+    window.addEventListener("blur", handleWindowBlur);
+    return () => window.removeEventListener("blur", handleWindowBlur);
+  }, [isPlaying]);
+
   // Note: Audio source is set in playTrack function, not here
   // This prevents conflicts and AbortError issues
 
@@ -305,6 +323,13 @@ export function AudioProvider({ children }: { children: ReactNode }) {
           setIsPlaying(true);
         }
       }
+    }
+  };
+
+  const pause = () => {
+    if (audioRef.current && !audioRef.current.paused) {
+      audioRef.current.pause();
+      setIsPlaying(false);
     }
   };
 
@@ -463,6 +488,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         error,
         playTrack,
         playPause,
+        pause,
         seek,
         setVolume,
         toggleMinimize,
