@@ -495,7 +495,7 @@ export default function MusicPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="-mt-8 md:-mt-10 flex items-start justify-center gap-8 md:gap-14 pb-12 md:pb-14"
+            className="mt-2 md:-mt-10 flex items-start justify-center gap-8 md:gap-14 pb-12 md:pb-14"
           >
             {MUSIC_PLATFORM_LINKS.map((platform, index) => (
               <motion.div
