@@ -19,6 +19,32 @@ import { useLyricsSync, loadLyrics } from "@/hooks/use-lyrics-sync";
 import releasesDataJson from "@/data/releases.json";
 
 const releasesData = releasesDataJson as Release[];
+const MUSIC_PLATFORM_LINKS = [
+  {
+    name: "Spotify",
+    url: "https://open.spotify.com/artist/6bnYniIgW2iRKvMeMvNqfW",
+  },
+  {
+    name: "YouTube Music",
+    url: "https://music.youtube.com/channel/UCVS7ytVPsU3ZO9RLWyVxbng",
+  },
+];
+
+function SpotifyLogo({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M12 0a12 12 0 1 0 12 12A12 12 0 0 0 12 0Zm5.505 17.307a.74.74 0 0 1-1.02.25 10.898 10.898 0 0 0-11 0 .74.74 0 1 1-.77-1.263 12.377 12.377 0 0 1 12.54 0 .74.74 0 0 1 .25 1.013Zm1.457-2.893a.926.926 0 0 1-1.276.313 13.645 13.645 0 0 0-13.372 0 .926.926 0 0 1-.963-1.582 15.5 15.5 0 0 1 15.31 0 .926.926 0 0 1 .301 1.27Zm.131-3.012a16.406 16.406 0 0 0-14.86 0 1.11 1.11 0 1 1-1.01-1.977 18.632 18.632 0 0 1 16.88 0 1.11 1.11 0 1 1-1.01 1.977Z" />
+    </svg>
+  );
+}
+
+function YouTubeMusicLogo({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M10.015 14.97V9.03L15 12l-4.985 2.97Zm1.985 7.03A10 10 0 1 1 22 12a10.011 10.011 0 0 1-10 10Zm0-18.5A8.5 8.5 0 1 0 20.5 12 8.51 8.51 0 0 0 12 3.5Zm0 2.375A6.125 6.125 0 1 1 5.875 12 6.132 6.132 0 0 1 12 5.875Zm0 10.75A4.625 4.625 0 1 0 7.375 12 4.63 4.63 0 0 0 12 16.625Z" />
+    </svg>
+  );
+}
 
 // Scrolling text component for long titles
 function ScrollingText({ 
@@ -348,7 +374,7 @@ export default function MusicPage() {
 
   return (
     <>
-      <Section className="relative isolate overflow-hidden pt-32 pb-20">
+      <Section className="relative isolate overflow-hidden pt-32 pb-8 md:pb-10">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-background to-black" />
         <div className="absolute inset-0 opacity-70 mix-blend-screen">
           <AnimatedBackground />
@@ -461,9 +487,45 @@ export default function MusicPage() {
         </Container>
       </Section>
 
-      <Section id="releases" className="pb-32 pt-12 relative">
+      <Section id="releases" className="pb-32 pt-6 md:pt-8 relative">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(179,10,10,0.08),_transparent_55%)] pointer-events-none" />
         <Container className="relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="-mt-8 md:-mt-10 flex items-start justify-center gap-8 md:gap-14 pb-12 md:pb-14"
+          >
+            {MUSIC_PLATFORM_LINKS.map((platform, index) => (
+              <motion.div
+                key={platform.name}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: index * 0.1 }}
+              >
+                <Link
+                  href={platform.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Listen on ${platform.name}`}
+                  className="group flex flex-col items-center gap-3 text-center"
+                >
+                  <span className="inline-flex h-16 w-16 md:h-20 md:w-20 items-center justify-center rounded-md border border-line/70 bg-black/40 text-foreground/80 group-hover:text-foreground group-hover:border-primary/60 group-hover:bg-primary/10 transition-all">
+                    {platform.name === "Spotify" ? (
+                      <SpotifyLogo className="h-8 w-8 md:h-10 md:w-10" />
+                    ) : (
+                      <YouTubeMusicLogo className="h-8 w-8 md:h-10 md:w-10" />
+                    )}
+                  </span>
+                  <span className="text-xs md:text-sm uppercase tracking-[0.2em] text-foreground/70 group-hover:text-foreground transition-colors">
+                    {platform.name}
+                  </span>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
           <div className="space-y-20">
             {releasesData.map((release: Release) => {
               const playableIndex =
