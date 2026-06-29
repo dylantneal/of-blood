@@ -512,13 +512,38 @@ export default function MusicPage() {
                   aria-label={`Listen on ${platform.name}`}
                   className="group flex flex-col items-center gap-3 text-center"
                 >
-                  <span className="inline-flex h-16 w-16 md:h-20 md:w-20 items-center justify-center rounded-md border border-line/70 bg-black/40 text-foreground/80 group-hover:text-foreground group-hover:border-primary/60 group-hover:bg-primary/10 transition-all">
+                  <motion.span
+                    animate={{
+                      boxShadow: [
+                        "0 0 0 1px rgba(179,10,10,0.24), 0 0 12px rgba(179,10,10,0.16)",
+                        "0 0 0 1px rgba(179,10,10,0.30), 0 0 18px rgba(179,10,10,0.22)",
+                        "0 0 0 1px rgba(179,10,10,0.42), 0 0 28px rgba(179,10,10,0.32)",
+                        "0 0 0 1px rgba(179,10,10,0.30), 0 0 18px rgba(179,10,10,0.22)",
+                        "0 0 0 1px rgba(179,10,10,0.24), 0 0 12px rgba(179,10,10,0.16)",
+                      ],
+                      scale: [1, 1.006, 1.012, 1.006, 1],
+                      color: [
+                        "rgba(229, 229, 229, 0.86)",
+                        "rgba(206, 120, 120, 0.9)",
+                        "rgba(179, 10, 10, 0.96)",
+                        "rgba(206, 120, 120, 0.9)",
+                        "rgba(229, 229, 229, 0.86)",
+                      ],
+                    }}
+                    transition={{
+                      duration: 7.2,
+                      repeat: Infinity,
+                      ease: [0.4, 0, 0.2, 1],
+                      times: [0, 0.25, 0.5, 0.75, 1],
+                    }}
+                    className="inline-flex h-16 w-16 md:h-20 md:w-20 items-center justify-center rounded-md border border-line/70 bg-black/40 text-foreground/80 group-hover:text-foreground group-hover:border-primary/60 group-hover:bg-primary/10 transition-all"
+                  >
                     {platform.name === "Spotify" ? (
-                      <SpotifyLogo className="h-8 w-8 md:h-10 md:w-10" />
+                      <SpotifyLogo className="h-8 w-8 md:h-10 md:w-10 drop-shadow-[0_0_10px_rgba(179,10,10,0.28)]" />
                     ) : (
-                      <YouTubeMusicLogo className="h-8 w-8 md:h-10 md:w-10" />
+                      <YouTubeMusicLogo className="h-8 w-8 md:h-10 md:w-10 drop-shadow-[0_0_10px_rgba(179,10,10,0.28)]" />
                     )}
-                  </span>
+                  </motion.span>
                   <span className="text-xs md:text-sm uppercase tracking-[0.2em] text-foreground/70 group-hover:text-foreground transition-colors">
                     {platform.name}
                   </span>
