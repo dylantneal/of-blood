@@ -25,6 +25,10 @@ const MUSIC_PLATFORM_LINKS = [
     url: "https://open.spotify.com/artist/6bnYniIgW2iRKvMeMvNqfW",
   },
   {
+    name: "Apple Music",
+    url: "https://music.apple.com/us/artist/of-blood/6785117215",
+  },
+  {
     name: "YouTube Music",
     url: "https://music.youtube.com/channel/UCVS7ytVPsU3ZO9RLWyVxbng",
   },
@@ -42,6 +46,14 @@ function YouTubeMusicLogo({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
       <path d="M10.015 14.97V9.03L15 12l-4.985 2.97Zm1.985 7.03A10 10 0 1 1 22 12a10.011 10.011 0 0 1-10 10Zm0-18.5A8.5 8.5 0 1 0 20.5 12 8.51 8.51 0 0 0 12 3.5Zm0 2.375A6.125 6.125 0 1 1 5.875 12 6.132 6.132 0 0 1 12 5.875Zm0 10.75A4.625 4.625 0 1 0 7.375 12 4.63 4.63 0 0 0 12 16.625Z" />
+    </svg>
+  );
+}
+
+function AppleMusicLogo({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M19.665 16.537c-.286.658-.625 1.264-1.016 1.82-.533.752-.968 1.27-1.31 1.554-.53.466-1.098.704-1.706.715-.436 0-1.021-.124-1.754-.376-.736-.25-1.413-.375-2.034-.375-.65 0-1.346.124-2.086.375-.741.252-1.336.382-1.784.391-.583.024-1.167-.22-1.754-.73-.374-.327-.829-.864-1.363-1.613-.573-.8-1.044-1.726-1.414-2.78-.397-1.137-.595-2.238-.595-3.302 0-1.218.263-2.27.79-3.154.412-.709.96-1.268 1.646-1.678a4.43 4.43 0 0 1 2.224-.639c.492 0 1.138.153 1.94.457.8.305 1.314.458 1.54.458.17 0 .745-.18 1.724-.538.926-.334 1.708-.473 2.347-.416 1.732.14 3.033.824 3.902 2.054-1.55.94-2.319 2.258-2.308 3.949.01 1.32.493 2.419 1.448 3.295.433.405.916.718 1.45.94-.117.34-.24.67-.375.988ZM14.49 2.273c0 .939-.343 1.816-1.028 2.63-.826.968-1.826 1.528-2.91 1.44a2.927 2.927 0 0 1-.022-.356c0-.901.393-1.865 1.092-2.655.35-.4.795-.733 1.335-1 .54-.263 1.05-.41 1.526-.432.014.125.022.249.022.373Z" />
     </svg>
   );
 }
@@ -510,7 +522,7 @@ export default function MusicPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Listen on ${platform.name}`}
-                  className="group flex flex-col items-center gap-3 text-center"
+                  className="group w-32 md:w-36 flex flex-col items-center gap-3 text-center"
                 >
                   <motion.span
                     animate={{
@@ -540,6 +552,8 @@ export default function MusicPage() {
                   >
                     {platform.name === "Spotify" ? (
                       <SpotifyLogo className="h-8 w-8 md:h-10 md:w-10 drop-shadow-[0_0_10px_rgba(179,10,10,0.28)]" />
+                    ) : platform.name === "Apple Music" ? (
+                      <AppleMusicLogo className="h-8 w-8 md:h-10 md:w-10 translate-x-[0.5px] -translate-y-[1px] drop-shadow-[0_0_10px_rgba(179,10,10,0.28)]" />
                     ) : (
                       <YouTubeMusicLogo className="h-8 w-8 md:h-10 md:w-10 drop-shadow-[0_0_10px_rgba(179,10,10,0.28)]" />
                     )}
