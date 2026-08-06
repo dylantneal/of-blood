@@ -5,13 +5,51 @@
     "type": "EP",
     "date": "2025-11-08",
     "cover": "/images/releases/InhalingTheEssenceOfAnnihilation.png",
-    "description": "Three tracks of crushing atmosphere and relentless heaviness. Searing vocals over massive riffs, with themes of cosmic annihilation and humanity's shared blood.",
+    "description": "Five tracks of crushing atmosphere and relentless heaviness. Searing vocals over massive riffs, with themes of cosmic annihilation and humanity's shared blood.",
     "links": {
       "youtube": "https://www.youtube.com/@OfBloodBand"
     },
     "tracks": [
       {
         "n": 1,
+        "title": "Primordial Terror",
+        "slug": "primordial-terror",
+        "audioUrl": "/audio/PrimordialTerror.wav",
+        "duration": 272,
+        "theme": {
+          "colors": {
+            "primary": "#DC2626",
+            "secondary": "#7F1D1D",
+            "background": "#0A0505",
+            "text": "#F5E6E6",
+            "highlight": "#EF4444",
+            "glow": "rgba(220, 38, 38, 0.5)"
+          },
+          "background": {
+            "gradient": "linear-gradient(180deg, #1a0808 0%, #0d0505 40%, #0A0505 100%)",
+            "overlay": "linear-gradient(180deg, rgba(100,0,0,0.15) 0%, transparent 40%, rgba(0,0,0,0.6) 100%)"
+          },
+          "particles": {
+            "type": "embers",
+            "density": 0.7,
+            "speed": 0.4,
+            "direction": "down",
+            "audioReactivity": 0.8
+          },
+          "albumArt": {
+            "effect": "breathe",
+            "audioReactivity": 0.6
+          },
+          "layout": {
+            "type": "default",
+            "albumArt": "always",
+            "centerpiece": "album",
+            "lyricsPosition": "right"
+          }
+        }
+      },
+      {
+        "n": 2,
         "title": "Tendrils of Descending Divinity",
         "slug": "tendrils-of-descending-divinity",
         "audioUrl": "/audio/TendrilsOfDescendingDivinity.mp3",
@@ -52,7 +90,7 @@
         }
       },
       {
-        "n": 2,
+        "n": 3,
         "title": "In The Stare Of Infinity",
         "slug": "in-the-stare-of-infinity",
         "audioUrl": "/audio/InTheStareOfInfinityNEW4.wav",
@@ -96,12 +134,50 @@
         }
       },
       {
-        "n": 3,
+        "n": 4,
         "title": "This Insurmountable Evil That Hangs Above Us All",
         "slug": "this-insurmountable-evil-that-hangs-above-us-all",
         "audioUrl": "/audio/ThisInsurmountableEvilThatHangsAboveUsAll.mp3",
         "duration": 243,
         "lyricsUrl": "/data/lyrics/this-insurmountable-evil-that-hangs-above-us-all.json",
+        "theme": {
+          "colors": {
+            "primary": "#DC2626",
+            "secondary": "#7F1D1D",
+            "background": "#0A0505",
+            "text": "#F5E6E6",
+            "highlight": "#EF4444",
+            "glow": "rgba(220, 38, 38, 0.5)"
+          },
+          "background": {
+            "gradient": "linear-gradient(180deg, #1a0808 0%, #0d0505 40%, #0A0505 100%)",
+            "overlay": "linear-gradient(180deg, rgba(100,0,0,0.15) 0%, transparent 40%, rgba(0,0,0,0.6) 100%)"
+          },
+          "particles": {
+            "type": "embers",
+            "density": 0.7,
+            "speed": 0.4,
+            "direction": "down",
+            "audioReactivity": 0.8
+          },
+          "albumArt": {
+            "effect": "breathe",
+            "audioReactivity": 0.6
+          },
+          "layout": {
+            "type": "default",
+            "albumArt": "always",
+            "centerpiece": "album",
+            "lyricsPosition": "right"
+          }
+        }
+      },
+      {
+        "n": 5,
+        "title": "Death Will Wear Your Eyes",
+        "slug": "death-will-wear-your-eyes",
+        "audioUrl": "/audio/DeathWillWearYourEyes.wav",
+        "duration": 209,
         "theme": {
           "colors": {
             "primary": "#DC2626",
