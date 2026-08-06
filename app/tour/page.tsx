@@ -159,14 +159,14 @@ export default async function TourPage() {
                     
                     {/* Flier Image (if available) */}
                     {show.flierUrl && (
-                      <div className="relative aspect-[16/9] w-full border-b border-line/40 overflow-hidden">
+                      // Preserve the full square poster instead of cropping it into a widescreen frame.
+                      <div className="relative aspect-square w-full border-b border-line/40 overflow-hidden bg-black/40">
                         <Image
                           src={show.flierUrl}
                           alt={`${show.venue} show flier`}
                           fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          className="object-contain transition-transform duration-700 group-hover:scale-[1.02]"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
                       </div>
                     )}
 
@@ -488,13 +488,14 @@ export default async function TourPage() {
                                       key={`${show.id}-media-${index}`}
                                       className="space-y-3"
                                     >
-                                      <div className="relative aspect-video border border-line/30 bg-black/60 overflow-hidden group/media">
+                                      {/* Recap artwork may be square, so show the complete image without cropping. */}
+                                      <div className="relative aspect-square border border-line/30 bg-black/60 overflow-hidden group/media">
                                         <Image
                                           src={item.url}
                                           alt={item.caption || `${show.city} performance photo`}
                                           fill
                                           sizes="(min-width: 768px) 50vw, 100vw"
-                                          className="object-cover transition-transform duration-700 group-hover/media:scale-105"
+                                          className="object-contain transition-transform duration-700 group-hover/media:scale-[1.02]"
                                         />
                                       </div>
                                       {(item.title || item.caption) && (

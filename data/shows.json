@@ -5,6 +5,7 @@
     "city": "West Chicago",
     "state": "IL",
     "venue": "WC Social Club",
+    "flierUrl": "/images/tour/wc-social-club-2026-08-06.png",
     "lineup": [
       {
         "name": "Of Blood",
@@ -24,7 +25,15 @@
       }
     ],
     "onSale": false,
-    "isSoldOut": false
+    "isSoldOut": false,
+    "media": [
+      {
+        "type": "image",
+        "url": "/images/tour/wc-social-club-2026-08-06.png",
+        "title": "The Civil Unrest Tour",
+        "caption": "Show poster from August 6, 2026"
+      }
+    ]
   },
   {
     "id": "the-book-club-2026-01-18",
