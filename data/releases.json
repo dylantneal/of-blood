@@ -14,7 +14,7 @@
         "n": 1,
         "title": "Primordial Terror",
         "slug": "primordial-terror",
-        "audioUrl": "/audio/PrimordialTerror.wav",
+        "audioUrl": "/audio/PrimordialTerror.mp3",
         "duration": 272,
         "theme": {
           "colors": {
@@ -93,7 +93,7 @@
         "n": 3,
         "title": "In The Stare Of Infinity",
         "slug": "in-the-stare-of-infinity",
-        "audioUrl": "/audio/InTheStareOfInfinityNEW4.wav",
+        "audioUrl": "/audio/InTheStareOfInfinity.mp3",
         "duration": 179,
         "lyricsUrl": "/data/lyrics/in-the-stare-of-infinity.json",
         "theme": {
@@ -176,7 +176,7 @@
         "n": 5,
         "title": "Death Will Wear Your Eyes",
         "slug": "death-will-wear-your-eyes",
-        "audioUrl": "/audio/DeathWillWearYourEyes.wav",
+        "audioUrl": "/audio/DeathWillWearYourEyes.mp3",
         "duration": 209,
         "theme": {
           "colors": {
