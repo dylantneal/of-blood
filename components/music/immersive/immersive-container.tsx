@@ -178,6 +178,12 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
     }
   }, [currentTrack.lyricsUrl, currentTrack.title]);
 
+  // Tracks without a lyrics file drop the lyrics column entirely so the remaining
+  // content centers instead of sitting beside an empty pane. This keys off the static
+  // `lyricsUrl` rather than the async `lyrics` state so the column doesn't collapse
+  // and reappear while a lyrics file is loading.
+  const hasLyrics = Boolean(currentTrack.lyricsUrl);
+
 
   // Auto-play track when entering immersive view (only on initial mount)
   useEffect(() => {
@@ -632,7 +638,7 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
                       y: isIntro ? 20 : 0 
                     }}
                     transition={{ delay: 0, duration: 0.3 }}
-                    className="w-full max-w-4xl h-[55vh] sm:h-[60vh]"
+                    className={cn("w-full max-w-4xl h-[55vh] sm:h-[60vh]", !hasLyrics && "hidden")}
                   >
                     <LyricsDisplay
                       lyrics={lyrics}
@@ -771,7 +777,7 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
                       y: isIntro ? 20 : 0 
                     }}
                     transition={{ delay: 0, duration: 0.3 }}
-                    className="w-full max-w-4xl h-[55vh] sm:h-[60vh]"
+                    className={cn("w-full max-w-4xl h-[55vh] sm:h-[60vh]", !hasLyrics && "hidden")}
                   >
                     <LyricsDisplay
                       lyrics={lyrics}
@@ -903,7 +909,7 @@ export function ImmersiveContainer({ track: initialTrack, release: initialReleas
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
-                className="flex-1 w-full max-w-xl lg:max-w-2xl h-[40vh] lg:h-[60vh]"
+                className={cn("flex-1 w-full max-w-xl lg:max-w-2xl h-[40vh] lg:h-[60vh]", !hasLyrics && "hidden")}
               >
                 <LyricsDisplay
                   lyrics={lyrics}

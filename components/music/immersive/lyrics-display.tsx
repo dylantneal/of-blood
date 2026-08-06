@@ -245,12 +245,10 @@ export function LyricsDisplay({
     };
   }, []);
 
+  // Render nothing rather than a placeholder. `lyrics` is also null while the
+  // lyrics file is still loading, so a message here would flash on every track change.
   if (!lyrics) {
-    return (
-      <div className={cn("flex items-center justify-center text-foreground/40", className)}>
-        <p className="font-display text-xl">No lyrics available</p>
-      </div>
-    );
+    return null;
   }
 
   return (
