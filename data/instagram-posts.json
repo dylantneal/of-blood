@@ -7,8 +7,7 @@
   {
     "id": "4",
     "type": "image",
-    "mediaUrl": "/images/instagram/Eye.png",
-    "caption": "Collage of nightmares."
+    "mediaUrl": "/images/instagram/Eye.png"
   },
   {
     "id": "5",
@@ -56,14 +55,14 @@
     "id": "12",
     "type": "image",
     "mediaUrl": "/images/instagram/live-wire-2026/Rawr.png",
-    "caption": "Rawr on vocals — Live Wire, Chicago, IL.",
+    "caption": "Dylan on vocals — Live Wire, Chicago, IL.",
     "date": "2026-02-04"
   },
   {
     "id": "13",
     "type": "image",
     "mediaUrl": "/images/instagram/live-wire-2026/BigRawr.png",
-    "caption": "Rawr — Live Wire, Chicago, IL.",
+    "caption": "Live Wire, Chicago, IL.",
     "date": "2026-02-04"
   },
   {
