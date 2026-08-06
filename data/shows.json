@@ -1,5 +1,32 @@
 [
   {
+    "id": "wc-social-club-2026-08-06",
+    "date": "2026-08-06",
+    "city": "West Chicago",
+    "state": "IL",
+    "venue": "WC Social Club",
+    "lineup": [
+      {
+        "name": "Of Blood",
+        "url": "https://www.instagram.com/ofbloodband/"
+      },
+      {
+        "name": "Autumn Lies Buried",
+        "url": "https://www.instagram.com/autumn.lies.buried/"
+      },
+      {
+        "name": "Selias",
+        "url": "https://www.instagram.com/seliasmetal/"
+      },
+      {
+        "name": "Trust In the Serpent",
+        "url": "https://www.instagram.com/trustintheserpentofficial/"
+      }
+    ],
+    "onSale": false,
+    "isSoldOut": false
+  },
+  {
     "id": "the-book-club-2026-01-18",
     "date": "2026-01-18",
     "city": "Chicago",
