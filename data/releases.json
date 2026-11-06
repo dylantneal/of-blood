@@ -15,7 +15,7 @@
         "title": "Primordial Terror",
         "slug": "primordial-terror",
         "audioUrl": "/audio/PrimordialTerror.mp3",
-        "duration": 272,
+        "duration": 271,
         "theme": {
           "colors": {
             "primary": "#DC2626",
@@ -53,7 +53,7 @@
         "title": "Tendrils of Descending Divinity",
         "slug": "tendrils-of-descending-divinity",
         "audioUrl": "/audio/TendrilsOfDescendingDivinity.mp3",
-        "duration": 219,
+        "duration": 211,
         "lyricsUrl": "/data/lyrics/tendrils-of-descending-divinity.json",
         "theme": {
           "colors": {
@@ -94,7 +94,7 @@
         "title": "In The Stare Of Infinity",
         "slug": "in-the-stare-of-infinity",
         "audioUrl": "/audio/InTheStareOfInfinity.mp3",
-        "duration": 179,
+        "duration": 180,
         "lyricsUrl": "/data/lyrics/in-the-stare-of-infinity.json",
         "theme": {
           "colors": {
@@ -138,7 +138,7 @@
         "title": "This Insurmountable Evil That Hangs Above Us All",
         "slug": "this-insurmountable-evil-that-hangs-above-us-all",
         "audioUrl": "/audio/ThisInsurmountableEvilThatHangsAboveUsAll.mp3",
-        "duration": 243,
+        "duration": 246,
         "lyricsUrl": "/data/lyrics/this-insurmountable-evil-that-hangs-above-us-all.json",
         "theme": {
           "colors": {

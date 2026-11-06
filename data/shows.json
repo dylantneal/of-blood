@@ -1,5 +1,35 @@
 [
   {
+    "id": "reggies-2026-11-06",
+    "date": "2026-11-06",
+    "city": "Chicago",
+    "state": "IL",
+    "venue": "Reggies Music Joint",
+    "address": "2105 S State St, Chicago, IL 60616",
+    "doorsTime": "7:00 PM",
+    "flierUrl": "/images/tour/reggies-2026-11-06.jpg",
+    "lineup": [
+      {
+        "name": "Ancient Entities",
+        "url": "https://www.instagram.com/anciententities/"
+      },
+      {
+        "name": "Internal Decay",
+        "url": "https://www.instagram.com/internaldecayofficialus/"
+      },
+      {
+        "name": "Carrion Feeder",
+        "url": "https://www.instagram.com/carrionfeederband/"
+      },
+      {
+        "name": "Of Blood",
+        "url": "https://www.instagram.com/ofbloodband/"
+      }
+    ],
+    "onSale": false,
+    "isSoldOut": false
+  },
+  {
     "id": "wc-social-club-2026-08-06",
     "date": "2026-08-06",
     "city": "West Chicago",
